@@ -10,12 +10,12 @@
         </v-flex>
         <v-flex xs12 text-xs-center round my-5>
           <template v-if="id==null">
-            <v-btn color="two" round dark v-on:click="postPost">
+            <v-btn color="two" round dark v-on:click="postWriteAndNotify">
             <v-icon size="17" class="mr-2">fa-pencil</v-icon>Write
             </v-btn>
           </template>
           <template v-else>
-            <v-btn color="two" round dark v-on:click="postPost">
+            <v-btn color="two" round dark v-on:click="postWriteAndNotify">
             <v-icon size="17" class="mr-2">fa-pencil</v-icon>Modify
             </v-btn>
           </template>
@@ -77,6 +77,34 @@ export default {
       this.title = this.post.title;
       this.body = this.post.body;
 		},
+    async postWriteAndNotify () {
+      if(this.id==null){
+        await FirebaseService.postPost(this.title, this.body);
+      }else{
+        await FirebaseService.modifyPost(this.title, this.body ,this.id);
+      }
+      this.$router.push({
+        name: "post"
+      });
+      if (window.Notification) {
+        Notification.requestPermission();
+      }
+      function pushNotification() {
+        setTimeout(function () {
+          notify();
+        }, 1500);
+      }
+      pushNotification();
+      function notify() {
+        var notification = new Notification('EEEAZY Notification', {
+          icon: 'https://i.imgur.com/wxV4WcW.png',
+          body: '새 글이 등록되었습니다.',
+        });
+        notification.onclick = function () {
+          window.open('http://localhost:8080/portfolio');
+        };
+      }
+    }
   }
 };
 </script>
