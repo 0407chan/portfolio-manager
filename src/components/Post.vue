@@ -23,6 +23,9 @@
 
 <template>
   <v-layout pt-3 h-50 wrap id="body">
+    <v-flex xs12>
+      <v-divider></v-divider>
+    </v-flex>
     <v-flex xs12 text-xs-right>
       <p>
         {{date.getFullYear()}}.
@@ -35,11 +38,20 @@
     <v-flex xs12 row>
       <vue-markdown>{{body}}</vue-markdown>
     </v-flex>
+    <!-- post comment, need authority -->
+    <v-flex xs10>
+      <v-text-field v-if="username" v-model="comment" autofocus label="Commnet"></v-text-field>
+    </v-flex>
+    <v-flex xs2 text-xs-right>
+      <v-btn v-if="username" round color="four" dark @click="" class="post_btn">
+        <v-icon size="17" class="mr-2">fa-pencil</v-icon>Write
+      </v-btn>
+    </v-flex>
     <v-flex xs12 text-xs-right round>
-      <v-btn v-if="username" round color="two" dark :to="{ name: 'modifypost', params: {id: this.id} }">
+      <v-btn class="post_btn" v-if="username" round color="two" dark :to="{ name: 'modifypost', params: {id: this.id} }">
         <v-icon size="17" class="mr-2">fa-pencil</v-icon>Modify
       </v-btn>
-      <v-btn v-if="username" round color="three" dark v-on:click="deletePost">
+      <v-btn class="post_btn" v-if="username" round color="three" dark v-on:click="deletePost">
         <v-icon size="17" class="mr-2">delete</v-icon>Delete
       </v-btn>
     </v-flex>
@@ -130,5 +142,8 @@ export default {
   }
   .h-100 {
     height: 100%;
+  }
+  .post_btn{
+    width: 110px;
   }
 </style>
