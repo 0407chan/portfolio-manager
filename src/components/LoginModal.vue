@@ -61,6 +61,9 @@
               </v-alert>
             </v-flex>
             <v-flex xs12>
+              <v-text-field label="Name*" :rules="[rules.required]" v-model="name" autofocus @keyup.esc="dialog=false" @keyup.self="message2=''" @keyup.enter="Register"></v-text-field>
+            </v-flex>
+            <v-flex xs12>
               <v-text-field label="Email*" :rules="[rules.required]" v-model="email2" autofocus @keyup.esc="dialog=false" @keyup.self="message2=''" @keyup.enter="Register"></v-text-field>
             </v-flex>
             <v-flex xs12>
@@ -103,6 +106,7 @@ export default {
     password: "",
     email2: "",
     ps1: "",
+    name: "",
     ps2: "",
     title: "Preliminary report",
     rules: {
@@ -124,11 +128,11 @@ export default {
 
   },
   methods: {
+
     async loginWithGoogle() {
       const result = await FirebaseService.loginWithGoogle();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
-      await this.$EventBus.$emit("completed");
       this.$router.push({
         name: "home"
       });
@@ -137,7 +141,6 @@ export default {
       const result = await FirebaseService.loginWithFacebook();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
-      await this.$EventBus.$emit("completed");
       this.$router.push({
         name: "home"
       });
@@ -158,6 +161,7 @@ export default {
     },
     signIn() {
       this.progress= true;
+      console.log("2test",this.message);
       if(this.email == ""){
         this.message = "이메일을 입력해주세요."
       }else if(this.password == ""){
@@ -170,6 +174,7 @@ export default {
           .signInWithEmailAndPassword(this.email, this.password)
           .then(
             function(user) {
+              user.name = "이찬호"
 
             },
             (err) => {
@@ -183,11 +188,26 @@ export default {
               this.progress= false
             }
           );
-        }
-        this.progress= false
+        };
+
+        this.progress= false;
+
     },
+
+
+    //TODO 로그인 된 token으로 uid에 회원 등급 적용 완료.
+    // - 회원가입, 구글로그인, 페이스북 로그인에 추가하기
+
+
+
+
     async SignIn() {
+      console.log("1test",this.message);
       let login =  await this.signIn();
+      let idid = firebase.auth().currentUser.uid;
+      console.log("3test",idid);
+      await FirebaseService.test(this.email,"팀원");
+      console.log("4test",this.message);
     },
 
     register() {

@@ -117,8 +117,8 @@ export default {
 			    if(username === null) {
               username = user.email.split('@')[0];
               this.username = username
-			}
-		}
+			        }
+		  }
     })
   }
 };

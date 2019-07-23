@@ -6,6 +6,8 @@ import store from '../store'
 const POSTS = 'posts'
 const PORTFOLIOS = 'portfolios'
 const PAGELOGS = 'pagelogs'
+const USERS = 'users'
+
 
 // Setup Firebase
 const config = {
@@ -86,7 +88,7 @@ export default {
 
 	deletePost(id){
 		return firestore.collection(POSTS).doc(id).delete().then(function() {
-			
+
 		}).catch(function(error) {
 				console.error("Error removing document: ", error);
 		});
@@ -186,6 +188,22 @@ export default {
 	async getMarker() {
     const snapshot = await firebase.firestore().collection('events').get()
     return snapshot.docs.map(doc => doc.data());
+	},
+
+	test(email,classify){
+		const firestore = firebase.firestore();
+		var userId = firebase.auth().currentUser.uid;
+		firestore.collection(USERS).doc(userId).set({
+			email:email,
+			classify:classify,
+		}).then(
+			function(user) {
+				console.log(user, " 성공했다.")
+			},
+			(err) => {
+				console.log(err, " 실패했다.")
+			}
+		);
 	},
 
 	/********************\
