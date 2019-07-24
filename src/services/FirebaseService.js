@@ -106,7 +106,8 @@ export default {
 	getPostComments(postId) {
 		const postCommentCollection = firestore.collection(POSTCOMMENTS)
 		return postCommentCollection
-				.where("postId", "==", postId).orderBy("created_at")
+				.where("postId", "==", postId)
+				.orderBy("created_at")
 				.get()
 				.then((docSnapshots) => {
 					return docSnapshots.docs.map((doc) => {

@@ -39,15 +39,16 @@
       <vue-markdown>{{body}}</vue-markdown>
     </v-flex>
     <v-flex xs12>
+      <span class="comment_title">Comment</span>
       <v-divider></v-divider>
     </v-flex>
-    <v-flex xs12 style="background-color: #f8f8f8;">
+    <v-flex xs12 style="background-color: #f8f8f8; box-shadow: 1px 1px 1px black; margin-bottom: 10px;">
         <v-layout wrap v-for="i in this.postComments.length" :key="i.id">
             <v-flex xs7 v-if="i < limit_postComment">
               {{postComments[postComments.length-i].body}}
             </v-flex>
-            <v-flex xs2 text-xs-right v-if="i < limit_postComment">
-              {{postComments[postComments.length-i].writer}}
+            <v-flex xs2 text-xs-left v-if="i < limit_postComment">
+              <a>{{postComments[postComments.length-i].writer}}</a>
             </v-flex>
             <v-flex xs2 text-xs-right v-if="i < limit_postComment">
               {{postComments[postComments.length-i].created_at.getMonth()+1}}.
@@ -56,8 +57,8 @@
               {{addZeros(postComments[postComments.length-i].created_at.getMinutes())}}
             </v-flex>
             <v-flex xs1 text-xs-right v-if="i < limit_postComment">
-              <v-icon size="17" class="mr-2" color="five" @click=''>fa-pencil</v-icon>
-              <v-icon size="17" class="mr-2" color="five" @click=''>fa-remove</v-icon>
+              <v-icon size="17" class="mr-2 comment_btn" hover color="four" @click=''>fa-pencil</v-icon>
+              <v-icon size="17" class="mr-2 comment_btn" hover color="three" @click=''>fa-remove</v-icon>
             </v-flex>
             <v-flex xs12 v-if="i === limit_postComment" text-xs-center>
               <v-btn fab dark icon flat @click="morePost(limit_postComment)" class="two" style="height:30px; width:30px">
@@ -66,12 +67,9 @@
             </v-flex>
         </v-layout>
     </v-flex>
-    <v-flex xs12>
-      <v-divider></v-divider>
-    </v-flex>
     <!-- post comment, need authority -->
     <v-flex xs10>
-      <v-text-field v-if="username" v-model="comment" autofocus label="Commnet"></v-text-field>
+      <v-text-field v-if="username" v-model="comment" autofocus label="Comment"></v-text-field>
     </v-flex>
     <v-flex xs2 text-xs-right>
       <v-btn v-if="username" round color="four" dark @click="postComment" class="post_btn">
@@ -201,5 +199,10 @@ export default {
   .comment_btn{
     width: 20px;
     height: 20px;
+    text-shadow: 2px 1px 1px black;
+  }
+  .comment_title{
+    font-size: 12pt;
+    font-weight: bold;
   }
 </style>
