@@ -86,4 +86,6 @@ new Vue({
 	})
 },
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');
+
+var admin = require('firebase-admin');

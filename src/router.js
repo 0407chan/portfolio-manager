@@ -13,6 +13,7 @@ import ModifyPostPage from './views/PostWriter.vue'
 
 import TestPage from './views/Test.vue'
 
+import AdminPage from './views/AdminPage'
 Vue.use(Router)
 
 export default new Router({
@@ -69,6 +70,11 @@ export default new Router({
 			path: '/test',
 			name: 'test',
 			component: TestPage
-	}
+	},
+	  {
+	  		path: '/admin',
+		  	name: 'admin',
+		  	component: AdminPage
+	  }
   ]
 })

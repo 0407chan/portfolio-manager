@@ -2,6 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 import store from '../store'
+import * as admin from 'firebase-admin';
 
 const POSTS = 'posts'
 const PORTFOLIOS = 'portfolios'
@@ -23,7 +24,20 @@ const config = {
 
 }
 
-firebase.initializeApp(config)
+firebase.initializeApp(config);
+admin.initializeApp({
+	credential: admin.credential.applicationDefault(),
+	databaseURL: 'https://todo-vue-3ea4e.firebaseio.com'
+});
+
+// var refreshToken;
+// admin.initializeApp({
+// 	credential: admin.credential.refreshToken(refreshToken),
+// 	databaseURL: 'https://todo-vue-3ea4e.firebaseio.com'
+// });
+
+
+
 const firestore = firebase.firestore()
 
 export default {
@@ -183,11 +197,6 @@ export default {
 	logout() {
 		return firebase.auth().signOut()
 	},
-	async getMarker() {
-    const snapshot = await firebase.firestore().collection('events').get()
-    return snapshot.docs.map(doc => doc.data());
-	},
-
 	/********************\
  \    PageLog 함수들    \
 	\********************/
