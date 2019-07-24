@@ -146,19 +146,26 @@ export default {
         })
     },
     getWeatherIcon(id) {
-
-        //TODO isThunderstorm, isDrizzle, isRain, isSnow 선언 안되어있음. 확인 필요
-
-        // if(this.isThunderstorm(id)) {
-        //     return require('../../public/svg/wi-thunderstorm.svg');
-        // }
-        // if(this.isDrizzle(id) || this.isRain(id)) {
-        //     return require('../../public/svg/wi-rain.svg');
-        // }
-        // if(this.isSnow(id)) {
-        //     return require('../../public/svg/wi-snow.svg');
-        // }
-        return require('../../public/svg/wi-cloud.svg');
+        if (this.dataObj != null) {
+          var weatherID = this.dataObj.weather[0].id;
+          if (weatherID >= 200 && weatherID <= 232) {
+            return require('../../public/svg/wi-thunderstorm.svg');
+          } else if (weatherID >= 300 && weatherID <= 321) {
+            return require('../../public/svg/wi-sprinkle.svg');
+          } else if (weatherID >= 500 && weatherID <= 531) {
+            return require('../../public/svg/wi-rain.svg');
+          } else if (weatherID >= 600 && weatherID <= 622) {
+            return require('../../public/svg/wi-snow.svg');
+          } else if (weatherID >= 701 && weatherID <= 781) {
+            return require('../../public/svg/wi-train.svg');
+          } else if (weatherID == 800) {
+            return require('../../public/svg/wi-moon-alt-new.svg');
+          } else if (weatherID >= 801 && weatherID <= 804) {
+            return require('../../public/svg/wi-cloud.svg');
+          } else if (weatherID >= 900 && weatherID <= 962) {
+            return require('../../public/svg/wi-small-craft-advisory.svg');
+          }
+        }
     }
   },
   mounted() {
@@ -166,29 +173,6 @@ export default {
     // console.log('App ready!');
   },
   computed: {
-    classWI: function() {
-      if (this.dataObj != null) {
-        var weatherID = this.dataObj.weather[0].id;
-        if (weatherID >= 200 && weatherID <= 232) {
-          return 'wi-thunderstorm';
-        } else if (weatherID >= 300 && weatherID <= 321) {
-          return 'wi-sprinkle';
-        } else if (weatherID >= 500 && weatherID <= 531) {
-          return 'wi-rain';
-        } else if (weatherID >= 600 && weatherID <= 622) {
-          return 'wi-snow';
-        } else if (weatherID >= 701 && weatherID <= 781) {
-          return 'wi-train';
-        } else if (weatherID == 800) {
-          return 'wi-moon-alt-new';
-        } else if (weatherID >= 801 && weatherID <= 804) {
-          return 'wi-cloud';
-        } else if (weatherID >= 900 && weatherID <= 962) {
-          return 'wi-small-craft-advisory';
-        }
-      }
-      return '';
-    },
     curTempDisplay: function() {
       if (this.curTemp != null) {
         if (this.displayMode == CELSIUS) {

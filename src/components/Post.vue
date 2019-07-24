@@ -38,12 +38,43 @@
     <v-flex xs12 row>
       <vue-markdown>{{body}}</vue-markdown>
     </v-flex>
+    <v-flex xs12>
+      <v-divider></v-divider>
+    </v-flex>
+    <v-flex xs12 style="background-color: #f8f8f8;">
+        <v-layout wrap v-for="i in this.postComments.length" :key="i.id">
+            <v-flex xs7 v-if="i < limit_postComment">
+              {{postComments[postComments.length-i].body}}
+            </v-flex>
+            <v-flex xs2 text-xs-right v-if="i < limit_postComment">
+              {{postComments[postComments.length-i].writer}}
+            </v-flex>
+            <v-flex xs2 text-xs-right v-if="i < limit_postComment">
+              {{postComments[postComments.length-i].created_at.getMonth()+1}}.
+              {{postComments[postComments.length-i].created_at.getDate()+1}}
+              {{addZeros(postComments[postComments.length-i].created_at.getHours())}}:
+              {{addZeros(postComments[postComments.length-i].created_at.getMinutes())}}
+            </v-flex>
+            <v-flex xs1 text-xs-right v-if="i < limit_postComment">
+              <v-icon size="17" class="mr-2" color="five" @click=''>fa-pencil</v-icon>
+              <v-icon size="17" class="mr-2" color="five" @click=''>fa-remove</v-icon>
+            </v-flex>
+            <v-flex xs12 v-if="i === limit_postComment" text-xs-center>
+              <v-btn fab dark icon flat @click="morePost(limit_postComment)" class="two" style="height:30px; width:30px">
+                <v-icon size="20">keyboard_arrow_down</v-icon>
+              </v-btn>
+            </v-flex>
+        </v-layout>
+    </v-flex>
+    <v-flex xs12>
+      <v-divider></v-divider>
+    </v-flex>
     <!-- post comment, need authority -->
     <v-flex xs10>
       <v-text-field v-if="username" v-model="comment" autofocus label="Commnet"></v-text-field>
     </v-flex>
     <v-flex xs2 text-xs-right>
-      <v-btn v-if="username" round color="four" dark @click="" class="post_btn">
+      <v-btn v-if="username" round color="four" dark @click="postComment" class="post_btn">
         <v-icon size="17" class="mr-2">fa-pencil</v-icon>Write
       </v-btn>
     </v-flex>
@@ -75,6 +106,11 @@ export default {
     id: {type: String},
     writer: {type: String},
     writer2: {type: String},
+    comment : {type: String},
+    limit_postComment: {
+        type: Number,
+        default: 5,
+      },
 	},
   data(){
     return{
@@ -86,6 +122,8 @@ export default {
       username:'',
       user: '',
       canModifyCancel: false,
+      postComments: [],
+
     }
   },
   computed: {
@@ -96,6 +134,9 @@ export default {
   mounted(){
     if(this.id != null){
       this.getPost(this.id);
+    }
+    if(this.id != null){
+      this.getPostComments(this.id);
     }
   },
   created() {
@@ -112,6 +153,10 @@ export default {
     }
   },
   methods: {
+    async postComment(){
+      await FirebaseService.postPostComment(this.id, this.comment);
+      this.comment = '';
+    },
     async deletePost(){
       swal('삭제되었습니다.');
       await FirebaseService.deletePost(this.id);
@@ -119,6 +164,9 @@ export default {
     },
     async getPost(id) {
       this.post = await FirebaseService.getPost(id);
+    },
+    async getPostComments(postId){
+      this.postComments = await FirebaseService.getPostComments(postId);
     },
     addZeros(num){
       var zero = '';
@@ -129,6 +177,9 @@ export default {
   	    }
   	  }
   	  return zero + num;
+    },
+    morePost(data){
+      this.limit_postComment = data+2;
     },
   }
 }
@@ -145,5 +196,9 @@ export default {
   }
   .post_btn{
     width: 110px;
+  }
+  .comment_btn{
+    width: 20px;
+    height: 20px;
   }
 </style>

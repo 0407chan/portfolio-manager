@@ -6,6 +6,7 @@ import store from '../store'
 const POSTS = 'posts'
 const PORTFOLIOS = 'portfolios'
 const PAGELOGS = 'pagelogs'
+const POSTCOMMENTS = "postcomments"
 
 // Setup Firebase
 const config = {
@@ -83,15 +84,39 @@ export default {
 			writer2:store.state.user.email
 		})
 	},
-
 	deletePost(id){
 		return firestore.collection(POSTS).doc(id).delete().then(function() {
-			
+
 		}).catch(function(error) {
 				console.error("Error removing document: ", error);
 		});
 	},
 
+	/********************\
+ \  PostCommnet 함수들  \
+	\********************/
+	postPostComment(postId, body){
+		return firestore.collection(POSTCOMMENTS).add({
+			postId,
+			body,
+			created_at: firebase.firestore.FieldValue.serverTimestamp(),
+			writer:store.state.user.email,
+		})
+	},
+	getPostComments(postId) {
+		const postCommentCollection = firestore.collection(POSTCOMMENTS)
+		return postCommentCollection
+				.where("postId", "==", postId).orderBy("created_at")
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+						let data = doc.data()
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate())
+						return data
+					})
+				})
+	},
 
 	/********************\
  \   Portfolio 함수들   \
