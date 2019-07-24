@@ -162,8 +162,7 @@ export default {
 		let provider = new firebase.auth.GoogleAuthProvider()
 		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
 		return firebase.auth().signInWithPopup(provider).then(function(result) {
-			let accessToken = result.credential.accessToken
-			let user = result.user
+
 			return result
 		}).catch(function(error) {
 			console.error('[Google Login Error]', error)
@@ -174,9 +173,6 @@ export default {
 		var provider = new firebase.auth.FacebookAuthProvider();
 		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
 		return firebase.auth().signInWithPopup(provider).then(function(result) {
-		  var accessToken = result.credential.accessToken;
-		  var user = result.user;
-			console.log("드루와",user)
 			return result
 		}).catch(function(error){
 			console.error('[Favebook Loing Error]', error)
@@ -185,25 +181,44 @@ export default {
 	logout() {
 		return firebase.auth().signOut()
 	},
-	async getMarker() {
-    const snapshot = await firebase.firestore().collection('events').get()
-    return snapshot.docs.map(doc => doc.data());
+
+	// TODO 작업중
+
+	getUserData(){
+		var userId = firebase.auth().currentUser.uid;
+		var userData = firestore.collection(USERS).doc(userId);
+		return userData.get().then(function(result) {
+			return result.data();
+		}).catch(function(error) {
+		    console.log("Error getting cached document:", error);
+		});
 	},
 
-	test(email,classify){
-		const firestore = firebase.firestore();
+	userDataInit(){
+		console.log("1 data 올리기");
+		var userId = firebase.auth().currentUser.uid;
+		return firestore.collection(USERS).doc(userId).set({
+			email:"",
+			classify:"",
+			name:"",
+			created_at:"",
+			current_at:"",
+		}).then(function(result){
+			return "2 빈거 올리기 완료"
+		});
+	},
+
+	userDataToDB(email,classify,name,created_at){
 		var userId = firebase.auth().currentUser.uid;
 		firestore.collection(USERS).doc(userId).set({
-			email:email,
-			classify:classify,
-		}).then(
-			function(user) {
-				console.log(user, " 성공했다.")
-			},
-			(err) => {
-				console.log(err, " 실패했다.")
-			}
-		);
+			email,
+			classify,
+			name,
+			created_at,
+			current_at: firebase.firestore.FieldValue.serverTimestamp(),
+		}).then(function(result){
+			console.log("4 내용 채우기 완료");
+		});
 	},
 
 	/********************\

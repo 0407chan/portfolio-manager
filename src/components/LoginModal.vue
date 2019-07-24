@@ -133,6 +133,7 @@ export default {
       const result = await FirebaseService.loginWithGoogle();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
+      this.userDataUpload();
       this.$router.push({
         name: "home"
       });
@@ -141,6 +142,7 @@ export default {
       const result = await FirebaseService.loginWithFacebook();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
+      this.userDataUpload();
       this.$router.push({
         name: "home"
       });
@@ -161,7 +163,6 @@ export default {
     },
     signIn() {
       this.progress= true;
-      console.log("2test",this.message);
       if(this.email == ""){
         this.message = "이메일을 입력해주세요."
       }else if(this.password == ""){
@@ -174,7 +175,6 @@ export default {
           .signInWithEmailAndPassword(this.email, this.password)
           .then(
             function(user) {
-              user.name = "이찬호"
 
             },
             (err) => {
@@ -200,19 +200,40 @@ export default {
 
 
 
-
     async SignIn() {
-      console.log("1test",this.message);
       let login =  await this.signIn();
-      let idid = firebase.auth().currentUser.uid;
-      console.log("3test",idid);
-      await FirebaseService.test(this.email,"팀원");
-      console.log("4test",this.message);
+      this.userDataUpload();
+    },
+
+    async userDataUpload(){
+      //가져와봐야 아무것도 없음
+      var result = await FirebaseService.getUserData();
+
+      console.log("0 result 불러왔냐",result);
+      //database에 로그인한 uid로 init함
+      if(await FirebaseService.getUserData() === undefined){
+        var init = await FirebaseService.userDataInit();
+        console.log("3 들어왔냐",init);
+        // 구글로그인, 페이스북 로그인인 경우
+        var name = this.$store.state.user.displayName;
+        // 그게 아니면 내가 적은 이름(회원가입경우)
+        if(name == null){
+          name = this.name;
+        }
+        if(result.created_at == ""){
+          await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,firebase.firestore.FieldValue.serverTimestamp());
+        }else{
+          await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,result.created_at);
+        }
+      }
+      console.log("5 종료");
     },
 
     register() {
       this.progress= true;
-      if (this.email2 == ""){
+      if(this.name == ""){
+        this.message2 = "이름을 입력해주세요."
+      }else if (this.email2 == ""){
         this.message2 = "이메일을 입력해주세요."
       }else if(this.ps1 == "" || this.ps2 == ""){
         this.message2 = "비밀번호를 입력해주세요."
@@ -243,6 +264,7 @@ export default {
 
     async Register() {
       let runRegister =  await this.register();
+      this.userDataUpload();
     },
 
 
