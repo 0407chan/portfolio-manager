@@ -61,6 +61,9 @@
               </v-alert>
             </v-flex>
             <v-flex xs12>
+              <v-text-field label="Name*" :rules="[rules.required]" v-model="name" autofocus @keyup.esc="dialog=false" @keyup.self="message2=''" @keyup.enter="Register"></v-text-field>
+            </v-flex>
+            <v-flex xs12>
               <v-text-field label="Email*" :rules="[rules.required]" v-model="email2" autofocus @keyup.esc="dialog=false" @keyup.self="message2=''" @keyup.enter="Register"></v-text-field>
             </v-flex>
             <v-flex xs12>
@@ -103,6 +106,7 @@ export default {
     password: "",
     email2: "",
     ps1: "",
+    name: "",
     ps2: "",
     title: "Preliminary report",
     rules: {
@@ -128,7 +132,7 @@ export default {
       const result = await FirebaseService.loginWithGoogle();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
-      await this.$EventBus.$emit("completed");
+      this.userDataUpload();
       this.$router.push({
         name: "home"
       });
@@ -137,7 +141,7 @@ export default {
       const result = await FirebaseService.loginWithFacebook();
       this.$store.state.accessToken = result.credential.accessToken;
       this.$store.state.user = result.user;
-      await this.$EventBus.$emit("completed");
+      this.userDataUpload();
       this.$router.push({
         name: "home"
       });
@@ -156,6 +160,7 @@ export default {
     login() {
       this.$router.replace("home");
     },
+
     signIn() {
       this.progress= true;
       if(this.email == ""){
@@ -183,16 +188,43 @@ export default {
               this.progress= false
             }
           );
-        }
-        this.progress= false
+        };
+        this.progress= false;
     },
+
     async SignIn() {
       let login =  await this.signIn();
+      this.userDataUpload();
+    },
+
+    async userDataUpload(){
+      let result = await FirebaseService.getUserData();
+      if(result === undefined){
+        const init = await FirebaseService.userDataInit();
+        var name = this.$store.state.user.displayName;
+        if(name == null){
+          name = this.name;
+        }
+        result = await FirebaseService.getUserData();
+        const re = await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,firebase.firestore.FieldValue.serverTimestamp());
+      }else{
+        const re = await FirebaseService.userDataToDB(result.email,result.classify,result.name,result.created_at);
+      }
+    },
+
+    async getUserData(){
+      const result = await FirebaseService.getUserData();
+    },
+
+    async deleteuser(){
+      const result = await FirebaseService.deleteUser();
     },
 
     register() {
       this.progress= true;
-      if (this.email2 == ""){
+      if(this.name == ""){
+        this.message2 = "이름을 입력해주세요."
+      }else if (this.email2 == ""){
         this.message2 = "이메일을 입력해주세요."
       }else if(this.ps1 == "" || this.ps2 == ""){
         this.message2 = "비밀번호를 입력해주세요."
@@ -223,6 +255,7 @@ export default {
 
     async Register() {
       let runRegister =  await this.register();
+      this.userDataUpload();
     },
 
 

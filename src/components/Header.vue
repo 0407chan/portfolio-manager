@@ -96,10 +96,10 @@ export default {
     },
     check() {
       return $store.state.check
-    }
+    },
   },
-
   created() {
+
     // 로그인, 로그아웃 을 위한 사용자 감지
     firebase.auth().onAuthStateChanged(user => {
       this.user = user;
@@ -117,8 +117,8 @@ export default {
 			    if(username === null) {
               username = user.email.split('@')[0];
               this.username = username
-			}
-		}
+			        }
+		  }
     })
   }
 };
