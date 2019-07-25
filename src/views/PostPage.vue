@@ -46,9 +46,6 @@ export default {
   created() {
     firebase.auth().onAuthStateChanged(user => {
       this.user = user;
-      if (!this.user) {
-        this.username = ""
-      }
     });
   },
   mounted() {

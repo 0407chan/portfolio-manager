@@ -8,7 +8,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <div v-if="user&&writeAuthority">
+    <div v-if="writeAuthority&&user">
     <buttonWrite/>
     </div>
   </div>
@@ -42,9 +42,6 @@ export default {
   created() {
     firebase.auth().onAuthStateChanged(user => {
       this.user = user;
-      if (!this.user) {
-        this.username = ""
-      }
     });
   },
   methods: {
@@ -59,8 +56,12 @@ export default {
     },
     async getUser() {
       this.currentUser = await FirebaseService.getUserData();
+      console.log(this.writeAuthority);
+
       console.log(this.currentUser);
-      if (this.currentUser.classify !== '수퍼맨') {
+      console.log(this.currentUser.classify);
+      console.log(this.writeAuthority);
+      if (this.currentUser.classify !== '방문자') {
         this.writeAuthority = true
       } else {
         this.writeAuthority = false
