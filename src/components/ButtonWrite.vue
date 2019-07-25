@@ -3,7 +3,7 @@
     fab
     fixed
     color='four'
-    v-if="visible&&user"
+    v-if="visible"
     :class="{active:true, moved: isActive}"
     v-on:click="currpage"
     dark
@@ -16,9 +16,6 @@
 
   <script>
   import * as easings from 'vuetify/es5/util/easing-patterns'
-  import firebase from "firebase/app";
-  import firebaseApp from 'firebase/app'
-  import store from '../store'
     export default {
 
       data() {
@@ -47,25 +44,11 @@
           bottom: true,
           left: false,
           transition: 'slide-y-reverse-transition',
-
-          user: '',
-          username: ''
     		}
     	},
 
-      mounted(){
-        this.init();
-      },
+      mounted(){},
       methods: {
-        init(){
-          var a = window.location.href.substring(8).indexOf('/');
-          this.page = window.location.href.substring(8).substring(a);
-          if(this.page =='/post' || this.page =='/portfolio'){
-            this.visible = true;
-          }else {
-            this.visible = false;
-          }
-        },
         handleScroll () {
           this.isActive = window.scrollY > 0;
         },
@@ -73,25 +56,18 @@
           var a = window.location.href.substring(8).indexOf('/');
           this.page = window.location.href.substring(8).substring(a);
 
-          if(this.page =='/post' || this.page =='/portfolio'){
+          if(this.page ==='/post' || this.page ==='/portfolio'){
             this.visible = true;
           }else {
             this.visible = false;
           }
 
-          if(this.page =='/post'){
+          if(this.page ==='/post'){
             this.$router.push('writepost');
-          }else if(this.page =='/portfolio'){
+          }else if(this.page ==='/portfolio'){
             this.$router.push('writeportfolio');
           }
         },
-        visibleCheck(){
-          if(this.page =='/post' || this.page =='/portfolio'){
-            this.visible = true;
-          }else {
-            this.visible = false;
-          }
-        }
       },
 
       beforeMount () {
@@ -100,31 +76,9 @@
       beforeDestroy () {
         window.removeEventListener('scroll', this.handleScroll);
       },
-
-      computed: {
-
-      },
-
-      watch:{
-        $route (to, from){
-          var a = window.location.href.substring(8).indexOf('/');
-          this.page = window.location.href.substring(8).substring(a);
-          if(this.page =='/post' || this.page =='/portfolio'){
-            this.visible = true;
-          }else {
-            this.visible = false;
-          }
-        }
-      },
-      created() {
-        firebase.auth().onAuthStateChanged(user => {
-            this.user = user;
-            if (!this.user) {
-              this.username = ""
-            }
-
-          });
-      }
+      computed: {},
+      watch: {},
+      created() {}
     }
 </script>
 

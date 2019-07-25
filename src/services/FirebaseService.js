@@ -223,8 +223,8 @@ export default {
 
 	// TODO 작업중
 
-	getUserData(){
-		var user = firebase.auth().currentUser;
+	async getUserData(){
+		var user = await firebase.auth().currentUser;
 		if(user != null){
 			var userData = firestore.collection(USERS).doc(user.uid);
 			return userData.get().then(function(result) {
@@ -281,6 +281,31 @@ export default {
 			console.log("유저없음");
 		}
 
+	},
+	getUsers() {
+		const users = firestore.collection(USERS);
+		return users.orderBy('created_at', 'desc')
+			.get()
+			.then((userDoc) => {
+				return userDoc.docs.map((doc) => {
+					let data = doc.data();
+					data.id = doc.id;
+					data.created_at = new Date(data.created_at.toDate());
+					return data
+				})
+			})
+	},
+	getUser(){
+		var userDoc = firestore.collection(USERS).doc(firebase.auth().currentUser.uid);
+		return userDoc.get().then(function(doc) {
+			if (doc.exists) {
+				let data = doc.data();
+				data.classify = doc.data().classify;
+				data.email = doc.data().email;
+				data.name = doc.data().name;
+				return data;
+			}
+		})
 	},
 
 	/********************\

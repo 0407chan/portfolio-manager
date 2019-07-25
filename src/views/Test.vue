@@ -34,6 +34,9 @@
     <v-flex text-xs-center>
       <v-btn round color="two"  v-on:click="getUserData">getUserData</v-btn>
     </v-flex>
+      <v-flex text-xs-center>
+          <v-btn round color="two"  v-on:click="getUsers">getUsers</v-btn>
+      </v-flex>
   </v-flex>
 </v-layout>
 </template>
@@ -59,6 +62,7 @@ export default {
     classify: "방문자",
     pw: "123123",
     message2:"",
+      users: []
   }),
 
   methods: {
@@ -160,11 +164,16 @@ export default {
 
     async getUserData(){
       const result = await FirebaseService.getUserData();
+      console.log(result)
     },
 
     async deleteuser(){
       const result = await FirebaseService.deleteUser();
     },
+      async getUsers() {
+        this.users = await FirebaseService.getUsers();
+        console.log(this.users)
+      }
   }
 }
 </script>

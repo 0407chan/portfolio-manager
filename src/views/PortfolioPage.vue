@@ -8,23 +8,45 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <div v-if="user&&writeAuthority">
+    <buttonWrite/>
+    </div>
   </div>
 </template>
 
 <script>
 import PortfolioList from '../components/PortfolioList'
+import buttonWrite from '../components/ButtonWrite.vue'
+import FirebaseService from "../services/FirebaseService";
+import firebase from "firebase/app";
+
+
 export default {
 	name: 'PortfolioPage',
   data(){
     return{
       lim: 3,
+      currentUser:'',
+      writeAuthority: false,
+      user:'',
     }
   },
 
 	components: {
 		PortfolioList,
+        buttonWrite,
 	},
-
+  mounted() {
+	this.getUser();
+  },
+  created() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.user = user;
+      if (!this.user) {
+        this.username = ""
+      }
+    });
+  },
   methods: {
     handleScroll () {
       var limit = document.body.offsetHeight - window.innerHeight;
@@ -34,7 +56,16 @@ export default {
     },
     loadMorePortfolios(){
       this.lim+= 3;
-    }
+    },
+    async getUser() {
+      this.currentUser = await FirebaseService.getUserData();
+      console.log(this.currentUser);
+      if (this.currentUser.classify !== '수퍼맨') {
+        this.writeAuthority = true
+      } else {
+        this.writeAuthority = false
+      }
+    },
   },
 
   beforeMount () {

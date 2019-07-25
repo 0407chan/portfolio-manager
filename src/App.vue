@@ -30,7 +30,6 @@ width:16px;height:16px;background:#FCFFFC;}
 
     <v-content>
       <buttonTop/>
-      <buttonWrite/>
       <router-view/>
     </v-content>
 

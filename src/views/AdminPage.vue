@@ -35,10 +35,16 @@
             </v-card-actions>
         </v-card>
     <v-list v-else-if="isAdmin">
-        <v-list-tile-title>User List</v-list-tile-title>
+
+        <v-list-item
+                v-for="user in users"
+        >
+            {{user.name}}
+        </v-list-item>
     </v-list>
 </template>
 <script>
+    import FirebaseService from "@/services/FirebaseService";
     export default {
         data() {
             return {
@@ -53,7 +59,16 @@
                 height: undefined,
                 adminAccount: '',
                 password: '',
+                users:[],
+                currentUser: '',
             }
+        },
+        mounted() {
+            this.getUsers();
+            this.getUser();
+            console.log(this.currentUser)
+        },
+        created() {
         },
         methods: {
             checkAdmin () {
@@ -63,8 +78,13 @@
                 } else {
                     swal( "Oops" ,  "다시 한 번 확인해주세요" ,  "error" )
                 }
+            },
+            async getUsers () {
+                this.users = await FirebaseService.getUsers();
+            },
+            async getUser() {
+                this.currentUser = await FirebaseService.getUserData();
             }
-
         },
     }
 </script>
