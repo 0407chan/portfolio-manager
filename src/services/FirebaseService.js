@@ -185,17 +185,21 @@ export default {
 	// TODO 작업중
 
 	getUserData(){
-		var userId = firebase.auth().currentUser.uid;
-		var userData = firestore.collection(USERS).doc(userId);
-		return userData.get().then(function(result) {
-			return result.data();
-		}).catch(function(error) {
-		    console.log("Error getting cached document:", error);
-		});
+		var user = firebase.auth().currentUser;
+		if(user != null){
+			var userData = firestore.collection(USERS).doc(user.uid);
+			return userData.get().then(function(result) {
+
+				return result.data();
+			}).catch(function(error) {
+				console.log("Error getting cached document:", error);
+			});
+		}else{
+			return "[getUserData] 로그인을 해주세요";
+		}
 	},
 
 	userDataInit(){
-		console.log("1 data 올리기");
 		var userId = firebase.auth().currentUser.uid;
 		return firestore.collection(USERS).doc(userId).set({
 			email:"",
@@ -204,21 +208,40 @@ export default {
 			created_at:"",
 			current_at:"",
 		}).then(function(result){
-			return "2 빈거 올리기 완료"
+
 		});
 	},
 
 	userDataToDB(email,classify,name,created_at){
 		var userId = firebase.auth().currentUser.uid;
-		firestore.collection(USERS).doc(userId).set({
+		return firestore.collection(USERS).doc(userId).set({
 			email,
 			classify,
 			name,
 			created_at,
 			current_at: firebase.firestore.FieldValue.serverTimestamp(),
 		}).then(function(result){
-			console.log("4 내용 채우기 완료");
+
 		});
+	},
+	deleteUser(){
+		var user = firebase.auth().currentUser;
+		if(user !== null){
+			firestore.collection(USERS).doc(user.uid).delete().then(function() {
+
+			}).catch(function(error) {
+					console.error("Error removing document: ", error);
+			});
+
+			return user.delete().then(function() {
+
+			}).catch(function(error) {
+			  console.log("이미 지워졌당ㅋ",error);
+			});
+		}else{
+			console.log("유저없음");
+		}
+
 	},
 
 	/********************\

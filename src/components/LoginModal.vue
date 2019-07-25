@@ -128,7 +128,6 @@ export default {
 
   },
   methods: {
-
     async loginWithGoogle() {
       const result = await FirebaseService.loginWithGoogle();
       this.$store.state.accessToken = result.credential.accessToken;
@@ -161,6 +160,7 @@ export default {
     login() {
       this.$router.replace("home");
     },
+
     signIn() {
       this.progress= true;
       if(this.email == ""){
@@ -189,16 +189,8 @@ export default {
             }
           );
         };
-
         this.progress= false;
-
     },
-
-
-    //TODO 로그인 된 token으로 uid에 회원 등급 적용 완료.
-    // - 회원가입, 구글로그인, 페이스북 로그인에 추가하기
-
-
 
     async SignIn() {
       let login =  await this.signIn();
@@ -206,27 +198,26 @@ export default {
     },
 
     async userDataUpload(){
-      //가져와봐야 아무것도 없음
-      var result = await FirebaseService.getUserData();
-
-      console.log("0 result 불러왔냐",result);
-      //database에 로그인한 uid로 init함
-      if(await FirebaseService.getUserData() === undefined){
-        var init = await FirebaseService.userDataInit();
-        console.log("3 들어왔냐",init);
-        // 구글로그인, 페이스북 로그인인 경우
+      let result = await FirebaseService.getUserData();
+      if(result === undefined){
+        const init = await FirebaseService.userDataInit();
         var name = this.$store.state.user.displayName;
-        // 그게 아니면 내가 적은 이름(회원가입경우)
         if(name == null){
           name = this.name;
         }
-        if(result.created_at == ""){
-          await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,firebase.firestore.FieldValue.serverTimestamp());
-        }else{
-          await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,result.created_at);
-        }
+        result = await FirebaseService.getUserData();
+        const re = await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,firebase.firestore.FieldValue.serverTimestamp());
+      }else{
+        const re = await FirebaseService.userDataToDB(result.email,result.classify,result.name,result.created_at);
       }
-      console.log("5 종료");
+    },
+
+    async getUserData(){
+      const result = await FirebaseService.getUserData();
+    },
+
+    async deleteuser(){
+      const result = await FirebaseService.deleteUser();
     },
 
     register() {

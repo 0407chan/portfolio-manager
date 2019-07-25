@@ -119,8 +119,7 @@ export default {
               this.username = username
 			        }
 		  }
-    });
-
+    })
   }
 };
 </script>
