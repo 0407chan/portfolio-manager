@@ -34,8 +34,7 @@ export default {
 		return {
 			repositories: [],
       userRepositories :[{username : 'All', token: '', repositories: []},
-                  {username : 'stupid', token: 'iZsCSnzryzg_JQxUzJLi', repositories: []},
-                  {username : 'ChrisRhee', token: 'Z_znp6PFxctNpZ4dbZ5e', repositories: []},
+                  {username : 'ChrisRhee', token: 'hdPnazsArc3BbqXtp6Uz', repositories: []},
                   {username : 'zettank', token: '__-ttFzJxEQwASCjzuvW', repositories: []},
                   {username : 'jisssh', token: '4hP7HyqmT9uniRYsix23', repositories: []}],
       active : null,

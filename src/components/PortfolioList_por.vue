@@ -65,13 +65,35 @@ export default {
   },
   watch: {
     search() {
+      if(this.search.length == 0){
+        var len = this.portfolios.length;
+        this.searchList = [];
+        for(var i = 0; i< len; i++){
+          this.searchList.push(this.portfolios[i]);
+        }
+      }else{
+        this.searchList = [];
+        var len = this.portfolios.length;
+        var search = this.search;
+        search = search.toLowerCase();
+        for(var i = 0; i< len; i++){
+          var a = this.portfolios[i].title.toLowerCase()
+          if(a.includes(search)){
+            this.searchList.push(this.portfolios[i]);
+          }
+        }
+      }
+    },
+    enhanceSearch() {
+      const search = this.search.toLowerCase();
       this.searchList = [];
       this.portfolios.forEach(function(item) {
-        const title = item.title;
-        if(this.search.length == 0 || (this.search.length > 0 && title.includes(search)))
+        const title = item.title.;
+        if(search.length == 0 || (search.length > 0 && title.includes(search)))
             this.searchList.push(item);
       });
     }
+
   },
   created() {
     firebase.auth().onAuthStateChanged(user => {
