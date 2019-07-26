@@ -3,7 +3,7 @@
     fab
     fixed
     color='four'
-    v-if="visible&&user"
+    v-if="user&&visible"
     :class="{active:true, moved: isActive}"
     v-on:click="currpage"
     dark
@@ -18,6 +18,7 @@
   import * as easings from 'vuetify/es5/util/easing-patterns'
   import firebase from "firebase/app";
   import firebaseApp from 'firebase/app'
+  import FirebaseService from "@/services/FirebaseService";
   import store from '../store'
     export default {
 
@@ -49,12 +50,15 @@
           transition: 'slide-y-reverse-transition',
 
           user: '',
-          username: ''
+          username: '',
+          writeAuthority: '',
     		}
     	},
 
       mounted(){
         this.init();
+        this.getUserData();
+        
       },
       methods: {
         init(){
@@ -85,13 +89,11 @@
             this.$router.push('writeportfolio');
           }
         },
-        visibleCheck(){
-          if(this.page =='/post' || this.page =='/portfolio'){
-            this.visible = true;
-          }else {
-            this.visible = false;
-          }
-        }
+        async getUserData(){
+          const result = await FirebaseService.getUserData()
+          this.writeAuthority = result.classfy
+          console.log(result,this.writeAuthority)
+    },
       },
 
       beforeMount () {

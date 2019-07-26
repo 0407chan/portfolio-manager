@@ -23,7 +23,6 @@
         </v-flex>
       </v-flex>
         <!-- <vue-markdown :source="portfolio.body" style="margin-left:1vw; margin-right:3vw;"></vue-markdown> -->
-      </v-flex>
 
     </v-layout>
     <v-flex xs12 text-xs-center>

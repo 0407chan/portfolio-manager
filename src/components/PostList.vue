@@ -5,14 +5,14 @@
       <template v-slot:header>
         <v-flex sm12 md8>{{posts[i - 1].title}}</v-flex>
         <v-flex hidden-sm-and-down md4>
-          <div v-if='posts[i-1].writer'>작성자 : {{posts[i-1].writer}}</div>
+          <div v-if='posts[i-1].name'>작성자 : {{posts[i-1].name}}</div>
           <div v-else>작성자 : {{posts[i-1].writer2}}</div>
         </v-flex>
         <!-- <v-flex xs2>작성자 : {{posts[i-1].writer2}}</v-flex>       -->
       </template>
       <v-card>
         <v-card-text>
-          <Post :id="posts[i-1].id" :date="posts[i - 1].created_at" :title="posts[i - 1].title" :body="posts[i - 1].body" :writer="posts[i-1].writer" :writer2="posts[i-1].writer2"></Post>
+          <Post :id="posts[i-1].id" :date="posts[i - 1].created_at" :title="posts[i - 1].title" :body="posts[i - 1].body" :writer="posts[i-1].writer" :name="posts[i-1].name"></Post>
         </v-card-text>
       </v-card>
     </v-expansion-panel-content>

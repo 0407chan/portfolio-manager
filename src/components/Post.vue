@@ -48,7 +48,7 @@
               {{postComments[postComments.length-i].body}}
             </v-flex>
             <v-flex xs2 text-xs-left v-if="i < limit_postComment">
-              <a>{{postComments[postComments.length-i].writer}}</a>
+              <a>{{postComments[postComments.length-i].name}}</a>
             </v-flex>
             <v-flex xs2 text-xs-right v-if="i < limit_postComment">
               {{postComments[postComments.length-i].created_at.getMonth()+1}}.
@@ -152,8 +152,10 @@ export default {
   },
   methods: {
     async postComment(){
-      await FirebaseService.postPostComment(this.id, this.comment);
+      let result = await FirebaseService.getUserData();
+      await FirebaseService.postPostComment(this.id, this.comment, result.name);
       this.comment = '';
+      this.getPostComments(this.id)
     },
     async deletePost(){
       swal('삭제되었습니다.');
