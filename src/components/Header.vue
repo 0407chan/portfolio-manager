@@ -11,7 +11,7 @@
 
   <v-toolbar-items class="hidden-sm-and-down">
 
-    <v-btn v-if="username" flat>{{username}}님</v-btn>
+    <v-btn v-if="username" flat :to="{ name: 'userdetail', params: {email: email} }">{{username}}님</v-btn>
     <v-btn flat :to="{name:'portfolio'}">Portfolio</v-btn>
     <v-btn flat :to="{name:'post'}">Post</v-btn>
     <v-btn flat v-if="!user">
@@ -37,7 +37,7 @@
 
       <v-list>
         <v-list-tile v-if="username">
-          <v-list-tile-title flat>{{username}}님</v-list-tile-title>
+          <v-list-tile-title flat :to="{ name: 'userdetail', params: {email: email} }">{{id}}{{username}}님</v-list-tile-title>
         </v-list-tile>
         <v-list-tile v-for="(item, i) in items" :key="i" :to="{name:item.title}">
           <v-list-tile-title flat>{{ item.title }}</v-list-tile-title>
@@ -81,6 +81,8 @@ export default {
     }],
     user: "",
     username: "",
+    email: '',
+    id: '',
   }),
   methods: {
     favorite() {
@@ -108,15 +110,11 @@ export default {
     });
     //헤더에 사용자 이름을 표시
     firebaseApp.auth().onAuthStateChanged(async user => {
-      var username = '';
       if (user) {
         var result = await FirebaseService.getUserData();
-        username = result.name;
-        this.username = username
-        if (username === null) {
-          username = user.email.split('@')[0];
-          this.username = username
-        }
+        this.username = result.name
+        this.email = result.email
+        this.id = result.uid
       }
     })
   }

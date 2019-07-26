@@ -209,6 +209,19 @@ export default {
 	},
 
 	// TODO 작업중
+	getUsers() {
+		const users = firestore.collection(USERS);
+		return users.orderBy('created_at', 'desc')
+			.get()
+			.then((userDoc) => {
+				return userDoc.docs.map((doc) => {
+					let data = doc.data();
+					data.id = doc.id;
+					data.created_at = new Date(data.created_at.toDate());
+					return data
+				})
+			})
+	},
 
 	getUserData(){
 		var user = firebase.auth().currentUser;

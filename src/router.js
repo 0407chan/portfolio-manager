@@ -14,6 +14,7 @@ import ModifyPostPage from './views/PostWriter.vue'
 import AdminPage from './views/AdminPage.vue'
 import TestPage from './views/Test.vue'
 
+import UserDetail from './views/UserDetail.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -72,9 +73,14 @@ export default new Router({
 			component: TestPage
 	  },
     {
-      path: '/admin',
-      name: 'admin',
-      component: AdminPage
-    },
+			path: '/admin',
+			name: 'admin',
+			component: AdminPage
+	},
+	{
+			path: '/userdetail/:email',
+			name: 'userdetail',
+			component: UserDetail
+	}
   ]
 })

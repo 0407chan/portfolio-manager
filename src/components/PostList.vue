@@ -6,9 +6,7 @@
         <v-flex sm12 md8>{{posts[i - 1].title}}</v-flex>
         <v-flex hidden-sm-and-down md4>
           <div v-if='posts[i-1].name'>작성자 : {{posts[i-1].name}}</div>
-          <div v-else>작성자 : {{posts[i-1].writer2}}</div>
         </v-flex>
-        <!-- <v-flex xs2>작성자 : {{posts[i-1].writer2}}</v-flex>       -->
       </template>
       <v-card>
         <v-card-text>
