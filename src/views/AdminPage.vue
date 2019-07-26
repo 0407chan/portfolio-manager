@@ -9,6 +9,7 @@
       :headers="headers"
       :items="searchList"
        hide-actions
+
       :pagination.sync="pagination"
       class="elevation-1"
     >
@@ -25,8 +26,8 @@
           "{{search}}" is not in Users
         </v-alert>
       </template>
-
     </v-data-table>
+
     </v-flex>
     <v-flex xs12 text-xs-center pt-2>
       <v-pagination v-model="pagination.page" :length="pages" next-icon="keyboard_arrow_right"
@@ -100,14 +101,13 @@ import firebase, {
         }
       },
     },
+
     computed: {
       pages () {
         if (this.pagination.rowsPerPage == null || this.pagination.totalItems == null) return 0
+        console.log(this.pagination.totalItems , this.pagination.rowsPerPage);
         return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
       },
-      formatedDate() {
-  			return `${this.date.getFullYear()}년 ${this.date.getMonth()+1}월 ${this.date.getDate()}일`
-      }
     }
   }
 </script>

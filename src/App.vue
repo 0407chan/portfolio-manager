@@ -46,7 +46,6 @@ import mainHeader from './components/Header.vue'
 import mainFooter from './components/Footer.vue'
 import buttonTop from './components/ButtonTop.vue'
 import buttonWrite from './components/ButtonWrite.vue'
-import * as easings from 'vuetify/es5/util/easing-patterns'
 
 export default {
 	name: 'App',
