@@ -1,27 +1,42 @@
 <template>
-  <div>
+  <v-container>
+  <v-layout mt-5 wrap text-xs-center>
+    <v-flex xs12 text-xs-center >
+      <v-text-field label="Search" v-model="search"></v-text-field>
+    </v-flex>
+    <v-flex xs12 text-xs-center >
     <v-data-table
       :headers="headers"
-      :items="desserts"
-      :search="search"
-      hide-actions
-      sort-icon="keyboard_arrow_up"
+      :items="searchList"
+       hide-actions
       :pagination.sync="pagination"
       class="elevation-1"
     >
       <template v-slot:items="props">
         <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.calories }}</td>
-        <td class="text-xs-right">{{ props.item.fat }}</td>
-        <td class="text-xs-right">{{ props.item.carbs }}</td>
-        <td class="text-xs-right">{{ props.item.protein }}</td>
-        <td class="text-xs-right">{{ props.item.iron }}</td>
+        <td >{{ props.item.email }}</td>
+        <td >{{ props.item.classify }}</td>
+        <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()+1}}</td>
+        <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()+1}}</td>
       </template>
+
+      <template v-slot:no-data transition="scale-transition">
+        <v-alert :value="searchList.length == 0" color="error" icon="warning" outline >
+          "{{search}}" is not in Users
+        </v-alert>
+      </template>
+
     </v-data-table>
-    <div class="text-xs-center pt-2">
-      <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
-    </div>
-  </div>
+    </v-flex>
+    <v-flex xs12 text-xs-center pt-2>
+      <v-pagination v-model="pagination.page" :length="pages" next-icon="keyboard_arrow_right"
+      prev-icon="keyboard_arrow_left"></v-pagination>
+    </v-flex>
+    <v-flex text-xs-center>
+      <v-btn round color="two"  v-on:click="get">getUsers</v-btn>
+    </v-flex>
+  </v-layout>
+</v-container>
 </template>
 
 
@@ -33,113 +48,65 @@ import firebase, {
   export default {
     data () {
       return {
+        selected: [],
         search: '',
+        users:[],
         pagination: {},
         selected: [],
+        searchList:[],
         headers: [
-          {
-            text: 'Dessert (100g serving)',
-            align: 'left',
-            sortable: false,
-            value: 'name'
-          },
-          { text: 'Calories', value: 'calories' },
-          { text: 'Fat (g)', value: 'fat' },
-          { text: 'Carbs (g)', value: 'carbs' },
-          { text: 'Protein (g)', value: 'protein' },
-          { text: 'Iron (%)', value: 'iron' }
+          { text: 'Name', sortable: false, value: 'name', align: 'center'},
+          { text: 'Email', value: 'email',sortable: false, align: 'center' },
+          { text: 'Classify', value: 'classify' ,sortable: false, align: 'center'},
+          { text: 'Created_at', value: 'created_at' ,sortable: false, align: 'center'},
+          { text: 'Current_at', value: 'current_at' ,sortable: false, align: 'center'},
         ],
-        desserts: [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
-            iron: '1%'
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-            iron: '1%'
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-            iron: '7%'
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-            iron: '8%'
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9,
-            iron: '16%'
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0,
-            iron: '0%'
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0,
-            iron: '2%'
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5,
-            iron: '45%'
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9,
-            iron: '22%'
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7,
-            iron: '6%'
-          }
-        ]
       }
+    },
+    mounted() {
+      this.getUsers();
+    },
+    methods: {
+      async getUsers() {
+        this.users = await FirebaseService.getUsers();
+        this.searchList = [];
+        for(var i = 0; i< this.users.length; i++){
+          this.searchList.push(this.users[i]);
+        }
+      },
+      get(){
+        console.log(this.selected);
+      }
+    },
+    watch: {
+      search() {
+        if(this.search.length == 0){
+          var len = this.users.length;
+          this.searchList = [];
+          for(var i = 0; i< len; i++){
+            this.searchList.push(this.users[i]);
+          }
+        }else{
+          this.searchList = [];
+          var len = this.users.length;
+          var search = this.search;
+          search = search.toLowerCase();
+          for(var i = 0; i< len; i++){
+            var a = this.users[i].name.toLowerCase()
+            if(a.includes(search)){
+              this.searchList.push(this.users[i]);
+            }
+          }
+        }
+      },
     },
     computed: {
       pages () {
-        if (this.pagination.rowsPerPage == null ||
-          this.pagination.totalItems == null
-        ) return 0
-
+        if (this.pagination.rowsPerPage == null || this.pagination.totalItems == null) return 0
         return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
+      },
+      formatedDate() {
+  			return `${this.date.getFullYear()}년 ${this.date.getMonth()+1}월 ${this.date.getDate()}일`
       }
     }
   }

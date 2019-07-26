@@ -181,6 +181,25 @@ export default {
 	},
 
 	/********************\
+ \     User 함수들      \
+	\********************/
+	getUsers(){
+		const usersCollection = firestore.collection(USERS)
+		return usersCollection
+				.orderBy('created_at', 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+						let data = doc.data();
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate())
+						data.current_at = new Date(data.current_at.toDate())
+						return data
+					})
+				})
+	},
+
+	/********************\
  \    Login 함수들      \
 	\********************/
 	loginWithGoogle() {
@@ -207,14 +226,12 @@ export default {
 		return firebase.auth().signOut()
 	},
 
-	// TODO 작업중
 
 	getUserData(){
 		var user = firebase.auth().currentUser;
 		if(user != null){
 			var userData = firestore.collection(USERS).doc(user.uid);
 			return userData.get().then(function(result) {
-
 				return result.data();
 			}).catch(function(error) {
 				console.log("Error getting cached document:", error);
