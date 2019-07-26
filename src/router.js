@@ -11,6 +11,7 @@ import PortfolioWriterPage from './views/PortfolioWriter.vue'
 import ModifyPortfolioPage from './views/PortfolioWriter.vue'
 import ModifyPostPage from './views/PostWriter.vue'
 
+import AdminPage from './views/AdminPage.vue'
 import TestPage from './views/Test.vue'
 
 Vue.use(Router)
@@ -69,6 +70,11 @@ export default new Router({
 			path: '/test',
 			name: 'test',
 			component: TestPage
-	}
+	  },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: AdminPage
+    },
   ]
 })

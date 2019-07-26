@@ -156,6 +156,7 @@ export default {
         .then(function() {
 
         });
+        this.$store.state.userInfo=[];
     },
     login() {
       this.$router.replace("home");
