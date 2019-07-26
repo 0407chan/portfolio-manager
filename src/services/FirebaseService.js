@@ -42,7 +42,7 @@ export default {
 					data.body = doc.data().body;
 					data.id = id;
 					data.writer = doc.data().writer;
-					data.writer2 = doc.data().writer2;
+					data.name = doc.data().name;
 					return data;
 				} else {
 						console.log("No such document!");
@@ -65,24 +65,24 @@ export default {
 					})
 				})
 	},
-	postPost(title, body) {
+	postPost(title, body, name) {
 		return firestore.collection(POSTS).add({
 			title,
 			body,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
-			writer:store.state.user.displayName,
-			writer2:store.state.user.email
+			writer:store.state.user.email,
+			name: name
 		})
 	},
 
-	modifyPost(title,body,id){
+	modifyPost(title,body,id, name){
 		return firestore.collection(POSTS).doc(id).set({
 			title,
 			body,
 			id,
+			name: name,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
-			writer: store.state.user.displayName,
-			writer2:store.state.user.email
+			writer:store.state.user.email
 		})
 	},
 	deletePost(id){
@@ -96,11 +96,12 @@ export default {
 	/********************\
  \  PostCommnet 함수들  \
 	\********************/
-	postPostComment(postId, body){
+	postPostComment(postId, body, name){
 		return firestore.collection(POSTCOMMENTS).add({
 			postId,
 			body,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
+			name: name,
 			writer:store.state.user.email,
 		})
 	},

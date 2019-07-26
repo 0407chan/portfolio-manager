@@ -62,8 +62,10 @@ export default {
   },
   methods: {
     async postPost() {
+      let result = await FirebaseService.getUserData();
+      console.log(result)
       if(this.id==null){
-        await FirebaseService.postPost(this.title, this.body);
+        await FirebaseService.postPost(this.title, this.body, result.name);
       }else{
         await FirebaseService.modifyPost(this.title, this.body ,this.id);
       }
@@ -78,8 +80,9 @@ export default {
       this.body = this.post.body;
 		},
     async postWriteAndNotify () {
+      let result = await FirebaseService.getUserData();
       if(this.id==null){
-        await FirebaseService.postPost(this.title, this.body);
+        await FirebaseService.postPost(this.title, this.body, result.name);
       }else{
         await FirebaseService.modifyPost(this.title, this.body ,this.id);
       }

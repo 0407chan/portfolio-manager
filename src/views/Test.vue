@@ -160,6 +160,8 @@ export default {
 
     async getUserData(){
       const result = await FirebaseService.getUserData();
+      console.log(result)
+      console.log(result.classify)
     },
 
     async deleteuser(){
