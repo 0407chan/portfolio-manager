@@ -38,18 +38,12 @@
 </v-layout>
 </template>
 
-<style>
-.loginModal_btn {
-  width: 100px;
-}
-</style>
-
-
 <script>
 import FirebaseService from "@/services/FirebaseService";
 import firebase, {
   functions
 } from "firebase/app";
+import store from '../store'
 
 export default {
 
@@ -60,7 +54,7 @@ export default {
     pw: "123123",
     message2:"",
   }),
-
+  store,
   methods: {
     async test() {
       const result = await FirebaseService.getUserData();
@@ -79,7 +73,7 @@ export default {
         .signInWithEmailAndPassword(this.email, this.pw)
         .then(
           function(user) {
-            return "로그인 완료"
+            return user
           },
           (err) => {
             if(err.message ==="There is no user record corresponding to this identifier. The user may have been deleted."){
@@ -94,10 +88,13 @@ export default {
     },
 
     async LogIn() {
-      const result =  await this.login();
+      let result =  await this.login();
       console.log("무엇이냐",result);
+      this.$store.state.user = result.user;
       await this.userDataUpload();
-      console.log("로그인 절차 완료");
+
+      result = await FirebaseService.getUserData();
+       console.log("로그인 절차 완료",this.$store.getters.USERINFO);
     },
 
 
@@ -160,13 +157,16 @@ export default {
 
     async getUserData(){
       const result = await FirebaseService.getUserData();
-      console.log(result)
-      console.log(result.classify)
+      console.log("userData",result);
+      console.log("store.getters",this.$store.getters.USERINFO);
+      console.log("store.getters",this.$store.state.user);
     },
 
     async deleteuser(){
       const result = await FirebaseService.deleteUser();
+      console.log(result);
     },
+
   }
 }
 </script>
