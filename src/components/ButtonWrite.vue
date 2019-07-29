@@ -15,7 +15,6 @@
 </template>
 
   <script>
-  import * as easings from 'vuetify/es5/util/easing-patterns'
   import firebase from "firebase/app";
   import FirebaseService from "@/services/FirebaseService";
     export default {
@@ -27,8 +26,6 @@
           number: 0,
           duration: 300,
           offset: 0,
-          easing: 'easeInOutCubic',
-          easings: Object.keys(easings),
 
           visible:true,
           hover: false,

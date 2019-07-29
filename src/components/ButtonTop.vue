@@ -28,8 +28,6 @@ import * as easings from 'vuetify/es5/util/easing-patterns'
         number: 0,
         duration: 300,
         offset: 0,
-        easing: 'easeInOutCubic',
-        easings: Object.keys(easings),
 
         direction: 'top',
         fab: false,
@@ -75,7 +73,6 @@ import * as easings from 'vuetify/es5/util/easing-patterns'
         return {
           duration: this.duration,
           offset: this.offset,
-          easing: this.easing
         }
       },
     },
