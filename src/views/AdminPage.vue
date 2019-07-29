@@ -8,33 +8,21 @@
     <v-data-table
       :headers="headers"
       :items="searchList"
-       hide-actions
-       :items-per-page="10"
       class="elevation-1"
     >
       <template v-slot:items="props">
-        <!-- <template v-if="props.item.edit">
-          <td><input v-model="props.item.name" style="text-align:center;"></input></td>
-          <td >{{ props.item.email }}</td>
-          <td><v-select
-              v-model="props.item.classify"
-                :items="classifies"
-                :menu-props="{offsetY: true }"
-              ></v-select></td>
-          <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
-          <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()}}</td>
-          <td> <v-btn fab flat small color ="three" v-on:click="modifyUser(props.item)"><v-icon size="17">radio_button_unchecked</v-icon></v-btn>
-                <v-btn fab flat small color ="two" v-on:click="editOff(props.item)"><v-icon size="17">clear</v-icon></v-btn>
-          </td>
-        </template> -->
-        <!-- <template v-else> -->
           <td > {{ props.item.name }}</td>
           <td >{{ props.item.email }}</td>
-          <td><v-select
+          <template v-if="props.item.classify=='관리자'">
+            <td >☆★☆{{ props.item.classify }}★☆★</td>
+          </template>
+          <template v-else>
+            <td><v-select
               v-model="props.item.classify"
-                :items="classifies"
-                :menu-props="{offsetY: true }"
+              :items="classifies"
+              :menu-props="{offsetY: true }"
               ></v-select></td>
+          </template>
           <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
           <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()}}</td>
           <td> <v-btn fab flat small color ="three" v-on:click="modifyUser(props.item)"><v-icon size="17">create</v-icon></v-btn>
@@ -50,13 +38,7 @@
       </template>
     </v-data-table>
     </v-flex>
-    <v-flex xs12 text-xs-center pt-2>
-      <v-pagination v-model="pagination.page" :length="pages" next-icon="keyboard_arrow_right"
-      prev-icon="keyboard_arrow_left"></v-pagination>
-    </v-flex>
-    <v-flex text-xs-center>
-      <v-btn round color="two"  v-on:click="get">getUsers</v-btn>
-    </v-flex>
+
   </v-layout>
 </v-container>
 </template>
@@ -133,7 +115,17 @@ import firebase, {
       async deleteUser(user){
         await FirebaseService.deleteUserbyId(user.id);
         this.getUsers();
+      },
+      highlight(text) {
+        var inputText = document.getElementById("inputText");
+        var innerHTML = inputText.innerHTML;
+        var index = innerHTML.indexOf(text);
+        if (index >= 0) {
+         innerHTML = innerHTML.substring(0,index) + "<span class='highlight'>" + innerHTML.substring(index,index+text.length) + "</span>" + innerHTML.substring(index + text.length);
+         inputText.innerHTML = innerHTML;
+        }
       }
+
     },
     watch: {
       search() {
