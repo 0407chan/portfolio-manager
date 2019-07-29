@@ -13,30 +13,38 @@
       class="elevation-1"
     >
       <template v-slot:items="props">
-        <template v-if="props.item.edit">
-          <td><v-text-field v-model="props.item.name" ></v-text-field></td>
+        <!-- <template v-if="props.item.edit">
+          <td><input v-model="props.item.name" style="text-align:center;"></input></td>
           <td >{{ props.item.email }}</td>
-          <td><v-text-field v-model="props.item.classify" ></v-text-field></td>
-          <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()+1}}</td>
-          <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()+1}}</td>
+          <td><v-select
+              v-model="props.item.classify"
+                :items="classifies"
+                :menu-props="{offsetY: true }"
+              ></v-select></td>
+          <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
+          <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()}}</td>
           <td> <v-btn fab flat small color ="three" v-on:click="modifyUser(props.item)"><v-icon size="17">radio_button_unchecked</v-icon></v-btn>
                 <v-btn fab flat small color ="two" v-on:click="editOff(props.item)"><v-icon size="17">clear</v-icon></v-btn>
           </td>
-        </template>
-        <template v-else>
-          <td> {{ props.item.name }}</td>
+        </template> -->
+        <!-- <template v-else> -->
+          <td > {{ props.item.name }}</td>
           <td >{{ props.item.email }}</td>
-          <td >{{ props.item.classify }}</td>
-          <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()+1}}</td>
-          <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()+1}}</td>
-          <td> <v-btn fab flat small color ="three" v-on:click="editOn(props.item)"><v-icon size="17">create</v-icon></v-btn>
+          <td><v-select
+              v-model="props.item.classify"
+                :items="classifies"
+                :menu-props="{offsetY: true }"
+              ></v-select></td>
+          <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
+          <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()}}</td>
+          <td> <v-btn fab flat small color ="three" v-on:click="modifyUser(props.item)"><v-icon size="17">create</v-icon></v-btn>
                 <v-btn fab flat small color ="two" v-on:click="deleteUser(props.item)"><v-icon size="17">delete</v-icon></v-btn>
           </td>
-        </template>
+        <!-- </template> -->
       </template>
 
       <template v-slot:no-data transition="scale-transition">
-        <v-alert :value="searchList.length == 0" color="error" icon="warning" outline >
+        <v-alert  v-if="alertinit" :value="searchList.length == 0" color="error" icon="warning" outline >
           "{{search}}" is not in Users
         </v-alert>
       </template>
@@ -66,8 +74,10 @@ import firebase, {
         search: '',
         edit: false,
         users:[],
+        alertinit:false,
         pagination: {},
         selected: [],
+        classifies:["팀원","수퍼맨","방문자","지스맨","지쓰구리"],
         searchList:[],
         headers: [
           { text: 'Name', sortable: false, value: 'name', align: 'center'},
@@ -81,6 +91,7 @@ import firebase, {
     },
     mounted() {
       this.getUsers();
+
     },
     methods: {
       async getUsers() {
@@ -90,6 +101,7 @@ import firebase, {
           this.users[i].edit = false;
           this.searchList.push(this.users[i]);
         }
+        this.alertinit = true;
       },
       get(){
         console.log(this.selected);
@@ -115,6 +127,7 @@ import firebase, {
       },
       async modifyUser(user){
         await FirebaseService.modifyUser(user);
+        swal("수정사항이 반영되었습니까");
         this.getUsers();
       },
       async deleteUser(user){
@@ -137,7 +150,9 @@ import firebase, {
           search = search.toLowerCase();
           for(var i = 0; i< len; i++){
             var a = this.users[i].name.toLowerCase()
-            if(a.includes(search)){
+            var b = this.users[i].email.toLowerCase()
+            var c = this.users[i].classify.toLowerCase()
+            if(a.includes(search) || b.includes(search) || c.includes(search)){
               this.searchList.push(this.users[i]);
             }
           }
