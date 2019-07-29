@@ -222,13 +222,29 @@ export default {
 				})
 			})
 	},
-
+	getUser(){
+		var userDoc = firestore.collection(USERS).doc(user.uid);
+		return userDoc.get().then(function(doc) {
+				if (doc.exists) {
+					let data = doc.data();
+					data.name = doc.data().name;
+					data.email = doc.data().email;
+					data.classify = doc.data().classify;
+					data.id = id;
+					return data;
+				} else {
+						console.log("No such document!");
+				}
+		}).catch(function(error) {
+				console.log("Error getting document:", error);
+		});
+	},
 	getUserData(){
 		var user = firebase.auth().currentUser;
 		if(user != null){
 			var userData = firestore.collection(USERS).doc(user.uid);
 			return userData.get().then(function(result) {
-
+				
 				return result.data();
 			}).catch(function(error) {
 				console.log("Error getting cached document:", error);

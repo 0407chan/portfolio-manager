@@ -78,8 +78,8 @@ export default new Router({
 			component: AdminPage
 	},
 	{
-			path: '/userdetail/:email',
-			name: 'userdetail',
+			path: '/userinfo/:id',
+			name: 'userinfo',
 			component: UserDetail
 	}
   ]

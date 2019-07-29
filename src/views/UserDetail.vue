@@ -2,15 +2,12 @@
     <v-container>
         <v-layout>
             <v-flex>
-                  <v-card
+                    <v-card
                         max-width="344"
                         class="mx-auto"
                     >
-                        <v-card-title>{{user.name}}</v-card-title>
-                        <v-card-text>{{user.classify}}</v-card-text>
-                        <v-card-actions>
-                        <v-btn text @click="userInfo">Click</v-btn>
-                        </v-card-actions>
+                        <v-card-title>{{pageuser.name}}</v-card-title>
+                        <v-card-text>{{pageuser.classify}}</v-card-text>
                     </v-card>
             </v-flex>
         </v-layout>
@@ -27,19 +24,25 @@ export default {
     data() {
         return {
             user:"",
+            result:'',
+            pageuser:'',
         }
 
     },
     created() {
-        this.email = this.$route.params.email;
+        this.id = this.$route.params.id;
         firebase.auth().onAuthStateChanged(async user => {
             if (user) {
-                var result = await FirebaseService.getUser();
+                this.result = await FirebaseService.getUsers();
+                for (var i in this.result) {
+                    if (this.result[i].id === this.id) {
+                        this.pageuser = this.result[i]
+                    }
+                }
         }
         })
     },
     methods: {
-    
     },
 }
 </script>
