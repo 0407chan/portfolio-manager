@@ -4,7 +4,7 @@
 <v-layout my-5 wrap>
   <v-flex v-for="profile in developer" xs12 md4>
     <v-hover>
-      <v-card slot-scope="{ hover }" class="mx-auto" color="grey lighten-4" max-width="600">
+      <v-card slot-scope="{ hover }" class="mx-auto" color="grey lighten-4">
         <v-img :aspect-ratio="1.35" :src='profile.picture'>
           <!-- text div-->
           <v-fade-transition>

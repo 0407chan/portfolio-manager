@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
 
 
 Vue.use(Vuetify, {
-	iconfont: 'fa',
+	iconfont: 'md',
 	theme: {
 		primary: '#3f51b5',
 		secondary: '#b0bec5',
