@@ -157,13 +157,13 @@ export default {
           } else if (weatherID >= 600 && weatherID <= 622) {
             return require('../../public/svg/wi-snow.svg');
           } else if (weatherID >= 701 && weatherID <= 781) {
-            return require('../../public/svg/wi-train.svg');
+            return require('../../public/svg/wi-day-haze.svg');
           } else if (weatherID == 800) {
-            return require('../../public/svg/wi-moon-alt-new.svg');
+            return require('../../public/svg/wi-dust.svg');
           } else if (weatherID >= 801 && weatherID <= 804) {
             return require('../../public/svg/wi-cloud.svg');
           } else if (weatherID >= 900 && weatherID <= 962) {
-            return require('../../public/svg/wi-small-craft-advisory.svg');
+            return require('../../public/svg/wi-cloudy.svg');
           }
         }
     }
