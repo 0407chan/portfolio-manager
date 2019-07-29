@@ -9,16 +9,30 @@
       :headers="headers"
       :items="searchList"
        hide-actions
-
-      :pagination.sync="pagination"
+       :items-per-page="10"
       class="elevation-1"
     >
       <template v-slot:items="props">
-        <td>{{ props.item.name }}</td>
-        <td >{{ props.item.email }}</td>
-        <td >{{ props.item.classify }}</td>
-        <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()+1}}</td>
-        <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()+1}}</td>
+        <template v-if="props.item.edit">
+          <td><v-text-field v-model="props.item.name" ></v-text-field></td>
+          <td >{{ props.item.email }}</td>
+          <td><v-text-field v-model="props.item.classify" ></v-text-field></td>
+          <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()+1}}</td>
+          <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()+1}}</td>
+          <td> <v-btn fab flat small color ="three" v-on:click="modifyUser(props.item)"><v-icon size="17">radio_button_unchecked</v-icon></v-btn>
+                <v-btn fab flat small color ="two" v-on:click="editOff(props.item)"><v-icon size="17">clear</v-icon></v-btn>
+          </td>
+        </template>
+        <template v-else>
+          <td> {{ props.item.name }}</td>
+          <td >{{ props.item.email }}</td>
+          <td >{{ props.item.classify }}</td>
+          <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()+1}}</td>
+          <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()+1}}</td>
+          <td> <v-btn fab flat small color ="three" v-on:click="editOn(props.item)"><v-icon size="17">create</v-icon></v-btn>
+                <v-btn fab flat small color ="two" v-on:click="deleteUser(props.item)"><v-icon size="17">delete</v-icon></v-btn>
+          </td>
+        </template>
       </template>
 
       <template v-slot:no-data transition="scale-transition">
@@ -27,7 +41,6 @@
         </v-alert>
       </template>
     </v-data-table>
-
     </v-flex>
     <v-flex xs12 text-xs-center pt-2>
       <v-pagination v-model="pagination.page" :length="pages" next-icon="keyboard_arrow_right"
@@ -51,16 +64,18 @@ import firebase, {
       return {
         selected: [],
         search: '',
+        edit: false,
         users:[],
         pagination: {},
         selected: [],
         searchList:[],
         headers: [
           { text: 'Name', sortable: false, value: 'name', align: 'center'},
-          { text: 'Email', value: 'email',sortable: false, align: 'center' },
-          { text: 'Classify', value: 'classify' ,sortable: false, align: 'center'},
+          { text: 'Email', value: 'email',sortable: false, align: 'center'},
+          { text: 'Classify', value: 'classify' ,sortable: false,align: 'center'},
           { text: 'Created_at', value: 'created_at' ,sortable: false, align: 'center'},
           { text: 'Current_at', value: 'current_at' ,sortable: false, align: 'center'},
+          { text: 'Actions', value: 'btns' ,sortable: false, align: 'center'},
         ],
       }
     },
@@ -72,11 +87,39 @@ import firebase, {
         this.users = await FirebaseService.getUsers();
         this.searchList = [];
         for(var i = 0; i< this.users.length; i++){
+          this.users[i].edit = false;
           this.searchList.push(this.users[i]);
         }
       },
       get(){
         console.log(this.selected);
+      },
+      delete(){
+        console.log("temp");
+      },
+      editOn(item){
+        item.edit = true;
+        console.log(item);
+        var temp = [];
+        for(var i = 0; i< this.searchList.length; i++){
+          temp.push(this.searchList[i]);
+        }
+        this.searchList = [];
+        for(var i = 0; i< temp.length; i++){
+          this.searchList.push(temp[i]);
+        }
+      },
+      editOff(item){
+
+        this.getUsers();
+      },
+      async modifyUser(user){
+        await FirebaseService.modifyUser(user);
+        this.getUsers();
+      },
+      async deleteUser(user){
+        await FirebaseService.deleteUserbyId(user.id);
+        this.getUsers();
       }
     },
     watch: {

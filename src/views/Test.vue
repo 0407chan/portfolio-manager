@@ -163,7 +163,7 @@ export default {
     },
 
     async deleteuser(){
-      const result = await FirebaseService.deleteUser();
+      const result = await FirebaseService.selfDeleteUser();
       console.log(result);
     },
 

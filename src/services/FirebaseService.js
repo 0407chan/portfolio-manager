@@ -27,7 +27,6 @@ const config = {
 
 firebase.initializeApp(config)
 const firestore = firebase.firestore()
-
 export default {
 
 	/********************\
@@ -199,6 +198,35 @@ export default {
 				})
 	},
 
+
+	modifyUser(user){
+		return firestore.collection(USERS).doc(user.id).set({
+			name: user.name,
+			classify: user.classify,
+			email: user.email,
+			created_at: user.created_at,
+			current_at: user.current_at
+		})
+	},
+	deleteUserbyId(id){
+		//delete user data from firebase
+		// firestore.collection(USERS).doc(id).delete().then(function() {
+		//
+		// }).catch(function(error) {
+		// 		console.error("Error removing document: ", error);
+		// });
+
+		//delete user from Athentication
+		var a = firebase.auth().getUser(id);
+		console.log(a);
+		// firebase.auth().deleteUser(id).then(function() {
+		//
+		// }).catch(function(error) {
+		//   console.log("이미 지워졌당ㅋ",error);
+		// });
+	},
+
+
 	/********************\
  \    Login 함수들      \
 	\********************/
@@ -266,7 +294,9 @@ export default {
 
 		});
 	},
-	deleteUser(){
+
+	//셀프 탈퇴
+	selfDeleteUser(){
 		var user = firebase.auth().currentUser;
 		if(user !== null){
 			firestore.collection(USERS).doc(user.uid).delete().then(function() {
@@ -283,7 +313,6 @@ export default {
 		}else{
 			console.log("유저없음");
 		}
-
 	},
 
 	/********************\
