@@ -209,13 +209,42 @@ export default {
 	},
 
 	// TODO 작업중
-
+	getUsers() {
+		const users = firestore.collection(USERS);
+		return users.orderBy('created_at', 'desc')
+			.get()
+			.then((userDoc) => {
+				return userDoc.docs.map((doc) => {
+					let data = doc.data();
+					data.id = doc.id;
+					data.created_at = new Date(data.created_at.toDate());
+					return data
+				})
+			})
+	},
+	getUser(){
+		var userDoc = firestore.collection(USERS).doc(user.uid);
+		return userDoc.get().then(function(doc) {
+				if (doc.exists) {
+					let data = doc.data();
+					data.name = doc.data().name;
+					data.email = doc.data().email;
+					data.classify = doc.data().classify;
+					data.id = id;
+					return data;
+				} else {
+						console.log("No such document!");
+				}
+		}).catch(function(error) {
+				console.log("Error getting document:", error);
+		});
+	},
 	getUserData(){
 		var user = firebase.auth().currentUser;
 		if(user != null){
 			var userData = firestore.collection(USERS).doc(user.uid);
 			return userData.get().then(function(result) {
-
+				
 				return result.data();
 			}).catch(function(error) {
 				console.log("Error getting cached document:", error);

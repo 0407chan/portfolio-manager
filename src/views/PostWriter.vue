@@ -67,7 +67,7 @@ export default {
       if(this.id==null){
         await FirebaseService.postPost(this.title, this.body, result.name);
       }else{
-        await FirebaseService.modifyPost(this.title, this.body ,this.id);
+        await FirebaseService.modifyPost(this.title, this.body ,this.id, result.name);
       }
       this.$router.push({
         name: "post"
@@ -84,7 +84,7 @@ export default {
       if(this.id==null){
         await FirebaseService.postPost(this.title, this.body, result.name);
       }else{
-        await FirebaseService.modifyPost(this.title, this.body ,this.id);
+        await FirebaseService.modifyPost(this.title, this.body ,this.id, result.name);
       }
       this.$router.push({
         name: "post"
