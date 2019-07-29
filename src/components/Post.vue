@@ -38,6 +38,14 @@
   <v-flex xs12 row>
     <vue-markdown>{{body}}</vue-markdown>
   </v-flex>
+  <v-flex xs12 text-xs-right round class="comment_title_margin_top">
+    <v-btn class="post_btn" v-if="useremail === this.writer" round color="two" dark :to="{ name: 'modifypost', params: {id: this.id} }">
+      <v-icon size="17" class="mr-2">fa-pencil</v-icon>Modify
+    </v-btn>
+    <v-btn class="post_btn" v-if="useremail === this.writer" round color="three" dark v-on:click="deletePost">
+      <v-icon size="17" class="mr-2">delete</v-icon>Delete
+    </v-btn>
+  </v-flex>
   <v-flex xs12 class="comment_title_margin_top">
     <span class="comment_title">Comment</span>
     <v-divider></v-divider>
@@ -75,8 +83,8 @@
             {{addZeros(comment.created_at.getMinutes())}}
           </v-flex>
           <v-flex xs2 sm1 text-xs-right>
-            <v-icon v-if="useremail === comment.writer"  @click="modifyCommentForm(comment)" size="17" class="mr-2 comment_btn" hover color="four">fa-edit</v-icon>
-            <v-icon v-if="useremail === comment.writer" @click="deleteComment(comment.id)" size="17" class="mr-2 comment_btn" hover color="three">fa-remove</v-icon>
+            <v-icon v-if="useremail === comment.writer"  @click="modifyCommentForm(comment)" size="17" class="mr-2 comment_btn" hover color="three">create</v-icon>
+            <v-icon v-if="useremail === comment.writer" @click="deleteComment(comment.id)" size="17" class="mr-2 comment_btn" hover color="two">delete</v-icon>
           </v-flex>
         </v-layout>
       </v-timeline-item>
@@ -88,20 +96,12 @@
     </v-flex>
   </v-flex>
   <!-- post comment, need authority -->
-  <v-flex xs8>
-    <v-text-field v-if="username" v-model="comment" autofocus label="Comment"></v-text-field>
+  <v-flex xs9>
+    <v-text-field v-if="username" v-model="comment" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
   </v-flex>
-  <v-flex xs4 text-xs-right>
+  <v-flex xs3 text-xs-right>
     <v-btn v-if="username" round color="four" dark @click="postComment" class="post_btn">
       <v-icon size="17" class="mr-2">fa-pencil</v-icon>Write
-    </v-btn>
-  </v-flex>
-  <v-flex xs12 text-xs-right round>
-    <v-btn class="post_btn" v-if="username" round color="two" dark :to="{ name: 'modifypost', params: {id: this.id} }">
-      <v-icon size="17" class="mr-2">fa-pencil</v-icon>Modify
-    </v-btn>
-    <v-btn class="post_btn" v-if="username" round color="three" dark v-on:click="deletePost">
-      <v-icon size="17" class="mr-2">delete</v-icon>Delete
     </v-btn>
   </v-flex>
 </v-layout>
@@ -268,7 +268,6 @@ export default {
 .comment_btn {
   width: 20px;
   height: 20px;
-  text-shadow: 2px 1px 1px black;
 }
 
 .comment_title {
