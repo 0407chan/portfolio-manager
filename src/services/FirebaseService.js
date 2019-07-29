@@ -103,13 +103,14 @@ export default {
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
 			name: name,
 			writer:store.state.user.email,
+			isModify: false,
 		})
 	},
 	getPostComments(postId) {
 		const postCommentCollection = firestore.collection(POSTCOMMENTS)
 		return postCommentCollection
 				.where("postId", "==", postId)
-				.orderBy("created_at")
+				.orderBy("created_at", 'desc')
 				.get()
 				.then((docSnapshots) => {
 					return docSnapshots.docs.map((doc) => {
@@ -119,6 +120,33 @@ export default {
 						return data
 					})
 				})
+	},
+	canModify(comment){
+		return firestore.collection(POSTCOMMENTS).doc(comment.id).set({
+			body: comment.body,
+			created_at: comment.created_at,
+			isModify: false,
+			name: comment.name,
+			postId: comment.postId,
+			writer: store.state.user.email
+		})
+	},
+	modifyComment(comment, newComment){
+		return firestore.collection(POSTCOMMENTS).doc(comment.id).set({
+			body: newComment,
+			created_at: comment.created_at,
+			isModify: false,
+			name: comment.name,
+			postId: comment.postId,
+			writer: store.state.user.email
+		})
+	},
+	deleteComment(commentId){
+		return firestore.collection(POSTCOMMENTS).doc(commentId).delete().then(function() {
+
+		}).catch(function(error) {
+				console.error("Error removing postComment: ", error);
+		});
 	},
 
 	/********************\
