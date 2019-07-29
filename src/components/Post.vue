@@ -67,7 +67,7 @@
             {{comment.body}}
           </v-flex>
           <v-flex xs7 sm8 v-if="comment.isModify">
-            <v-text-field v-model="newComment" :value='comment.body'></v-text-field>
+            <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyComment(comment)"></v-text-field>
           </v-flex>
           <v-flex xs1 sm1 text-xs-right v-if="comment.isModify">
             <v-btn fab dark v-if="useremail === comment.writer"  @click="modifyComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
@@ -192,22 +192,22 @@ export default {
     })
   },
   methods: {
-    deleteComment(commentId){
-      FirebaseService.deleteComment(commentId);
+    async deleteComment(commentId){
+      await FirebaseService.deleteComment(commentId);
       this.getPostComments(this.id);
     },
-    modifyComment(comment){
-      FirebaseService.modifyComment(comment, this.newComment);
+    async modifyComment(comment){
+      await FirebaseService.modifyComment(comment, this.newComment);
       this.getPostComments(this.id);
     },
-    modifyCommentForm(comment) {
+    async modifyCommentForm(comment) {
       if(comment.isModify){
         comment.isModify = false;
       }else{
         comment.isModify = true;
       }
       this.newComment = comment.body;
-      FirebaseService.canModify(comment);
+      await FirebaseService.canModify(comment);
     },
     async postComment() {
       let result = await FirebaseService.getUserData();
