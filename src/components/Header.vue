@@ -11,7 +11,7 @@
 
   <v-toolbar-items class="hidden-sm-and-down">
 
-    <v-btn v-if="username" flat :to="{ name: 'userinfo', params: {email: email} }">{{username}}님</v-btn>
+    <v-btn v-if="username" flat :to="{ name: 'userinfo', params: {id: id}}">{{username}}님</v-btn>
     <v-btn flat :to="{name:'portfolio'}">Portfolio</v-btn>
     <v-btn flat :to="{name:'post'}">Post</v-btn>
     <v-btn flat v-if="!user">
