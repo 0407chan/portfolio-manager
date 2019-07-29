@@ -3,7 +3,7 @@
     fab
     fixed
     color='four'
-    v-if="user&&visible"
+    v-if="writeAuthority&&visible"
     :class="{active:true, moved: isActive}"
     v-on:click="currpage"
     dark
@@ -15,11 +15,8 @@
 </template>
 
   <script>
-  import * as easings from 'vuetify/es5/util/easing-patterns'
   import firebase from "firebase/app";
-  import firebaseApp from 'firebase/app'
   import FirebaseService from "@/services/FirebaseService";
-  import store from '../store'
     export default {
 
       data() {
@@ -29,8 +26,6 @@
           number: 0,
           duration: 300,
           offset: 0,
-          easing: 'easeInOutCubic',
-          easings: Object.keys(easings),
 
           visible:true,
           hover: false,
@@ -50,7 +45,6 @@
           transition: 'slide-y-reverse-transition',
 
           user: '',
-          username: '',
           writeAuthority: '',
     		}
     	},
@@ -64,7 +58,7 @@
         init(){
           var a = window.location.href.substring(8).indexOf('/');
           this.page = window.location.href.substring(8).substring(a);
-          if(this.page =='/post' || this.page =='/portfolio'){
+          if(this.page ==='/post' || this.page ==='/portfolio'){
             this.visible = true;
           }else {
             this.visible = false;
@@ -77,22 +71,21 @@
           var a = window.location.href.substring(8).indexOf('/');
           this.page = window.location.href.substring(8).substring(a);
 
-          if(this.page =='/post' || this.page =='/portfolio'){
+          if (this.page ==='/post' || this.page ==='/portfolio'){
             this.visible = true;
           }else {
             this.visible = false;
           }
 
-          if(this.page =='/post'){
+          if(this.page ==='/post'){
             this.$router.push('writepost');
-          }else if(this.page =='/portfolio'){
+          }else if(this.page ==='/portfolio'){
             this.$router.push('writeportfolio');
           }
         },
         async getUserData(){
-          const result = await FirebaseService.getUserData()
+          const result = await FirebaseService.getUserData();
           this.writeAuthority = result.classfy
-          console.log(result,this.writeAuthority)
     },
       },
 
@@ -111,7 +104,7 @@
         $route (to, from){
           var a = window.location.href.substring(8).indexOf('/');
           this.page = window.location.href.substring(8).substring(a);
-          if(this.page =='/post' || this.page =='/portfolio'){
+          if(this.page ==='/post' || this.page ==='/portfolio'){
             this.visible = true;
           }else {
             this.visible = false;
@@ -119,10 +112,16 @@
         }
       },
       created() {
-        firebase.auth().onAuthStateChanged(user => {
+        firebase.auth().onAuthStateChanged(async user => {
             this.user = user;
-            if (!this.user) {
-              this.username = ""
+            if (user) {
+              var result = await FirebaseService.getUserData();
+              if (result.classify !== '방문자') {
+                this.writeAuthority = true
+              }
+            }
+            else {
+              this.writeAuthority = false
             }
 
           });

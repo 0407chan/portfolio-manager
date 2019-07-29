@@ -27,7 +27,6 @@ const config = {
 
 firebase.initializeApp(config)
 const firestore = firebase.firestore()
-
 export default {
 
 	/********************\
@@ -182,6 +181,54 @@ export default {
 	},
 
 	/********************\
+ \     User 함수들      \
+	\********************/
+	getUsers(){
+		const usersCollection = firestore.collection(USERS)
+		return usersCollection
+				.orderBy('created_at', 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+						let data = doc.data();
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate())
+						data.current_at = new Date(data.current_at.toDate())
+						return data
+					})
+				})
+	},
+
+
+	modifyUser(user){
+		return firestore.collection(USERS).doc(user.id).set({
+			name: user.name,
+			classify: user.classify,
+			email: user.email,
+			created_at: user.created_at,
+			current_at: user.current_at
+		})
+	},
+	deleteUserbyId(id){
+		//delete user data from firebase
+		// firestore.collection(USERS).doc(id).delete().then(function() {
+		//
+		// }).catch(function(error) {
+		// 		console.error("Error removing document: ", error);
+		// });
+
+		//delete user from Athentication
+		var a = firebase.auth().getUser(id);
+		console.log(a);
+		// firebase.auth().deleteUser(id).then(function() {
+		//
+		// }).catch(function(error) {
+		//   console.log("이미 지워졌당ㅋ",error);
+		// });
+	},
+
+
+	/********************\
  \    Login 함수들      \
 	\********************/
 	loginWithGoogle() {
@@ -208,8 +255,24 @@ export default {
 		return firebase.auth().signOut()
 	},
 
-	// TODO 작업중
 
+	getUser(){
+		var userDoc = firestore.collection(USERS).doc(user.uid);
+		return userDoc.get().then(function(doc) {
+				if (doc.exists) {
+					let data = doc.data();
+					data.name = doc.data().name;
+					data.email = doc.data().email;
+					data.classify = doc.data().classify;
+					data.id = id;
+					return data;
+				} else {
+						console.log("No such document!");
+				}
+		}).catch(function(error) {
+				console.log("Error getting document:", error);
+		});
+	},
 	getUserData(){
 		var user = firebase.auth().currentUser;
 		if(user != null){
@@ -250,7 +313,9 @@ export default {
 
 		});
 	},
-	deleteUser(){
+
+	//셀프 탈퇴
+	selfDeleteUser(){
 		var user = firebase.auth().currentUser;
 		if(user !== null){
 			firestore.collection(USERS).doc(user.uid).delete().then(function() {
@@ -267,7 +332,6 @@ export default {
 		}else{
 			console.log("유저없음");
 		}
-
 	},
 
 	/********************\
