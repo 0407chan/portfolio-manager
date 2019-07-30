@@ -8,6 +8,7 @@ const PORTFOLIOS = 'portfolios'
 const PAGELOGS = 'pagelogs'
 const USERS = 'users'
 const POSTCOMMENTS = "postcomments"
+const PORTFOLIOCOMMENTS = 'portfoliocomments'
 
 // Setup Firebase
 const config = {
@@ -206,6 +207,62 @@ export default {
 			img,
 			created_at: firebase.firestore.FieldValue.serverTimestamp()
 		})
+	},
+
+	/**************************\
+ \ Portfolio Comment 함수들   \
+	\**************************/
+	postPortfolioComment(portfolioId, body, name){
+		return firestore.collection(PORTFOLIOCOMMENTS).add({
+			portfolioId,
+			body,
+			created_at: firebase.firestore.FieldValue.serverTimestamp(),
+			name: name,
+			writer:store.state.user.email,
+			isModify: false,
+		})
+	},
+	getPortfolioComments(portfolioId) {
+		const portfolioCommentCollection = firestore.collection(PORTFOLIOCOMMENTS)
+		return portfolioCommentCollection
+				.where("portfolioId", "==", portfolioId)
+				.orderBy("created_at", 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+						let data = doc.data()
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate())
+						return data
+					})
+				})
+	},
+	canPortfolioModify(comment){
+		return firestore.collection(PORTFOLIOCOMMENTS).doc(comment.id).set({
+			body: comment.body,
+			created_at: comment.created_at,
+			isModify: false,
+			name: comment.name,
+			portfolioId: comment.portfolioId,
+			writer: store.state.user.email
+		})
+	},
+	modifyPortfolioComment(comment, newComment){
+		return firestore.collection(PORTFOLIOCOMMENTS).doc(comment.id).set({
+			body: newComment,
+			created_at: comment.created_at,
+			isModify: false,
+			name: comment.name,
+			portfolioId: comment.portfolioId,
+			writer: store.state.user.email
+		})
+	},
+	deletePortfolioComment(commentId){
+		return firestore.collection(PORTFOLIOCOMMENTS).doc(commentId).delete().then(function() {
+
+		}).catch(function(error) {
+				console.error("Error removing portfolioComment: ", error);
+		});
 	},
 
 	/********************\
