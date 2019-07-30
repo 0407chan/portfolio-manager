@@ -67,23 +67,21 @@ export default {
     LoginModal,
     Translate,
   },
+
   data() {
     return {
-      marked: false
+      items: [{
+        title: "post"
+      }, {
+        title: "portfolio"
+      }],
+      user: "",
+      username: "",
+      email: '',
+      id: '',
+      marked: false,
     };
   },
-
-  data: () => ({
-    items: [{
-      title: "post"
-    }, {
-      title: "portfolio"
-    }],
-    user: "",
-    username: "",
-    email: '',
-    id: '',
-  }),
   methods: {
     favorite() {
       alert("ctrl + D 를 눌러 즐겨찾기에 추가해주세요.");

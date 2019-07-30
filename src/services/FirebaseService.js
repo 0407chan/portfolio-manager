@@ -237,6 +237,18 @@ export default {
 			current_at: user.current_at
 		})
 	},
+
+	modifyUserWithImage(user, image){
+		return firestore.collection(USERS).doc(user.id).set({
+			name: user.name,
+			classify: user.classify,
+			email: user.email,
+			created_at: user.created_at,
+			current_at: user.current_at,
+			userImageUrl: image,
+		})
+	},
+
 	deleteUserbyId(id){
 		//delete user data from firebase
 		// firestore.collection(USERS).doc(id).delete().then(function() {
@@ -292,6 +304,7 @@ export default {
 					data.name = doc.data().name;
 					data.email = doc.data().email;
 					data.classify = doc.data().classify;
+					data.userImageUrl = doc.data().userImageUrl;
 					data.id = id;
 					return data;
 				} else {
@@ -329,13 +342,14 @@ export default {
 		});
 	},
 
-	userDataToDB(email,classify,name,created_at){
+	userDataToDB(email,classify,name,created_at,userImageUrl){
 		var userId = firebase.auth().currentUser.uid;
 		return firestore.collection(USERS).doc(userId).set({
 			email,
 			classify,
 			name,
 			created_at,
+			userImageUrl,
 			current_at: firebase.firestore.FieldValue.serverTimestamp(),
 		}).then(function(result){
 
