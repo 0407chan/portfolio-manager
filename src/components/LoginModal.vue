@@ -209,7 +209,7 @@ export default {
         result = await FirebaseService.getUserData();
         const re = await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,firebase.firestore.FieldValue.serverTimestamp());
       }else{
-        const re = await FirebaseService.userDataToDB(result.email,result.classify,result.name,result.created_at);
+        const re = await FirebaseService.userDataToDB(result.email,result.classify,result.name,result.created_at,userImageUrl);
       }
     },
 

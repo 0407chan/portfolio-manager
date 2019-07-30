@@ -32,7 +32,7 @@
           <td> {{ props.item.name }}</td>
           <td>{{ props.item.email }}</td>
           <template v-if="props.item.classify=='관리자'">
-            <td>☆★☆{{ props.item.classify }}★☆★</td>
+            <td >🔥{{ props.item.classify }}🔥</td>
           </template>
           <template v-else>
             <td>
