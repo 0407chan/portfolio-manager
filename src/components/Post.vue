@@ -53,7 +53,7 @@
 
   <v-flex xs12 v-for="(comment, index) in postComments" :key="comment.id">
     <v-timeline v-if="index < limit_postComment" dense clipped style="margin-left: 5px; padding-top:5px">
-      <v-timeline-item :color="colors[index%4]" small class="timeline_comment">
+      <v-timeline-item :color="colors[index%4]" small style="padding-bottom:5px">
         <template v-slot:icon>
           <!-- 타임라인 댓글 사진 표시 <v-avatar>
             <img src="http://i.pravatar.cc/64">
@@ -67,7 +67,7 @@
             {{comment.body}}
           </v-flex>
           <v-flex xs7 sm8 v-if="comment.isModify">
-            <v-text-field v-model="newComment" :value='comment.body'></v-text-field>
+            <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyComment(comment)"></v-text-field>
           </v-flex>
           <v-flex xs1 sm1 text-xs-right v-if="comment.isModify">
             <v-btn fab dark v-if="useremail === comment.writer"  @click="modifyComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
@@ -97,7 +97,7 @@
   </v-flex>
   <!-- post comment, need authority -->
   <v-flex xs9>
-    <v-text-field v-if="username" v-model="comment" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
+    <v-text-field v-if="username" v-model="comment_input" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
   </v-flex>
   <v-flex xs3 text-xs-right>
     <v-btn v-if="username" round color="four" dark @click="postComment" class="post_btn">
@@ -146,6 +146,7 @@ export default {
   },
   data() {
     return {
+      comment_input: '',
       heightt: 0,
       img: '',
       index: 0,
@@ -154,10 +155,8 @@ export default {
       username: '',
       useremail: '',
       user: '',
-      canModifyCancel: false,
       postComments: [],
       colors: ['two', 'three', 'four', 'five'],
-      dialog: false,
       newComment: '',
     }
   },
@@ -192,27 +191,27 @@ export default {
     })
   },
   methods: {
-    deleteComment(commentId){
-      FirebaseService.deleteComment(commentId);
+    async deleteComment(commentId){
+      await FirebaseService.deleteComment(commentId);
       this.getPostComments(this.id);
     },
-    modifyComment(comment){
-      FirebaseService.modifyComment(comment, this.newComment);
+    async modifyComment(comment){
+      await FirebaseService.modifyComment(comment, this.newComment);
       this.getPostComments(this.id);
     },
-    modifyCommentForm(comment) {
+    async modifyCommentForm(comment) {
       if(comment.isModify){
         comment.isModify = false;
       }else{
         comment.isModify = true;
       }
       this.newComment = comment.body;
-      FirebaseService.canModify(comment);
+      await FirebaseService.canModify(comment);
     },
     async postComment() {
       let result = await FirebaseService.getUserData();
-      await FirebaseService.postPostComment(this.id, this.comment, result.name);
-      this.comment = '';
+      await FirebaseService.postPostComment(this.id, this.comment_input, result.name);
+      this.comment_input = '';
       this.getPostComments(this.id)
     },
     async deletePost() {
@@ -277,10 +276,6 @@ export default {
 
 .comment_title_margin_top{
   margin-top: 50px;
-}
-
-.timeline_comment {
-  padding-bottom: 5px;
 }
 
 .onModify {

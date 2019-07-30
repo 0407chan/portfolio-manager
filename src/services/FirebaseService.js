@@ -8,6 +8,7 @@ const PORTFOLIOS = 'portfolios'
 const PAGELOGS = 'pagelogs'
 const USERS = 'users'
 const POSTCOMMENTS = "postcomments"
+const PORTFOLIOCOMMENTS = 'portfoliocomments'
 
 // Setup Firebase
 const config = {
@@ -25,8 +26,11 @@ const config = {
 
 }
 
+
 firebase.initializeApp(config)
 const firestore = firebase.firestore()
+
+
 export default {
 
 	/********************\
@@ -206,6 +210,62 @@ export default {
 			img,
 			created_at: firebase.firestore.FieldValue.serverTimestamp()
 		})
+	},
+
+	/**************************\
+ \ Portfolio Comment 함수들   \
+	\**************************/
+	postPortfolioComment(portfolioId, body, name){
+		return firestore.collection(PORTFOLIOCOMMENTS).add({
+			portfolioId,
+			body,
+			created_at: firebase.firestore.FieldValue.serverTimestamp(),
+			name: name,
+			writer:store.state.user.email,
+			isModify: false,
+		})
+	},
+	getPortfolioComments(portfolioId) {
+		const portfolioCommentCollection = firestore.collection(PORTFOLIOCOMMENTS)
+		return portfolioCommentCollection
+				.where("portfolioId", "==", portfolioId)
+				.orderBy("created_at", 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+						let data = doc.data()
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate())
+						return data
+					})
+				})
+	},
+	canPortfolioModify(comment){
+		return firestore.collection(PORTFOLIOCOMMENTS).doc(comment.id).set({
+			body: comment.body,
+			created_at: comment.created_at,
+			isModify: false,
+			name: comment.name,
+			portfolioId: comment.portfolioId,
+			writer: store.state.user.email
+		})
+	},
+	modifyPortfolioComment(comment, newComment){
+		return firestore.collection(PORTFOLIOCOMMENTS).doc(comment.id).set({
+			body: newComment,
+			created_at: comment.created_at,
+			isModify: false,
+			name: comment.name,
+			portfolioId: comment.portfolioId,
+			writer: store.state.user.email
+		})
+	},
+	deletePortfolioComment(commentId){
+		return firestore.collection(PORTFOLIOCOMMENTS).doc(commentId).delete().then(function() {
+
+		}).catch(function(error) {
+				console.error("Error removing portfolioComment: ", error);
+		});
 	},
 
 	/********************\
@@ -400,4 +460,45 @@ export default {
 			visitTime: firebase.firestore.FieldValue.serverTimestamp()
 		})
 	},
+
+
+	/********************\
+ \ Page Offline 함수들  \
+	\********************/
+
+
+	/** 오프라인 지속성 구현 */
+	enablePersistence(){
+      firestore.enablePersistence()
+        .catch(function(err) {
+            if (err.code == 'failed-precondition') {
+                // Multiple tabs open, persistence can only be enabled
+                // in one tab at a a time.
+                // ...
+            } else if (err.code == 'unimplemented') {
+                // The current browser does not support all of the
+                // features required to enable persistence
+                // ...
+            }
+        });
+      // Subsequent queries will use persistence, if it was enabled successfully
+      // [END initialize_persistence]
+  },
+
+	// it("should reply with .fromCache fields", () => {
+  //     // [START use_from_cache]
+  //     db.collection("cities").where("state", "==", "CA")
+  //       .onSnapshot({ includeMetadataChanges: true }, function(snapshot) {
+  //           snapshot.docChanges().forEach(function(change) {
+  //               if (change.type === "added") {
+  //                   console.log("New city: ", change.doc.data());
+  //               }
+	//
+  //               var source = snapshot.metadata.fromCache ? "local cache" : "server";
+  //               console.log("Data came from " + source);
+  //           });
+  //       });
+  //     // [END use_from_cache]
+  //   })
+
 }
