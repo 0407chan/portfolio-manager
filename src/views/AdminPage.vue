@@ -26,7 +26,7 @@
           <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
           <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()}}</td>
           <td> <v-btn fab flat small color ="three" v-on:click="modifyUser(props.item)"><v-icon size="17">create</v-icon></v-btn>
-                <v-btn fab flat small color ="two" v-on:click="deleteUser(props.item)"><v-icon size="17">delete</v-icon></v-btn>
+                <!-- <v-btn fab flat small color ="two" v-on:click="deleteUser(props.item)"><v-icon size="17">delete</v-icon></v-btn> -->
           </td>
         <!-- </template> -->
       </template>
