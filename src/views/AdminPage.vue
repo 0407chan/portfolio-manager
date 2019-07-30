@@ -1,6 +1,42 @@
 <template>
   <v-container>
-  <v-layout mt-5 wrap text-xs-center>
+     <v-card
+                class="mx-auto"
+                :flat="flat"
+                :loading="loading"
+                :outlined="outlined"
+                :elevation="elevation"
+                :width="width"
+                :height="height"
+                v-if="isAdmin===false"
+        >
+            <v-img
+                    v-if="media"
+                    class="white--text"
+                    height="200px"
+                    src="https://i.imgur.com/Cerxrec.png"
+            >
+            </v-img>
+            <v-card-title v-else>EEEAZY PORTFOLIO</v-card-title>
+
+            <v-card-text>
+                <v-flex xs12>
+                    <v-text-field label="Admin Account*" v-model="adminAccount" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                    <v-text-field label="Password*" v-model="password" type="password" required @keyup.enter="checkAdmin"></v-text-field>
+                </v-flex>
+            </v-card-text>
+            <v-card-actions @click="checkAdmin">
+                <v-flex text-xs-center>
+                    <v-btn icon>
+                        <v-icon>lock_open</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-card-actions>
+        </v-card>
+
+  <v-layout mt-5 wrap text-xs-center v-else-if="isAdmin">
     <v-flex xs12 text-xs-center >
       <v-text-field label="Search" v-model="search"></v-text-field>
     </v-flex>
@@ -8,37 +44,25 @@
     <v-data-table
       :headers="headers"
       :items="searchList"
-       hide-actions
-       :items-per-page="10"
       class="elevation-1"
     >
       <template v-slot:items="props">
-        <!-- <template v-if="props.item.edit">
-          <td><input v-model="props.item.name" style="text-align:center;"></input></td>
-          <td >{{ props.item.email }}</td>
-          <td><v-select
-              v-model="props.item.classify"
-                :items="classifies"
-                :menu-props="{offsetY: true }"
-              ></v-select></td>
-          <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
-          <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()}}</td>
-          <td> <v-btn fab flat small color ="three" v-on:click="modifyUser(props.item)"><v-icon size="17">radio_button_unchecked</v-icon></v-btn>
-                <v-btn fab flat small color ="two" v-on:click="editOff(props.item)"><v-icon size="17">clear</v-icon></v-btn>
-          </td>
-        </template> -->
-        <!-- <template v-else> -->
           <td > {{ props.item.name }}</td>
           <td >{{ props.item.email }}</td>
-          <td><v-select
+          <template v-if="props.item.classify=='관리자'">
+            <td >☆★☆{{ props.item.classify }}★☆★</td>
+          </template>
+          <template v-else>
+            <td><v-select
               v-model="props.item.classify"
-                :items="classifies"
-                :menu-props="{offsetY: true }"
+              :items="classifies"
+              :menu-props="{offsetY: true }"
               ></v-select></td>
+          </template>
           <td >{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
           <td >{{ props.item.current_at.getFullYear()}}.{{ props.item.current_at.getMonth()+1}}.{{ props.item.current_at.getDate()}}</td>
           <td> <v-btn fab flat small color ="three" v-on:click="modifyUser(props.item)"><v-icon size="17">create</v-icon></v-btn>
-                <v-btn fab flat small color ="two" v-on:click="deleteUser(props.item)"><v-icon size="17">delete</v-icon></v-btn>
+                <!-- <v-btn fab flat small color ="two" v-on:click="deleteUser(props.item)"><v-icon size="17">delete</v-icon></v-btn> -->
           </td>
         <!-- </template> -->
       </template>
@@ -50,13 +74,7 @@
       </template>
     </v-data-table>
     </v-flex>
-    <v-flex xs12 text-xs-center pt-2>
-      <v-pagination v-model="pagination.page" :length="pages" next-icon="keyboard_arrow_right"
-      prev-icon="keyboard_arrow_left"></v-pagination>
-    </v-flex>
-    <v-flex text-xs-center>
-      <v-btn round color="two"  v-on:click="get">getUsers</v-btn>
-    </v-flex>
+
   </v-layout>
 </v-container>
 </template>
@@ -70,6 +88,17 @@ import firebase, {
   export default {
     data () {
       return {
+        isAdmin: false,
+        flat: false,
+        media: true,
+        loading: false,
+        outlined: false,
+        elevation: undefined,
+        raised: false,
+        width: 344,
+        height: undefined,
+        adminAccount: '',
+        password: '',
         selected: [],
         search: '',
         edit: false,
@@ -127,13 +156,31 @@ import firebase, {
       },
       async modifyUser(user){
         await FirebaseService.modifyUser(user);
-        swal("수정사항이 반영되었습니까");
+        swal("수정사항이 반영되었습니다.");
         this.getUsers();
       },
       async deleteUser(user){
         await FirebaseService.deleteUserbyId(user.id);
         this.getUsers();
+      },
+      checkAdmin () {
+                if (this.adminAccount === 'admin' && this.password === 'admin') {
+                    this.isAdmin = true;
+                    swal("Admin님 환영합니다.","","success")
+                } else {
+                    swal( "Oops" ,  "다시 한 번 확인해주세요" ,  "error" )
+                }
+            },
+      highlight(text) {
+        var inputText = document.getElementById("inputText");
+        var innerHTML = inputText.innerHTML;
+        var index = innerHTML.indexOf(text);
+        if (index >= 0) {
+         innerHTML = innerHTML.substring(0,index) + "<span class='highlight'>" + innerHTML.substring(index,index+text.length) + "</span>" + innerHTML.substring(index + text.length);
+         inputText.innerHTML = innerHTML;
+        }
       }
+
     },
     watch: {
       search() {
