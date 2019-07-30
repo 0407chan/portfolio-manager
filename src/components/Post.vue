@@ -53,7 +53,7 @@
 
   <v-flex xs12 v-for="(comment, index) in postComments" :key="comment.id">
     <v-timeline v-if="index < limit_postComment" dense clipped style="margin-left: 5px; padding-top:5px">
-      <v-timeline-item :color="colors[index%4]" small class="timeline_comment">
+      <v-timeline-item :color="colors[index%4]" small style="padding-bottom:5px">
         <template v-slot:icon>
           <!-- 타임라인 댓글 사진 표시 <v-avatar>
             <img src="http://i.pravatar.cc/64">
@@ -277,10 +277,6 @@ export default {
 
 .comment_title_margin_top{
   margin-top: 50px;
-}
-
-.timeline_comment {
-  padding-bottom: 5px;
 }
 
 .onModify {
