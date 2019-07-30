@@ -118,6 +118,7 @@ export default {
     async Register() {
       const result = await this.register();
       await this.userDataUpload();
+      location.reload();
     },
 
     async loginWithGoogle() {
