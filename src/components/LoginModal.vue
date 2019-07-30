@@ -8,7 +8,7 @@
       <v-tab @click="resetSignin">Sign in</v-tab>
       <v-tab @click="resetSignup">Register</v-tab>
       <v-flex text-xs-right>
-        <v-btn icon @click="dialog=false">
+        <v-btn icon @click="closeDialog">
           <v-icon>highlight_off</v-icon>
         </v-btn>
       </v-flex>
@@ -260,15 +260,22 @@ export default {
     },
 
 
-    resetSignin: function() {
+    resetSignin() {
       this.email = ""
       this.password = ""
       this.message = ""
     },
-    resetSignup: function() {
+    resetSignup() {
+      this.name = ""
       this.email2 = ""
       this.ps2 = ""
       this.message2 = ""
+    },
+
+    closeDialog(){
+      this.resetSignin();
+      this.resetSignup();
+      this.dialog = false;
     }
   },
   mounted() {

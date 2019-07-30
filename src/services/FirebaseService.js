@@ -25,8 +25,11 @@ const config = {
 
 }
 
+
 firebase.initializeApp(config)
 const firestore = firebase.firestore()
+
+
 export default {
 
 	/********************\
@@ -386,4 +389,45 @@ export default {
 			visitTime: firebase.firestore.FieldValue.serverTimestamp()
 		})
 	},
+
+
+	/********************\
+ \ Page Offline 함수들  \
+	\********************/
+
+
+	/** 오프라인 지속성 구현 */
+	enablePersistence(){
+      firestore.enablePersistence()
+        .catch(function(err) {
+            if (err.code == 'failed-precondition') {
+                // Multiple tabs open, persistence can only be enabled
+                // in one tab at a a time.
+                // ...
+            } else if (err.code == 'unimplemented') {
+                // The current browser does not support all of the
+                // features required to enable persistence
+                // ...
+            }
+        });
+      // Subsequent queries will use persistence, if it was enabled successfully
+      // [END initialize_persistence]
+  },
+
+	// it("should reply with .fromCache fields", () => {
+  //     // [START use_from_cache]
+  //     db.collection("cities").where("state", "==", "CA")
+  //       .onSnapshot({ includeMetadataChanges: true }, function(snapshot) {
+  //           snapshot.docChanges().forEach(function(change) {
+  //               if (change.type === "added") {
+  //                   console.log("New city: ", change.doc.data());
+  //               }
+	//
+  //               var source = snapshot.metadata.fromCache ? "local cache" : "server";
+  //               console.log("Data came from " + source);
+  //           });
+  //       });
+  //     // [END use_from_cache]
+  //   })
+
 }
