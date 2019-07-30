@@ -97,7 +97,7 @@
   </v-flex>
   <!-- post comment, need authority -->
   <v-flex xs9>
-    <v-text-field v-if="username" v-model="comment" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
+    <v-text-field v-if="username" v-model="comment_input" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
   </v-flex>
   <v-flex xs3 text-xs-right>
     <v-btn v-if="username" round color="four" dark @click="postComment" class="post_btn">
@@ -146,6 +146,7 @@ export default {
   },
   data() {
     return {
+      comment_input: '',
       heightt: 0,
       img: '',
       index: 0,
@@ -154,10 +155,8 @@ export default {
       username: '',
       useremail: '',
       user: '',
-      canModifyCancel: false,
       postComments: [],
       colors: ['two', 'three', 'four', 'five'],
-      dialog: false,
       newComment: '',
     }
   },
@@ -211,8 +210,8 @@ export default {
     },
     async postComment() {
       let result = await FirebaseService.getUserData();
-      await FirebaseService.postPostComment(this.id, this.comment, result.name);
-      this.comment = '';
+      await FirebaseService.postPostComment(this.id, this.comment_input, result.name);
+      this.comment_input = '';
       this.getPostComments(this.id)
     },
     async deletePost() {

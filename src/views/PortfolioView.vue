@@ -36,8 +36,11 @@
         <v-icon size="17" class="mr-2">fa-undo</v-icon>Back
       </v-btn>
     </v-flex>
-    <v-flex xs12>
+    <!-- <v-flex xs12>
       <div id="disqus_thread"></div>
+    </v-flex> -->
+    <v-flex xs12>
+      <PortfolioComment :id="portfolio.id"></PortfolioComment>
     </v-flex>
   </v-container>
 </div>
@@ -49,6 +52,7 @@ import PortfolioList from '../components/PortfolioList'
 import Portfolio from '@/components/Portfolio'
 import firebase from "firebase/app"
 import firebaseApp from 'firebase/app'
+import PortfolioComment from '../components/PortfolioComment'
 
 
 export default {
@@ -75,26 +79,12 @@ export default {
 
     });
     this.id = this.$route.params.id;
-    /**
-    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-    var disqus_config = function () {
-    this.page.url = 'http://70.12.247.78:8080/';  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = 'ssafyeeasy'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-
-    (function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = 'https://ssafyeeasy.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-    })();
   },
 
   components: {
     ImgBanner,
-    PortfolioList
+    PortfolioList,
+    PortfolioComment,
   },
 
   mounted() {
