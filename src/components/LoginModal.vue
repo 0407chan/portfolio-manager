@@ -206,10 +206,14 @@ export default {
         if(name == null){
           name = this.name;
         }
-        result = await FirebaseService.getUserData();
-        const re = await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,firebase.firestore.FieldValue.serverTimestamp());
+        const re = await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,firebase.firestore.FieldValue.serverTimestamp(),"https://i.imgur.com/OpxiyFt.png");
       }else{
-        const re = await FirebaseService.userDataToDB(result.email,result.classify,result.name,result.created_at,userImageUrl);
+        if(result.userImageUrl === undefined || result.userImageUrl == "" || result.userImageUrl=="https://i.imgur.com/OpxiyFt.png"){
+          const re = await FirebaseService.userDataToDB(result.email,result.classify,result.name,result.created_at,"https://i.imgur.com/OpxiyFt.png");
+        }
+        else{
+          const re = await FirebaseService.userDataToDB(result.email,result.classify,result.name,result.created_at,result.userImageUrl);
+        }
       }
     },
 

@@ -57,7 +57,6 @@
 <script>
 import FirebaseService from "@/services/FirebaseService";
 import firebase from "firebase/app";
-import firebaseApp from 'firebase/app'
 import store from '../store'
 import LoginModal from "../components/LoginModal.vue";
 import Translate from "../components/Translate.vue";
@@ -102,17 +101,21 @@ export default {
     // 로그인, 로그아웃 을 위한 사용자 감지
     firebase.auth().onAuthStateChanged(user => {
       this.user = user;
-      if (!this.user) {
+      if (!user) {
         this.username = ""
       }
     });
     //헤더에 사용자 이름을 표시
-    firebaseApp.auth().onAuthStateChanged(async user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         var result = await FirebaseService.getUserData();
+        console.log(result);
         this.username = result.name
         this.email = result.email
         this.id = user.uid
+      }
+      else {
+        this.username = ""
       }
     })
   }

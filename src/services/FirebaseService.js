@@ -280,8 +280,12 @@ export default {
 					return docSnapshots.docs.map((doc) => {
 						let data = doc.data();
 						data.id = doc.id;
-						data.created_at = new Date(data.created_at.toDate())
-						data.current_at = new Date(data.current_at.toDate())
+						if(data.created_at != ""){
+							data.created_at = new Date(data.created_at.toDate())
+						}
+						if(data.current_at != ""){
+							data.current_at = new Date(data.current_at.toDate())
+						}
 						return data
 					})
 				})
@@ -397,6 +401,7 @@ export default {
 			name:"",
 			created_at:"",
 			current_at:"",
+			userImageUrl:"",
 		}).then(function(result){
 
 		});
