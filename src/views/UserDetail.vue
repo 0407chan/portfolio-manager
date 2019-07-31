@@ -16,6 +16,7 @@
                         v-model="imageName"
                         prepend-icon="attach_file"
                         color="four"
+                        v-if="user.email==pageuser.email"
                 ></v-text-field>
 
                 <input
@@ -33,7 +34,9 @@
                         <p class="title" style="margin-bottom: 0px">이름: </p>
                     </v-flex>
                     <v-flex text-xs-5 md0 pb0>
-                        <v-text-field v-model="pageuser.name">
+                        <v-text-field v-model="pageuser.name" v-if="user&&user.email==pageuser.email">
+                        </v-text-field>
+                        <v-text-field v-model="pageuser.name" readonly v-else-if="user&&user.email!==pageuser.email">
                         </v-text-field>
                     </v-flex>
                 </v-layout>
@@ -42,7 +45,9 @@
                         <p class="title" style="margin-bottom: 0px">이메일: </p>
                     </v-flex>
                     <v-flex text-xs-5>
-                        <v-text-field v-model="pageuser.email" readonly @click="cannotModify">
+                        <v-text-field v-model="pageuser.email" readonly @click="cannotModify" v-if="user&&user.email==pageuser.email">
+                        </v-text-field>
+                        <v-text-field v-model="pageuser.email" readonly v-else-if="user&&user.email!==pageuser.email">
                         </v-text-field>
                     </v-flex>
                 </v-layout>
@@ -51,7 +56,9 @@
                         <p class="title" style="margin-bottom: 0px">등급: </p>
                     </v-flex>
                     <v-flex text-xs-5>
-                        <v-text-field v-model="pageuser.classify" readonly @click="cannotModify">
+                        <v-text-field v-model="pageuser.classify" readonly @click="cannotModify" v-if="user&&user.email==pageuser.email">
+                        </v-text-field>
+                        <v-text-field v-model="pageuser.classify" readonly v-else-if="user&&user.email!==pageuser.email">
                         </v-text-field>
                     </v-flex>
                 </v-layout>
@@ -62,11 +69,8 @@
             </v-flex>
         </v-layout>
         <v-flex text-xs-center my5>
-            <v-btn icon flat v-if="pageuser.classify==='관리자'" :to="{name: 'admin'}"><v-icon>lock_open</v-icon></v-btn>
-            <v-btn icon flat @click="modifyUserWithImage" color="five"><v-icon>create</v-icon></v-btn>
+            <v-btn icon flat @click="modifyUserWithImage" color="five" v-if="user&&user.email==pageuser.email"><v-icon>create</v-icon></v-btn>
         </v-flex>
-
-<!--        <v-btn icon flat @click="modifyUserWithImage()"><v-icon>create</v-icon></v-btn>-->
     </v-container>
 </template>
 
@@ -99,6 +103,7 @@ export default {
         this.id = this.$route.params.id;
         firebase.auth().onAuthStateChanged(async user => {
             if (user) {
+                this.user = user;
                 this.result = await FirebaseService.getUsers();
                 for (var i in this.result) {
                     if (this.result[i].id === this.id) {
