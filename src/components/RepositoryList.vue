@@ -35,7 +35,7 @@ export default {
 			repositories: [],
       userRepositories :[{username : 'All', token: '', repositories: []},
                   {username : 'ChrisRhee', token: 'hdPnazsArc3BbqXtp6Uz', repositories: []},
-                  {username : 'zettank', token: '__-ttFzJxEQwASCjzuvW', repositories: []},
+                  {username : 'zettank', token: 'CG78C2m-HeYfPJ51A-To', repositories: []},
                   {username : 'jisssh', token: '4hP7HyqmT9uniRYsix23', repositories: []}],
       active : null,
       limits: {type: Number, default: 4},
