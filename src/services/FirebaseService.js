@@ -26,8 +26,11 @@ const config = {
 
 }
 
+
 firebase.initializeApp(config)
 const firestore = firebase.firestore()
+
+
 export default {
 
 	/********************\
@@ -277,8 +280,12 @@ export default {
 					return docSnapshots.docs.map((doc) => {
 						let data = doc.data();
 						data.id = doc.id;
-						data.created_at = new Date(data.created_at.toDate())
-						data.current_at = new Date(data.current_at.toDate())
+						if(data.created_at != ""){
+							data.created_at = new Date(data.created_at.toDate())
+						}
+						if(data.current_at != ""){
+							data.current_at = new Date(data.current_at.toDate())
+						}
 						return data
 					})
 				})
@@ -294,6 +301,18 @@ export default {
 			current_at: user.current_at
 		})
 	},
+
+	modifyUserWithImage(user, image){
+		return firestore.collection(USERS).doc(user.id).set({
+			name: user.name,
+			classify: user.classify,
+			email: user.email,
+			created_at: user.created_at,
+			current_at: user.current_at,
+			userImageUrl: image,
+		})
+	},
+
 	deleteUserbyId(id){
 		//delete user data from firebase
 		// firestore.collection(USERS).doc(id).delete().then(function() {
@@ -349,6 +368,7 @@ export default {
 					data.name = doc.data().name;
 					data.email = doc.data().email;
 					data.classify = doc.data().classify;
+					data.userImageUrl = doc.data().userImageUrl;
 					data.id = id;
 					return data;
 				} else {
@@ -381,18 +401,20 @@ export default {
 			name:"",
 			created_at:"",
 			current_at:"",
+			userImageUrl:"",
 		}).then(function(result){
 
 		});
 	},
 
-	userDataToDB(email,classify,name,created_at){
+	userDataToDB(email,classify,name,created_at,userImageUrl){
 		var userId = firebase.auth().currentUser.uid;
 		return firestore.collection(USERS).doc(userId).set({
 			email,
 			classify,
 			name,
 			created_at,
+			userImageUrl,
 			current_at: firebase.firestore.FieldValue.serverTimestamp(),
 		}).then(function(result){
 
@@ -443,4 +465,45 @@ export default {
 			visitTime: firebase.firestore.FieldValue.serverTimestamp()
 		})
 	},
+
+
+	/********************\
+ \ Page Offline 함수들  \
+	\********************/
+
+
+	/** 오프라인 지속성 구현 */
+	enablePersistence(){
+      firestore.enablePersistence()
+        .catch(function(err) {
+            if (err.code == 'failed-precondition') {
+                // Multiple tabs open, persistence can only be enabled
+                // in one tab at a a time.
+                // ...
+            } else if (err.code == 'unimplemented') {
+                // The current browser does not support all of the
+                // features required to enable persistence
+                // ...
+            }
+        });
+      // Subsequent queries will use persistence, if it was enabled successfully
+      // [END initialize_persistence]
+  },
+
+	// it("should reply with .fromCache fields", () => {
+  //     // [START use_from_cache]
+  //     db.collection("cities").where("state", "==", "CA")
+  //       .onSnapshot({ includeMetadataChanges: true }, function(snapshot) {
+  //           snapshot.docChanges().forEach(function(change) {
+  //               if (change.type === "added") {
+  //                   console.log("New city: ", change.doc.data());
+  //               }
+	//
+  //               var source = snapshot.metadata.fromCache ? "local cache" : "server";
+  //               console.log("Data came from " + source);
+  //           });
+  //       });
+  //     // [END use_from_cache]
+  //   })
+
 }

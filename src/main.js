@@ -28,22 +28,20 @@ Vue.config.productionTip = false
 // var router = new VueRouter();
 router.beforeEach((to, from, next) => {
 
-	firebaseApp.auth().onAuthStateChanged(user => {
-		var username = null;
-		if (user) {
-			username = store.state.user.displayName;
-			if(username === null) {
-				username = user.email.split('@')[0];
-			}
-		}
-		else
-			username = 'Guest';
+	// firebaseApp.auth().onAuthStateChanged(user => {
+		// var username = null;
+		// if (user) {
+		// 	username = store.state.user.displayName;
+		// 	if(username === null) {
+		// 		username = user.email.split('@')[0];
+		// 	}
+		// }
+		// else
+		// 	username = 'Guest';
 
-
-
-		firebaseMy.postPageLog(username, from.name, to.name);
-		// console.log("username : "+username+", from : "+from.name+", to : "+to.name);
-	  });
+		// firebaseMy.postPageLog(username, from.name, to.name);
+		// // console.log("username : "+username+", from : "+from.name+", to : "+to.name);
+	  // });
 
 	next();
 })

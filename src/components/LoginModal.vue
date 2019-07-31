@@ -8,7 +8,7 @@
       <v-tab @click="resetSignin">Sign in</v-tab>
       <v-tab @click="resetSignup">Register</v-tab>
       <v-flex text-xs-right>
-        <v-btn icon @click="dialog=false">
+        <v-btn icon @click="closeDialog">
           <v-icon>highlight_off</v-icon>
         </v-btn>
       </v-flex>
@@ -206,10 +206,14 @@ export default {
         if(name == null){
           name = this.name;
         }
-        result = await FirebaseService.getUserData();
-        const re = await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,firebase.firestore.FieldValue.serverTimestamp());
+        const re = await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,firebase.firestore.FieldValue.serverTimestamp(),"https://i.imgur.com/OpxiyFt.png");
       }else{
-        const re = await FirebaseService.userDataToDB(result.email,result.classify,result.name,result.created_at);
+        if(result.userImageUrl === undefined || result.userImageUrl == "" || result.userImageUrl=="https://i.imgur.com/OpxiyFt.png"){
+          const re = await FirebaseService.userDataToDB(result.email,result.classify,result.name,result.created_at,"https://i.imgur.com/OpxiyFt.png");
+        }
+        else{
+          const re = await FirebaseService.userDataToDB(result.email,result.classify,result.name,result.created_at,result.userImageUrl);
+        }
       }
     },
 
@@ -260,15 +264,22 @@ export default {
     },
 
 
-    resetSignin: function() {
+    resetSignin() {
       this.email = ""
       this.password = ""
       this.message = ""
     },
-    resetSignup: function() {
+    resetSignup() {
+      this.name = ""
       this.email2 = ""
       this.ps2 = ""
       this.message2 = ""
+    },
+
+    closeDialog(){
+      this.resetSignin();
+      this.resetSignup();
+      this.dialog = false;
     }
   },
   mounted() {
