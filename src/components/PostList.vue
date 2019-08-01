@@ -3,8 +3,8 @@
   <v-expansion-panel focusable header-icon="clear" width="100%">
     <v-expansion-panel-content v-for="i in posts.length > limits ? limits : posts.length" expand-icon="arrow_drop_down">
       <template v-slot:header>
-        <v-flex sm12 md8>{{posts[i - 1].title}}</v-flex>
-        <v-flex hidden-sm-and-down md4>
+        <v-flex sm12 md9>{{posts[i - 1].title}}</v-flex>
+        <v-flex hidden-sm-and-down md3>
           <div v-if='posts[i-1].name'>작성자 : {{posts[i-1].name}}</div>
         </v-flex>
       </template>

@@ -2,7 +2,7 @@
 <div>
   <v-container>
     <v-layout my-5 wrap>
-      <v-flex xs12 sm5>
+      <v-flex xs12 md5>
         <div class="img_div">
           <div class="img_scale">
             <img v-bind:src="portfolio.img" width="100%" />
@@ -11,7 +11,7 @@
       </v-flex>
       <v-flex xs12 sm1>
       </v-flex>
-      <v-flex xs12 sm6>
+      <v-flex xs12 md6>
         <v-flex xs12 text-xs-center>
           <h2>{{portfolio.title}} </h2>
         </v-flex>
