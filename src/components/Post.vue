@@ -60,7 +60,7 @@
           </v-avatar>
         </template>
         <template>
-          <router-link :to="{ name: 'userinfo', params: {id: comment.userId}}">{{comment.userId}}:::{{comment.name}}</router-link>
+          <router-link :to="{ name: 'userinfo', params: {id: comment.userId}}">{{comment.name}}</router-link>
         </template>
         <v-layout justify-space-between wrap align-center>
           <v-flex xs8 sm9 v-if="!comment.isModify" style="background-color: #f8f8f8; border-radius: 10px">
