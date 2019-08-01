@@ -17,19 +17,38 @@ export default {
 	name: 'PortfolioPage',
   data(){
     return{
-      lim: 3,
+      lim: 0,
     }
   },
 
 	components: {
 		PortfolioList,
 	},
+  mounted(){
+    this.initLim();
+  },
 
   methods: {
+    initLim(){
+      if(innerWidth >= 1264){
+        this.lim=3;
+      }
+      else{
+        this.lim=2;
+      }
+    },
     handleScroll () {
       var limit = document.body.offsetHeight - window.innerHeight;
       if(window.scrollY >= limit - 200){
-        this.lim+=3;
+        if(innerWidth >= 1264){
+          this.lim+=3;
+        }
+        else if(innerWidth < 1264 && innerWidth >= 600){
+          this.lim+=2;
+        }
+        else{
+          this.lim+=1;
+        }
       }
     },
     loadMorePortfolios(){

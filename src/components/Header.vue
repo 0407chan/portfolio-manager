@@ -109,7 +109,6 @@ export default {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         var result = await FirebaseService.getUserData();
-        // console.log(result);
         this.username = result.name
         this.email = result.email
         this.id = user.uid

@@ -44,7 +44,7 @@ export default {
 					data.title = doc.data().title;
 					data.body = doc.data().body;
 					data.id = id;
-					data.writer = doc.data().writer;
+					data.email = doc.data().email;
 					data.name = doc.data().name;
 					return data;
 				} else {
@@ -73,19 +73,17 @@ export default {
 			title,
 			body,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
-			writer:store.state.user.email,
+			email:store.state.user.email,
 			name: name
 		})
 	},
 
 	modifyPost(title,body,id, name){
-		return firestore.collection(POSTS).doc(id).set({
-			title,
-			body,
-			id,
-			name: name,
-			created_at: firebase.firestore.FieldValue.serverTimestamp(),
-			writer:store.state.user.email
+		return firestore.collection(POSTS).doc(id).update({
+			"title":title,
+			"body":body,
+			"name": name,
+			"email":store.state.user.email
 		})
 	},
 	deletePost(id){
@@ -105,7 +103,7 @@ export default {
 			body,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
 			name: name,
-			writer:store.state.user.email,
+			email:store.state.user.email,
 			isModify: false,
 			userImageUrl: userImageUrl,
 		})
@@ -132,7 +130,7 @@ export default {
 			isModify: false,
 			name: comment.name,
 			postId: comment.postId,
-			writer: store.state.user.email
+			email: store.state.user.email
 		})
 	},
 	modifyComment(comment, newComment){
@@ -142,7 +140,7 @@ export default {
 			isModify: false,
 			name: comment.name,
 			postId: comment.postId,
-			writer: store.state.user.email
+			email: store.state.user.email
 		})
 	},
 	deleteComment(commentId){
@@ -194,22 +192,26 @@ export default {
 					})
 				})
 	},
-	modifyPortfolio(title,body,img,id){
-		return firestore.collection(PORTFOLIOS).doc(id).set({
-			title,
-			body,
-			img,
-			id,
-			created_at: firebase.firestore.FieldValue.serverTimestamp()
+
+
+	modifyPortfolio(title,body,img,id,name){
+		return firestore.collection(PORTFOLIOS).doc(id).update({
+			"title":title,
+			"img":img,
+			"body":body,
+			"name":name,
+			"email":store.state.user.email
 		})
 	},
 
-	postPortfolio(title, body, img) {
+	postPortfolio(title, body, img, name) {
 		return firestore.collection(PORTFOLIOS).add({
 			title,
 			body,
 			img,
-			created_at: firebase.firestore.FieldValue.serverTimestamp()
+			name,
+			created_at: firebase.firestore.FieldValue.serverTimestamp(),
+			email:store.state.user.email
 		})
 	},
 
@@ -222,7 +224,7 @@ export default {
 			body,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
 			name: name,
-			writer:store.state.user.email,
+			email:store.state.user.email,
 			isModify: false,
 			userImageUrl: userImageUrl,
 		})
@@ -249,7 +251,7 @@ export default {
 			isModify: false,
 			name: comment.name,
 			portfolioId: comment.portfolioId,
-			writer: store.state.user.email
+			email: store.state.user.email
 		})
 	},
 	modifyPortfolioComment(comment, newComment){
@@ -259,7 +261,7 @@ export default {
 			isModify: false,
 			name: comment.name,
 			portfolioId: comment.portfolioId,
-			writer: store.state.user.email
+			email: store.state.user.email
 		})
 	},
 	deletePortfolioComment(commentId){
@@ -295,12 +297,13 @@ export default {
 
 
 	modifyUser(user){
-		return firestore.collection(USERS).doc(user.id).set({
-			name: user.name,
-			classify: user.classify,
-			email: user.email,
-			created_at: user.created_at,
-			current_at: user.current_at
+		return firestore.collection(USERS).doc(user.id).update({
+			"name": user.name,
+			"classify": user.classify,
+			"email": user.email,
+			"created_at": user.created_at,
+			"current_at": user.current_at,
+			"userImageUrl": user.userImageUrl,
 		})
 	},
 
@@ -357,29 +360,22 @@ export default {
 			console.error('[Favebook Loing Error]', error)
 		});
 	},
+
 	logout() {
 		return firebase.auth().signOut()
 	},
 
-
-	getUser(){
-		var userDoc = firestore.collection(USERS).doc(user.uid);
-		return userDoc.get().then(function(doc) {
-				if (doc.exists) {
-					let data = doc.data();
-					data.name = doc.data().name;
-					data.email = doc.data().email;
-					data.classify = doc.data().classify;
-					data.userImageUrl = doc.data().userImageUrl;
-					data.id = id;
-					return data;
-				} else {
-						console.log("No such document!");
-				}
+	getUser(id){
+		var userDoc = firestore.collection(USERS).doc(id);
+		return userDoc.get().then(function(result) {
+			let data = result.data();
+			data.id = result.id;
+			return data;
 		}).catch(function(error) {
 				console.log("Error getting document:", error);
 		});
 	},
+
 	getUserData(){
 		var user = firebase.auth().currentUser;
 		if(user != null){
