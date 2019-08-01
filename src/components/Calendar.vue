@@ -12,15 +12,19 @@
                         </template>
                         <v-card color="one" width="350px" flat max-height="300px" overflow=scroll>
                         <v-toolbar :color="event.color" dark height="40px">
-                            <v-toolbar-title v-html="event.title"></v-toolbar-title>
-                            <v-flex text-xs-right>
-                            <v-btn icon :to="{ name: 'modifypost', params: {id: event.id}}">
-                            <v-icon size="17">edit</v-icon>
-                            </v-btn>
-                            <v-btn icon @click="deletePost(event.id)">
-                            <v-icon size="17">fa-trash</v-icon>
-                            </v-btn>
-                            </v-flex>
+                            <v-layout>
+                                <v-flex xs8>
+                                    <v-toolbar-title v-html="event.title" style="margin-top:5%"></v-toolbar-title>
+                                </v-flex>
+                                <v-flex xs4 text-xs-right>
+                                    <v-btn icon :to="{ name: 'modifypost', params: {id: event.id}}">
+                                    <v-icon size="17">edit</v-icon>
+                                    </v-btn>
+                                    <v-btn icon @click="deletePost(event.id)">
+                                    <v-icon size="17">fa-trash</v-icon>
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
                         </v-toolbar>
                         <v-card-title primary-title class="one">
                             <vue-markdown>{{event.details}}</vue-markdown>
