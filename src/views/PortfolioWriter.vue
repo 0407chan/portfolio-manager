@@ -93,10 +93,13 @@ export default {
   },
   methods: {
     async writePortfolio() {
+      let result = await FirebaseService.getUserData();
+      console.log(result)
+
       if(this.id==null){
-        await FirebaseService.postPortfolio(this.title, this.body, this.imageUrl);
+        await FirebaseService.postPortfolio(this.title, this.body, this.imageUrl, result.name);
       }else{
-        await FirebaseService.modifyPortfolio(this.title, this.body, this.imageUrl, this.id);
+        await FirebaseService.modifyPortfolio(this.title, this.body, this.imageUrl, this.id, result.name);
       }
       this.$router.push({
         name: "portfolio"
@@ -176,14 +179,16 @@ export default {
       }
     },
     async portfolioWriteAndNotify () {
-        if(this.id==null){
-          await FirebaseService.postPortfolio(this.title, this.body, this.imageUrl);
-        }else{
-          await FirebaseService.modifyPortfolio(this.title, this.body, this.imageUrl, this.id);
-        }
-        this.$router.push({
-          name: "portfolio"
-        });
+      let result = await FirebaseService.getUserData();
+
+      if(this.id==null){
+        await FirebaseService.postPortfolio(this.title, this.body, this.imageUrl, result.name);
+      }else{
+        await FirebaseService.modifyPortfolio(this.title, this.body, this.imageUrl, this.id, result.name);
+      }
+      this.$router.push({
+        name: "portfolio"
+      });
       if (window.Notification) {
         Notification.requestPermission();
       }

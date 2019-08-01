@@ -12,7 +12,7 @@ import ModifyPortfolioPage from './views/PortfolioWriter.vue'
 import ModifyPostPage from './views/PostWriter.vue'
 
 import AdminPage from './views/AdminPage.vue'
-import TestPage from './views/Test.vue'
+import TestPage from './views/Test2.vue'
 
 import UserDetail from './views/UserDetail.vue'
 Vue.use(Router)
