@@ -8,9 +8,9 @@
     <v-timeline v-if="index < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
       <v-timeline-item :color="colors[index%4]" small style="padding-bottom:5px">
         <template v-slot:icon>
-          <!-- 타임라인 댓글 사진 표시 <v-avatar>
-            <img src="http://i.pravatar.cc/64">
-          </v-avatar> -->
+          <v-avatar>
+            <img :src="comment.userImageUrl">
+          </v-avatar>
         </template>
         <template>
           <a>{{comment.name}}</a>
@@ -87,6 +87,7 @@ export default {
       portfolioId: '',
       user: '',
       portfolioComments: [],
+      users: [],
       colors: ['two', 'three', 'four', 'five'],
       newComment: '',
       comment_input: '',
@@ -127,12 +128,21 @@ export default {
     },
     async postPortfolioComment() {
       let result = await FirebaseService.getUserData();
-      await FirebaseService.postPortfolioComment(this.id, this.comment_input, result.name);
+      await FirebaseService.postPortfolioComment(this.id, this.comment_input, result.name, result.userImageUrl);
       this.comment_input = '';
       this.getPortfolioComments(this.id);
     },
     async getPortfolioComments(portfolioId) {
       this.portfolioComments = await FirebaseService.getPortfolioComments(portfolioId);
+      this.users = await FirebaseService.getUsers();
+      for(var i in this.portfolioComments){
+        for(var j in this.users){
+            if(this.portfolioComments[i].writer === this.users[j].email){
+              this.portfolioComments[i].userImageUrl = this.users[j].userImageUrl;
+              this.portfolioComments[i].name = this.users[j].name;
+            }
+        }
+      }
     },
     addZeros(num) {
       var zero = '';
