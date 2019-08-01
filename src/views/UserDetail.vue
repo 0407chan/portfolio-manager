@@ -1,20 +1,19 @@
 <template>
 <v-container>
-  <v-layout wrap>
-    <v-flex xs2></v-flex>
-    <v-flex xs3>
-      <v-progress-circular v-if="loading" indeterminate color="four"></v-progress-circular>
-      <v-img :src="imageUrl" width="300" height="300" v-if="imageUrl" />
+  <v-layout wrap align-center justify-center>
+      <v-flex xs4>
+        <v-progress-circular v-if="loading" indeterminate color="four"></v-progress-circular>
+        <v-img :src="imageUrl" width="300" height="300" v-if="imageUrl" />
 
-      <v-text-field label="Select Image" @click="pickFile" v-model="imageUrl" prepend-icon="attach_file" color="four" v-if="user.email==pageuser.email"></v-text-field>
+        <v-text-field label="Select Image" @click="pickFile" v-model="imageUrl" prepend-icon="attach_file" color="four" v-if="user.email==pageuser.email"></v-text-field>
 
-      <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked" />
-    </v-flex>
+        <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked" />
+      </v-flex>
     <v-flex xs2></v-flex>
-    <v-flex xs3>
+    <v-flex xs4>
       <v-layout align-center>
 
-        <v-flex text-xs-5 md0 pb0>
+        <v-flex text-xs-12>
           <v-text-field label="Name" v-model="pageuser.name" v-if="user&&user.email==pageuser.email">
           </v-text-field>
           <v-text-field label="Name" v-model="pageuser.name" readonly v-else-if="user&&user.email!==pageuser.email">
@@ -22,7 +21,7 @@
         </v-flex>
       </v-layout>
       <v-layout align-center>
-        <v-flex text-xs-5>
+        <v-flex text-xs-12>
           <v-text-field label="Email" v-model="pageuser.email" readonly @click="cannotModify" v-if="user&&user.email==pageuser.email">
           </v-text-field>
           <v-text-field label="Email" v-model="pageuser.email" readonly v-else-if="user&&user.email!==pageuser.email">
@@ -31,15 +30,11 @@
       </v-layout>
       <v-layout align-center>
 
-        <v-flex text-xs-5>
+        <v-flex text-xs-12>
           <v-text-field label="Classify" v-model="pageuser.classify" readonly @click="cannotModify" v-if="user&&user.email==pageuser.email">
           </v-text-field>
           <v-text-field label="Classify" v-model="pageuser.classify" readonly v-else-if="user&&user.email!==pageuser.email">
           </v-text-field>
-        </v-flex>
-      </v-layout>
-      <v-layout>
-        <v-flex>
         </v-flex>
       </v-layout>
     </v-flex>
@@ -101,6 +96,8 @@ export default {
       if (this.imageUrl === '') {
         this.imageUrl = this.pageuser.userImageUrl
       }
+      this.pageuser.userImageUrl = this.imageUrl;
+      //console.log(this.pageuser);
       await FirebaseService.modifyUser(this.pageuser)
       this.$store.state.user = this.pageuser
       swal("개인정보 수정이 완료되었습니다.")

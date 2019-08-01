@@ -39,10 +39,10 @@
     <vue-markdown>{{body}}</vue-markdown>
   </v-flex>
   <v-flex xs12 text-xs-right round class="comment_title_margin_top">
-    <v-btn class="post_btn" v-if="useremail === this.writer" round color="two" dark :to="{ name: 'modifypost', params: {id: this.id} }">
+    <v-btn class="post_btn" v-if="useremail === this.email" round color="two" dark :to="{ name: 'modifypost', params: {id: this.id} }">
       <v-icon size="17" class="mr-2">fa-pencil</v-icon>Modify
     </v-btn>
-    <v-btn class="post_btn" v-if="useremail === this.writer" round color="three" dark v-on:click="deletePost">
+    <v-btn class="post_btn" v-if="useremail === this.email" round color="three" dark v-on:click="deletePost">
       <v-icon size="17" class="mr-2">delete</v-icon>Delete
     </v-btn>
   </v-flex>
@@ -70,7 +70,7 @@
             <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyComment(comment)"></v-text-field>
           </v-flex>
           <v-flex xs1 sm1 text-xs-right v-if="comment.isModify">
-            <v-btn fab dark v-if="useremail === comment.writer"  @click="modifyComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
+            <v-btn fab dark v-if="useremail === comment.email"  @click="modifyComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
               <v-icon size="15">
                   fa-pencil
               </v-icon>
@@ -83,8 +83,8 @@
             {{addZeros(comment.created_at.getMinutes())}}
           </v-flex>
           <v-flex xs2 sm1 text-xs-right>
-            <v-icon v-if="useremail === comment.writer"  @click="modifyCommentForm(comment)" size="17" class="mr-2 comment_btn" hover color="three">create</v-icon>
-            <v-icon v-if="useremail === comment.writer" @click="deleteComment(comment.id)" size="17" class="mr-2 comment_btn" hover color="two">delete</v-icon>
+            <v-icon v-if="useremail === comment.email"  @click="modifyCommentForm(comment)" size="17" class="mr-2 comment_btn" hover color="three">create</v-icon>
+            <v-icon v-if="useremail === comment.email" @click="deleteComment(comment.id)" size="17" class="mr-2 comment_btn" hover color="two">delete</v-icon>
           </v-flex>
         </v-layout>
       </v-timeline-item>
@@ -130,10 +130,7 @@ export default {
     id: {
       type: String
     },
-    writer: {
-      type: String
-    },
-    writer2: {
+    email: {
       type: String
     },
     comment: {
@@ -171,7 +168,6 @@ export default {
       this.getPost(this.id);
     }
     if (this.id != null) {
-      console.log(this.id)
       this.getPostComments(this.id);
     }
   },
@@ -226,6 +222,7 @@ export default {
     },
     async getPostComments(postId) {
       this.postComments = await FirebaseService.getPostComments(postId);
+
       // 후후
       this.users = await FirebaseService.getUsers();
       for(var i in this.postComments){
@@ -234,7 +231,6 @@ export default {
               this.postComments[i].userImageUrl = this.users[j].userImageUrl;
               this.postComments[i].name = this.users[j].name;
               this.postComments[i].userId = this.users[j].id;
-              console.log(this.postComments[i])
             }
         }
       }

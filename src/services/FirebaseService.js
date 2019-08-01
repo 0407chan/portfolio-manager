@@ -106,6 +106,7 @@ export default {
 			email:store.state.user.email,
 			isModify: false,
 			userImageUrl: userImageUrl,
+			userId:store.state.user.uid,
 		})
 	},
 	getPostComments(postId) {
@@ -134,13 +135,15 @@ export default {
 		})
 	},
 	modifyComment(comment, newComment){
-		return firestore.collection(POSTCOMMENTS).doc(comment.id).set({
-			body: newComment,
-			created_at: comment.created_at,
-			isModify: false,
-			name: comment.name,
-			postId: comment.postId,
-			email: store.state.user.email
+		return firestore.collection(POSTCOMMENTS).doc(comment.id).update({
+			"body": newComment,
+			"created_at": comment.created_at,
+			"isModify": false,
+			"name": comment.name,
+			"postId": comment.postId,
+			"userImageUrl": comment.userImageUrl,
+			"email": store.state.user.email,
+			"userId":store.state.user.uid,
 		})
 	},
 	deleteComment(commentId){
@@ -200,6 +203,7 @@ export default {
 			"img":img,
 			"body":body,
 			"name":name,
+			"userId":store.state.user.uid,
 			"email":store.state.user.email
 		})
 	},
@@ -210,6 +214,7 @@ export default {
 			body,
 			img,
 			name,
+			userId:store.state.user.uid,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
 			email:store.state.user.email
 		})
@@ -227,6 +232,7 @@ export default {
 			email:store.state.user.email,
 			isModify: false,
 			userImageUrl: userImageUrl,
+			userId:store.state.user.uid,
 		})
 	},
 	getPortfolioComments(portfolioId) {
@@ -255,13 +261,15 @@ export default {
 		})
 	},
 	modifyPortfolioComment(comment, newComment){
-		return firestore.collection(PORTFOLIOCOMMENTS).doc(comment.id).set({
-			body: newComment,
-			created_at: comment.created_at,
-			isModify: false,
-			name: comment.name,
-			portfolioId: comment.portfolioId,
-			email: store.state.user.email
+		return firestore.collection(PORTFOLIOCOMMENTS).doc(comment.id).update({
+			"body": newComment,
+			"created_at": comment.created_at,
+			"isModify": false,
+			"name": comment.name,
+			"portfolioId": comment.portfolioId,
+			"userImageUrl": comment.userImageUrl,
+			"email": store.state.user.email,
+			"userId":store.state.user.uid,
 		})
 	},
 	deletePortfolioComment(commentId){
@@ -381,8 +389,9 @@ export default {
 		if(user != null){
 			var userData = firestore.collection(USERS).doc(user.uid);
 			return userData.get().then(function(result) {
-
-				return result.data();
+				var data = result.data();
+				data.id = result.id;
+				return data;
 			}).catch(function(error) {
 				console.log("Error getting cached document:", error);
 			});

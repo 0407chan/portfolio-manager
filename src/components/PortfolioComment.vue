@@ -13,7 +13,7 @@
           </v-avatar>
         </template>
         <template>
-          <a>{{comment.name}}</a>
+          <router-link :to="{ name: 'userinfo', params: {id:comment.userId}}"> {{comment.name}} </router-link>
         </template>
         <v-layout justify-space-between wrap align-center>
           <v-flex xs8 sm9 v-if="!comment.isModify" style="background-color: #EDEDED; border-radius: 10px">
@@ -23,7 +23,7 @@
             <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyPortfolioComment(comment)"></v-text-field>
           </v-flex>
           <v-flex xs1 sm1 text-xs-right v-if="comment.isModify">
-            <v-btn fab dark v-if="useremail === comment.writer"  @click="modifyPortfolioComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
+            <v-btn fab dark v-if="useremail === comment.email"  @click="modifyPortfolioComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
               <v-icon size="15">
                   fa-pencil
               </v-icon>
@@ -36,8 +36,8 @@
             {{addZeros(comment.created_at.getMinutes())}}
           </v-flex>
           <v-flex xs2 sm1 text-xs-right>
-            <v-icon v-if="useremail === comment.writer"  @click="modifyPortfolioCommentForm(comment)" size="17" class="mr-2 comment_btn" hover color="three">create</v-icon>
-            <v-icon v-if="useremail === comment.writer" @click="deletePortfolioComment(comment.id)" size="17" class="mr-2 comment_btn" hover color="two">delete</v-icon>
+            <v-icon v-if="useremail === comment.email"  @click="modifyPortfolioCommentForm(comment)" size="17" class="mr-2 comment_btn" hover color="three">create</v-icon>
+            <v-icon v-if="useremail === comment.email" @click="deletePortfolioComment(comment.id)" size="17" class="mr-2 comment_btn" hover color="two">delete</v-icon>
           </v-flex>
         </v-layout>
       </v-timeline-item>
@@ -137,7 +137,7 @@ export default {
       this.users = await FirebaseService.getUsers();
       for(var i in this.portfolioComments){
         for(var j in this.users){
-            if(this.portfolioComments[i].writer === this.users[j].email){
+            if(this.portfolioComments[i].email === this.users[j].email){
               this.portfolioComments[i].userImageUrl = this.users[j].userImageUrl;
               this.portfolioComments[i].name = this.users[j].name;
             }
