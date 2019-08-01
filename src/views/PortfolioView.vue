@@ -26,10 +26,10 @@
 
     </v-layout>
     <v-flex xs12 text-xs-center>
-      <v-btn round v-if="username" color="two" dark :to="{ name: 'modifyportfolio', params: {id: portfolio.id} }">
+      <v-btn round v-if="user.classify!=='방문자'" color="two" dark :to="{ name: 'modifyportfolio', params: {id: portfolio.id} }">
         <v-icon size="17" class="mr-2">fa-pencil</v-icon>Modify
       </v-btn>
-      <v-btn round v-if="username" color="three" dark v-on:click="deletePortfolio">
+      <v-btn round v-if="user.classify!=='방문자'" color="three" dark v-on:click="deletePortfolio">
         <v-icon size="17" class="mr-2">delete</v-icon>Delete
       </v-btn>
       <v-btn round color="four" dark :to="{name:'portfolio'}">
@@ -65,16 +65,13 @@ export default {
       img: '',
       index: 0,
       portfolio: '',
-      username: ""
+      user: ""
     }
   },
   created() {
-    firebase.auth().onAuthStateChanged(user => {
-      this.user = user;
-      if (!this.user) {
-        this.username = ""
-      } else {
-        this.username = 'NONE'
+    firebase.auth().onAuthStateChanged(async user => {
+      if (user) {
+        this.user = await FirebaseService.getUserData();
       }
 
     });
