@@ -66,6 +66,12 @@
             Posts ({{postSearchList.length}})
             <v-icon size=17>fa-clipboard</v-icon>
           </v-tab>
+
+          <v-tab href="#tab-4">
+            <!-- web log -->
+            Web logs
+            <v-icon size=17>fa-clipboard</v-icon>
+          </v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab">
@@ -160,6 +166,13 @@
             </v-card>
           </v-tab-item>
 
+          <v-tab-item :value="'tab-'+4">
+            <v-card flat>
+              <v-flex xs12 text-xs-center>
+                <iframe width="100%" height="840" src="https://datastudio.google.com/embed/reporting/1y7uMo_N_o-sHKJNg1HNBQsu9B6fFKHF4/page/LPSw" frameborder="0" style="border:0" allowfullscreen></iframe>
+              </v-flex>
+            </v-card>
+          </v-tab-item>
         </v-tabs-items>
       </v-card>
     </v-container>
