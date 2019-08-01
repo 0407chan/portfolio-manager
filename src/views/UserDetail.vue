@@ -98,6 +98,14 @@ export default {
       }
       this.pageuser.userImageUrl = this.imageUrl;
       //console.log(this.pageuser);
+
+
+
+      // TODO 내가 이름이 수정되면, 내가 작성한 모든 post, 포폴, 댓글에 들어간 name 수정하기
+
+
+
+
       await FirebaseService.modifyUser(this.pageuser)
       this.$store.state.user = this.pageuser
       swal("개인정보 수정이 완료되었습니다.")
@@ -147,7 +155,13 @@ export default {
     },
 
 
+
+
     // TODO 유저 삭제 시 유저가 사용한 댓글, 포스트, 포르포리오 전체 삭제하기
+
+
+
+
 
     async deleteUser(){
       const result = await FirebaseService.selfDeleteUser();
