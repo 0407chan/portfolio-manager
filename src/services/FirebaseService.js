@@ -99,7 +99,7 @@ export default {
 	/********************\
  \  PostCommnet 함수들  \
 	\********************/
-	postPostComment(postId, body, name){
+	postPostComment(postId, body, name, userImageUrl){
 		return firestore.collection(POSTCOMMENTS).add({
 			postId,
 			body,
@@ -107,6 +107,7 @@ export default {
 			name: name,
 			writer:store.state.user.email,
 			isModify: false,
+			userImageUrl: userImageUrl,
 		})
 	},
 	getPostComments(postId) {
@@ -215,7 +216,7 @@ export default {
 	/**************************\
  \ Portfolio Comment 함수들   \
 	\**************************/
-	postPortfolioComment(portfolioId, body, name){
+	postPortfolioComment(portfolioId, body, name, userImageUrl){
 		return firestore.collection(PORTFOLIOCOMMENTS).add({
 			portfolioId,
 			body,
@@ -223,6 +224,7 @@ export default {
 			name: name,
 			writer:store.state.user.email,
 			isModify: false,
+			userImageUrl: userImageUrl,
 		})
 	},
 	getPortfolioComments(portfolioId) {

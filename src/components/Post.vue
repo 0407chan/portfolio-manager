@@ -55,9 +55,9 @@
     <v-timeline v-if="index < limit_postComment" dense clipped style="margin-left: 5px; padding-top:5px">
       <v-timeline-item :color="colors[index%4]" small style="padding-bottom:5px">
         <template v-slot:icon>
-          <!-- 타임라인 댓글 사진 표시 <v-avatar>
-            <img src="http://i.pravatar.cc/64">
-          </v-avatar> -->
+          <v-avatar>
+            <img :src="comment.userImageUrl">
+          </v-avatar>
         </template>
         <template>
           <a>{{comment.name}}</a>
@@ -156,6 +156,7 @@ export default {
       useremail: '',
       user: '',
       postComments: [],
+      users: [],
       colors: ['two', 'three', 'four', 'five'],
       newComment: '',
     }
@@ -210,7 +211,7 @@ export default {
     },
     async postComment() {
       let result = await FirebaseService.getUserData();
-      await FirebaseService.postPostComment(this.id, this.comment_input, result.name);
+      await FirebaseService.postPostComment(this.id, this.comment_input, result.name, result.userImageUrl);
       this.comment_input = '';
       this.getPostComments(this.id)
     },
@@ -224,6 +225,16 @@ export default {
     },
     async getPostComments(postId) {
       this.postComments = await FirebaseService.getPostComments(postId);
+      // 후후
+      this.users = await FirebaseService.getUsers();
+      for(var i in this.postComments){
+        for(var j in this.users){
+            if(this.postComments[i].writer === this.users[j].email){
+              this.postComments[i].userImageUrl = this.users[j].userImageUrl;
+              this.postComments[i].name = this.users[j].name;
+            }
+        }
+      }
     },
     addZeros(num) {
       var zero = '';
