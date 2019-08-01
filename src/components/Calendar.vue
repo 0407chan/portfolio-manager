@@ -12,15 +12,19 @@
                         </template>
                         <v-card color="one" width="350px" flat max-height="300px" overflow=scroll>
                         <v-toolbar :color="event.color" dark height="40px">
-                            <v-toolbar-title v-html="event.title"></v-toolbar-title>
-                            <v-flex text-xs-right>
-                            <v-btn icon :to="{ name: 'modifypost', params: {id: event.id}}">
-                            <v-icon size="17">edit</v-icon>
-                            </v-btn>
-                            <v-btn icon @click="deletePost(event.id)">
-                            <v-icon size="17">fa-trash</v-icon>
-                            </v-btn>
-                            </v-flex>
+                            <v-layout>
+                                <v-flex xs8>
+                                    <v-toolbar-title v-html="event.title" style="margin-top:5%"></v-toolbar-title>
+                                </v-flex>
+                                <v-flex xs4 text-xs-right>
+                                    <v-btn v-if="user&&user.email===event.postWriter" icon :to="{ name: 'modifypost', params: {id: event.id}}">
+                                    <v-icon size="17">edit</v-icon>
+                                    </v-btn>
+                                    <v-btn v-if="user&&user.email===event.postWriter" icon @click="deletePost(event.id)">
+                                    <v-icon size="17">fa-trash</v-icon>
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
                         </v-toolbar>
                         <v-card-title primary-title class="one">
                             <vue-markdown>{{event.details}}</vue-markdown>
@@ -68,6 +72,7 @@
 <script>
     import FirebaseService from "@/services/FirebaseService";
     import Post from "@/components/Post";
+    import firebase from "firebase/app"
     export default {
     props:{
       limit_post: {
@@ -80,6 +85,8 @@
         events: [],
         posts: [],
         id: '',
+        user: '',
+        postWriter: '',
     }),
     components: {
         Post
@@ -117,13 +124,14 @@
         var colors = ['two', 'three', 'four','five']
         for (var i = 0; i <this.posts.length; i ++) {
             let idx = i % 4;
+            let postWriter = this.posts[i].writer;
             let title = this.posts[i].title;
             let body = this.posts[i].body;
             let created_at = this.posts[i].created_at;
             let date = `${created_at.getFullYear()}-${('0' + (created_at.getMonth() + 1)).slice(-2)}-${('0' + created_at.getDate()).slice(-2)}`;
             let color = colors[idx];
             let id = this.posts[i].id;
-            this.events.push({title:title,details:body, date: date, color:color, id:id, open:false})
+            this.events.push({postWriter: postWriter, title:title,details:body, date: date, color:color, id:id, open:false})
             }
         },
         async deletePost(id){
@@ -136,6 +144,12 @@
         }
     },
     created() {
+        firebase.auth().onAuthStateChanged(async user => {
+            if (user) {
+                this.user = await FirebaseService.getUserData();
+            }
+
+        });
     }
     };
 </script>
