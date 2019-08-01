@@ -60,7 +60,7 @@
           </v-avatar>
         </template>
         <template>
-          <a>{{comment.name}}</a>
+          <router-link :to="{ name: 'userinfo', params: {id: comment.userId}}">{{comment.name}}</router-link>
         </template>
         <v-layout justify-space-between wrap align-center>
           <v-flex xs8 sm9 v-if="!comment.isModify" style="background-color: #f8f8f8; border-radius: 10px">
@@ -171,6 +171,7 @@ export default {
       this.getPost(this.id);
     }
     if (this.id != null) {
+      console.log(this.id)
       this.getPostComments(this.id);
     }
   },
@@ -189,7 +190,7 @@ export default {
           this.username = username;
         }
       }
-    })
+    });
   },
   methods: {
     async deleteComment(commentId){
@@ -229,9 +230,11 @@ export default {
       this.users = await FirebaseService.getUsers();
       for(var i in this.postComments){
         for(var j in this.users){
-            if(this.postComments[i].writer === this.users[j].email){
+            if(this.postComments[i].email === this.users[j].email){
               this.postComments[i].userImageUrl = this.users[j].userImageUrl;
               this.postComments[i].name = this.users[j].name;
+              this.postComments[i].userId = this.users[j].id;
+              console.log(this.postComments[i])
             }
         }
       }
