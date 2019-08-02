@@ -44,7 +44,7 @@
       <v-icon size="17" class="mr-2">create</v-icon>Modify
     </v-btn>
     <router-link :to="{name:'admin'}">
-      <v-btn color="three" v-if="user&&user.classify==='관리자'" dark round>
+      <v-btn color="three" v-if="user&&user.classify==='관리자'&&user.email===pageuser.email" dark round>
         <v-icon size="17" class="mr-2">people</v-icon>Admin
       </v-btn>
     </router-link>

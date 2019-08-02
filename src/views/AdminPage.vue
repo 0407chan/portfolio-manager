@@ -7,6 +7,7 @@
    max-width: 150px;
    -webkit-line-clamp: 1;
    -webkit-box-orient: vertical;
+  text-align: center;
 }
 
 </style>
@@ -122,7 +123,7 @@
               <v-flex xs12 text-xs-center>
                 <v-data-table :headers="portfolioHeaders" :items="portfolioSearchList" class="elevation-1">
                   <template v-slot:items="props">
-                    <td><span class="testbody"> {{ props.item.title }} </span> </td>
+                    <td><p class="testbody"> {{ props.item.title }} </p></td>
                     <td>{{ props.item.name }}</td>
                     <td>{{ props.item.email }}</td>
                     <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
@@ -209,10 +210,6 @@ export default {
       password: '',
 
       // i don't know Data
-      flat: false,
-      raised: false,
-      adminAccount: '',
-      password: '',
       selected: [],
       edit: false,
       alertinit: false,
