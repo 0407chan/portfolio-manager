@@ -12,7 +12,7 @@
 </style>
 
 <template>
-<v-container>
+<v-container v-if="user.classify==='관리자'">
   <v-card class="mx-auto" :flat="flat" :loading="loading" :outlined="outlined" :elevation="elevation" :width="width" :height="height" v-if="isAdmin===false">
     <v-img v-if="media" class="white--text" height="200px" src="https://i.imgur.com/Cerxrec.png">
     </v-img>
@@ -176,14 +176,15 @@
         </v-tabs-items>
       </v-card>
     </v-container>
-
   </v-layout>
 </v-container>
+<BlockAccess v-else-if="user.classify!=='관리자'"></BlockAccess>
 </template>
 
 
 <script>
 import FirebaseService from "@/services/FirebaseService";
+import BlockAccess from '../components/BlockAccess';
 import firebase, {
   functions
 } from "firebase/app";
@@ -219,6 +220,7 @@ export default {
       // users Data
       classifies: ["팀원", "수퍼맨", "방문자", "지스맨", "지쓰구리"],
       users: [],
+      user: '',
       userHeaders: [
         { text: 'Name',sortable: false, value: 'name', align: 'center' },
         { text: 'Email', value: 'email', sortable: false, align: 'center' },
@@ -255,10 +257,21 @@ export default {
       postSearchList: [],
     }
   },
+  components: {
+    BlockAccess
+  },
   mounted() {
     this.getUsers();
     this.getPortfolios();
     this.getPosts();
+  },
+  created() {
+    firebase.auth().onAuthStateChanged(async user => {
+      if (user) {
+        this.user = await FirebaseService.getUserData();
+      }
+
+    });
   },
   methods: {
     async getUsers() {
