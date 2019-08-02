@@ -128,7 +128,9 @@ export default {
     },
     async postPortfolioComment() {
       let result = await FirebaseService.getUserData();
-      await FirebaseService.postPortfolioComment(this.id, this.comment_input, result.name, result.userImageUrl);
+      let res = await FirebaseService.postPortfolioComment(this.id, this.comment_input, result.name, result.userImageUrl);
+      await FirebaseService.addToPortfoliocommentList(res);
+
       this.comment_input = '';
       this.getPortfolioComments(this.id);
     },

@@ -92,7 +92,8 @@ export default {
     async postWriteAndNotify () {
       let result = await FirebaseService.getUserData();
       if(this.id==null){
-        await FirebaseService.postPost(this.title, this.body, result.name);
+        let res= await FirebaseService.postPost(this.title, this.body, result.name);
+        await FirebaseService.addToPostList(res);
       }else{
         await FirebaseService.modifyPost(this.title, this.body ,this.id, result.name);
       }

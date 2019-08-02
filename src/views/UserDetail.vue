@@ -1,16 +1,16 @@
 <template>
 <v-container>
   <v-layout wrap align-center justify-center>
-      <v-flex xs12 sm4>
+      <v-flex xs4>
         <v-progress-circular v-if="loading" indeterminate color="four"></v-progress-circular>
-        <v-img :src="imageUrl" max-width="300" max-height="300" v-if="imageUrl" />
+        <v-img :src="imageUrl" width="300" height="300" v-if="imageUrl" />
 
         <v-text-field label="Select Image" @click="pickFile" v-model="imageUrl" prepend-icon="attach_file" color="four" v-if="user.email==pageuser.email"></v-text-field>
 
         <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked" />
       </v-flex>
-    <v-flex hidden-xs-12 xs2></v-flex>
-    <v-flex xs12 sm4>
+    <v-flex xs2></v-flex>
+    <v-flex xs4>
       <v-layout align-center>
 
         <v-flex text-xs-12>
@@ -103,15 +103,16 @@ export default {
       //console.log(this.pageuser);
 
 
-
       // TODO 내가 이름이 수정되면, 내가 작성한 모든 post, 포폴, 댓글에 들어간 name 수정하기
-
 
 
 
       await FirebaseService.modifyUser(this.pageuser)
       this.$store.state.user = this.pageuser
       swal("개인정보 수정이 완료되었습니다.")
+      this.$router.push({
+        name: "home"
+      });
     },
     pickFile() {
       this.$refs.image.click();
@@ -158,16 +159,36 @@ export default {
     },
 
 
-
-
-    // TODO 유저 삭제 시 유저가 사용한 댓글, 포스트, 포르포리오 전체 삭제하기
-
-
-
-
-
     async deleteUser(){
+      const res = await FirebaseService.getUserData();
+      if(res.postcomments){
+        for(var i =0; i<res.postcomments.length; i++)
+        FirebaseService.deleteComment(res.postcomments[i]);
+      }
+      if(res.posts){
+        for(var i =0; i<res.posts.length; i++)
+        FirebaseService.deletePost(res.posts[i]);
+      }
+      if(res.portfolios){
+        for(var i =0; i<res.portfolios.length; i++)
+        FirebaseService.deletePortfolio(res.portfolios[i]);
+      }
+      if(res.portfoliocomments){
+        for(var i =0; i<res.portfoliocomments.length; i++)
+        FirebaseService.deletePortfolioComment(res.portfoliocomments[i]);
+      }
       const result = await FirebaseService.selfDeleteUser();
+
+      FirebaseService.logout();
+      firebase.auth().signOut().then(function() {
+
+      });
+      swal("정상적으로 탈퇴되었습니다.")
+      this.$router.push({
+        name: "home"
+      });
+
+
     }
   },
 }
