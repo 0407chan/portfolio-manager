@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container>
+    <v-container v-if="user&&user.classify !=='방문자'">
       <v-layout wrap>
         <v-flex xs12 my-5>
           <v-text-field v-model="title" :rules="[rules.required]" autofocus label="Title"></v-text-field>
@@ -50,6 +50,7 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <BlockAccess v-else></BlockAccess>
   </div>
 </template>
 <script>
@@ -57,6 +58,8 @@ import FirebaseService from "@/services/FirebaseService";
 import PortfolioList from "../components/PortfolioList";
 import Portfolio from '@/components/Portfolio'
 import axios from "axios";
+import firebase from "firebase";
+import BlockAccess from "../components/BlockAccess"
 
 export default {
   name: "PortfolioWriterPage",
@@ -77,11 +80,18 @@ export default {
       clientid: "aac995cb6f223ce",
       callback: "feedback",
       id: "",
+      user: '',
 
     };
   },
   created() {
-      this.id = this.$route.params.id;
+    firebase.auth().onAuthStateChanged(async user => {
+      if (user) {
+        this.user = await FirebaseService.getUserData();
+      }
+
+    });
+    this.id = this.$route.params.id
   },
   mounted(){
     if(this.id!=null){
@@ -89,7 +99,8 @@ export default {
     }
   },
   components: {
-    PortfolioList
+    PortfolioList,
+    BlockAccess
   },
   methods: {
     async writePortfolio() {

@@ -185,9 +185,7 @@
 <script>
 import FirebaseService from "@/services/FirebaseService";
 import BlockAccess from '../components/BlockAccess';
-import firebase, {
-  functions
-} from "firebase/app";
+import firebase from "firebase/app";
 export default {
   data() {
     return {
