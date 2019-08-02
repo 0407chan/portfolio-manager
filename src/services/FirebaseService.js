@@ -75,6 +75,8 @@ export default {
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
 			email:store.state.user.email,
 			name: name
+		}).then(function(docRef) {
+    		return docRef.id;
 		})
 	},
 
@@ -87,6 +89,11 @@ export default {
 		})
 	},
 	deletePost(id){
+		var userId = firebase.auth().currentUser.uid;
+		firestore.collection(USERS).doc(userId).update({
+    		posts: firebase.firestore.FieldValue.arrayRemove(id),
+		})
+
 		return firestore.collection(POSTS).doc(id).delete().then(function() {
 
 		}).catch(function(error) {
@@ -95,7 +102,7 @@ export default {
 	},
 
 	/********************\
- \  PostCommnet 함수들  \
+	\  PostCommnet 함수들  \
 	\********************/
 	postPostComment(postId, body, name, userImageUrl){
 		return firestore.collection(POSTCOMMENTS).add({
@@ -107,6 +114,8 @@ export default {
 			isModify: false,
 			userImageUrl: userImageUrl,
 			userId:store.state.user.uid,
+		}).then(function(docRef) {
+    		return docRef.id;
 		})
 	},
 	getPostComments(postId) {
@@ -147,6 +156,11 @@ export default {
 		})
 	},
 	deleteComment(commentId){
+		var userId = firebase.auth().currentUser.uid;
+		firestore.collection(USERS).doc(userId).update({
+    		postcomments: firebase.firestore.FieldValue.arrayRemove(commentId),
+		})
+
 		return firestore.collection(POSTCOMMENTS).doc(commentId).delete().then(function() {
 
 		}).catch(function(error) {
@@ -158,6 +172,11 @@ export default {
  \   Portfolio 함수들   \
 	\********************/
 	deletePortfolio(id){
+		var userId = firebase.auth().currentUser.uid;
+		firestore.collection(USERS).doc(userId).update({
+    		portfolios: firebase.firestore.FieldValue.arrayRemove(id),
+		})
+
 		return firestore.collection(PORTFOLIOS).doc(id).delete().then(function() {
 
 		}).catch(function(error) {
@@ -217,6 +236,8 @@ export default {
 			userId:store.state.user.uid,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
 			email:store.state.user.email
+		}).then(function(docRef) {
+    		return docRef.id;
 		})
 	},
 
@@ -233,6 +254,8 @@ export default {
 			isModify: false,
 			userImageUrl: userImageUrl,
 			userId:store.state.user.uid,
+		}).then(function(docRef) {
+ 		   	return docRef.id;
 		})
 	},
 	getPortfolioComments(portfolioId) {
@@ -273,6 +296,11 @@ export default {
 		})
 	},
 	deletePortfolioComment(commentId){
+		var userId = firebase.auth().currentUser.uid;
+		firestore.collection(USERS).doc(userId).update({
+    		portfoliocomments: firebase.firestore.FieldValue.arrayRemove(commentId),
+		})
+
 		return firestore.collection(PORTFOLIOCOMMENTS).doc(commentId).delete().then(function() {
 
 		}).catch(function(error) {
@@ -302,7 +330,6 @@ export default {
 					})
 				})
 	},
-
 
 	modifyUser(user){
 		return firestore.collection(USERS).doc(user.id).update({
@@ -344,6 +371,30 @@ export default {
 		// });
 	},
 
+	addToPortfolioList(id){
+		var userId = firebase.auth().currentUser.uid;
+		return firestore.collection(USERS).doc(userId).update({
+    	portfolios: firebase.firestore.FieldValue.arrayUnion(id),
+		})
+	},
+	addToPostList(id){
+		var userId = firebase.auth().currentUser.uid;
+		return firestore.collection(USERS).doc(userId).update({
+    	posts: firebase.firestore.FieldValue.arrayUnion(id),
+		})
+	},
+	addToPostcommentList(id){
+		var userId = firebase.auth().currentUser.uid;
+		return firestore.collection(USERS).doc(userId).update({
+    	postcomments: firebase.firestore.FieldValue.arrayUnion(id),
+		})
+	},
+	addToPortfoliocommentList(id){
+		var userId = firebase.auth().currentUser.uid;
+		return firestore.collection(USERS).doc(userId).update({
+    	portfoliocomments: firebase.firestore.FieldValue.arrayUnion(id),
+		})
+	},
 
 	/********************\
  \    Login 함수들      \
@@ -409,6 +460,7 @@ export default {
 			created_at:"",
 			current_at:"",
 			userImageUrl:"",
+
 		}).then(function(result){
 
 		});
@@ -441,7 +493,7 @@ export default {
 			return user.delete().then(function() {
 
 			}).catch(function(error) {
-			  console.log("이미 지워졌당ㅋ",error);
+			  console.log("유저 삭제",error);
 			});
 		}else{
 			console.log("유저없음");
@@ -477,7 +529,6 @@ export default {
 	/********************\
  \ Page Offline 함수들  \
 	\********************/
-
 
 	/** 오프라인 지속성 구현 */
 	enablePersistence(){

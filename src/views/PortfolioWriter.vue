@@ -180,12 +180,15 @@ export default {
     },
     async portfolioWriteAndNotify () {
       let result = await FirebaseService.getUserData();
-
+      let res = '';
       if(this.id==null){
-        await FirebaseService.postPortfolio(this.title, this.body, this.imageUrl, result.name);
+        res = await FirebaseService.postPortfolio(this.title, this.body, this.imageUrl, result.name);
+        await FirebaseService.addToPortfolioList(res);
       }else{
         await FirebaseService.modifyPortfolio(this.title, this.body, this.imageUrl, this.id, result.name);
       }
+
+
       this.$router.push({
         name: "portfolio"
       });

@@ -206,6 +206,7 @@ export default {
         if(name == null){
           name = this.name;
         }
+        console.log(name);
         const re = await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,firebase.firestore.FieldValue.serverTimestamp(),"https://i.imgur.com/OpxiyFt.png");
       }else{
         if(result.userImageUrl === undefined || result.userImageUrl == "" || result.userImageUrl=="https://i.imgur.com/OpxiyFt.png"){

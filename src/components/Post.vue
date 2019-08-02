@@ -208,7 +208,8 @@ export default {
     },
     async postComment() {
       let result = await FirebaseService.getUserData();
-      await FirebaseService.postPostComment(this.id, this.comment_input, result.name, result.userImageUrl);
+      let res = await FirebaseService.postPostComment(this.id, this.comment_input, result.name, result.userImageUrl);
+      await FirebaseService.addToPostcommentList(res);
       this.comment_input = '';
       this.getPostComments(this.id)
     },
