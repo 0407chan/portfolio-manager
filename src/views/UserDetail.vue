@@ -40,11 +40,15 @@
     </v-flex>
   </v-layout>
   <v-flex text-xs-center my5>
-    <v-btn color="two" v-if="user&&user.email==pageuser.email" round dark v-on:click="modifyUser">
+    <v-btn color="two" v-if="user&&user.email===pageuser.email" round dark v-on:click="modifyUser">
       <v-icon size="17" class="mr-2">create</v-icon>Modify
     </v-btn>
-
-    <v-btn color="three" v-if="user&&user.email==pageuser.email" dark round v-on:click="deleteUser">
+    <router-link :to="{name:'admin'}">
+      <v-btn color="three" v-if="user&&user.classify==='관리자'" dark round>
+        <v-icon size="17" class="mr-2">people</v-icon>Admin
+      </v-btn>
+    </router-link>
+    <v-btn color="three" v-if="user&&user.classify!=='관리자'&&user.email===pageuser.email" dark round v-on:click="deleteUser">
       <v-icon size="17" class="mr-2">cancel</v-icon>탈퇴하기
     </v-btn>
 
@@ -83,8 +87,7 @@ export default {
     this.id = this.$route.params.id;
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        var currentUser = firebase.auth().currentUser;
-        this.user = currentUser;
+        this.user = await FirebaseService.getUserData();
         this.pageuser = await FirebaseService.getUser(this.id);
         this.imageUrl = this.pageuser.userImageUrl;
       }
