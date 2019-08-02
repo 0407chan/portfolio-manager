@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container>
+    <v-container v-if="user&&user.classify !=='방문자'">
       <v-layout wrap>
         <v-flex xs12 my-5>
           <v-text-field v-model="title" :rules="[rules.required]" autofocus label="Title"></v-text-field>
@@ -26,11 +26,14 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <BlockAccess v-else></BlockAccess>
   </div>
 </template>
 <script>
 import FirebaseService from "@/services/FirebaseService";
 import PostList from "../components/PostList";
+import firebase from "firebase";
+import BlockAccess from "../components/BlockAccess"
 
 export default {
   name: "PostWriterPage",
@@ -45,12 +48,18 @@ export default {
       body:'',
       post:'',
       id:'',
+      user: '',
     };
   },
   created() {
-      this.id = this.$route.params.id;
-  },
+    firebase.auth().onAuthStateChanged(async user => {
+      if (user) {
+        this.user = await FirebaseService.getUserData();
+      }
 
+    });
+    this.id = this.$route.params.id
+  },
 
   mounted(){
     if(this.id!=null){
@@ -58,7 +67,8 @@ export default {
     }
   },
   components: {
-    PostList
+    PostList,
+    BlockAccess
   },
   methods: {
     async postPost() {

@@ -25,7 +25,7 @@
         </ImgBanner>
       </slide>
 
-    </v-layout>
+<!--    </v-layout>-->
     <hooper-navigation slot="hooper-addons"></hooper-navigation>
     <hooper-pagination slot="hooper-addons"></hooper-pagination>
   </hooper>
