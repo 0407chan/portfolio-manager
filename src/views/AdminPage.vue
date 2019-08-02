@@ -70,7 +70,12 @@
           <v-tab href="#tab-4">
             <!-- web log -->
             Web logs
-            <v-icon size=17>fa-clipboard</v-icon>
+            <v-icon size=17>insert_chart</v-icon>
+          </v-tab>
+
+          <v-tab @click="move()">
+            analytics
+            <v-icon size=17>fa-google</v-icon>
           </v-tab>
         </v-tabs>
 
@@ -272,6 +277,10 @@ export default {
     });
   },
   methods: {
+    move: function(link) {
+      var openNewWindow = window.open("about:blank");
+      openNewWindow.location.href="https://analytics.google.com/analytics/web/?hl=ko&pli=1#/report-home/a143630748w205025840p198264123";
+    },
     async getUsers() {
       this.users = await FirebaseService.getUsers();
       this.userSearchList = [];
