@@ -14,7 +14,7 @@
     <v-btn v-if="username" flat :to="{ name: 'userinfo', params: {id: id}}">{{username}}님</v-btn>
     <v-btn flat :to="{name:'portfolio'}">Portfolio</v-btn>
     <v-btn flat :to="{name:'post'}">Post</v-btn>
-    <v-btn flat v-if="!user">
+    <v-btn flat v-if="wait&&!user">
       <LoginModal></LoginModal>
     </v-btn>
     <v-btn flat v-if="user" v-on:click="signOut">Logout</v-btn>
@@ -79,6 +79,7 @@ export default {
       email: '',
       id: '',
       marked: false,
+      wait: false
     };
   },
   methods: {
@@ -87,10 +88,11 @@ export default {
     },
     signOut() {
       FirebaseService.logout().then(function() {
+          swal('로그아웃되었습니다')
 
         }),
         firebase.auth().signOut().then(function() {
-
+          swal('로그아웃되었습니다')
         });
     },
     check() {
@@ -112,9 +114,11 @@ export default {
         this.username = result.name
         this.email = result.email
         this.id = user.uid
+        this.wait = true
       }
       else {
         this.username = ""
+        this.wait = true
       }
     })
   }
