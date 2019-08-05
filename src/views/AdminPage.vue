@@ -184,7 +184,7 @@
     </v-container>
   </v-layout>
 </v-container>
-<BlockAccess v-else-if="user.classify!=='관리자'"></BlockAccess>
+<BlockAccess v-else-if="wait&&user.classify!=='관리자'"></BlockAccess>
 </template>
 
 
@@ -208,6 +208,7 @@ export default {
       height: undefined,
       adminAccount: '',
       password: '',
+      wait:false,
 
       // i don't know Data
       selected: [],
@@ -269,6 +270,9 @@ export default {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.user = await FirebaseService.getUserData();
+        this.wait = true
+      } else {
+        this.wait = true
       }
 
     });

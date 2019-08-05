@@ -50,7 +50,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <BlockAccess v-else></BlockAccess>
+    <BlockAccess v-else-if="wait"></BlockAccess>
   </div>
 </template>
 <script>
@@ -81,13 +81,16 @@ export default {
       callback: "feedback",
       id: "",
       user: '',
-
+      wait: false,
     };
   },
   created() {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.user = await FirebaseService.getUserData();
+        this.wait = true
+      } else {
+        this.wait = true
       }
 
     });
