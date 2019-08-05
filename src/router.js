@@ -12,8 +12,11 @@ import ModifyPortfolioPage from './views/PortfolioWriter.vue'
 import ModifyPostPage from './views/PostWriter.vue'
 
 import AdminPage from './views/AdminPage.vue'
-import TestPage from './views/Test2.vue'
-import Test1 from './views/Test.vue'
+
+import UserDetailTest from './test/UserDetailTest.vue'
+import AdminPageTest from './test/AdminPageTest.vue'
+import LoginTest from './test/LoginTest.vue'
+import InputTest from './test/InputTest.vue'
 
 import UserDetail from './views/UserDetail.vue'
 Vue.use(Router)
@@ -68,25 +71,43 @@ export default new Router({
 			name: 'portfolioview',
 			component: PortfolioViewPage
 		},
-    {
-			path: '/test',
-			name: 'test',
-			component: TestPage
-	  },
-    {
-			path: '/test1',
-			name: 'test1',
-			component: Test1
-	  },
+
     {
 			path: '/admin',
 			name: 'admin',
 			component: AdminPage
-	},
-	{
-			path: '/userinfo/:id',
-			name: 'userinfo',
-			component: UserDetail
-	}
+  	},
+  	{
+  			path: '/userinfo/:id',
+  			name: 'userinfo',
+  			component: UserDetail
+  	},
+
+
+    /********************\
+   \     test rounter     \
+    \********************/
+    {
+      path: '/test4',
+      name: 'userdetailtest',
+      component: UserDetailTest
+    },
+    {
+      path: '/test3',
+      name: 'inputtest',
+      component: InputTest
+    },
+    {
+      path: '/test2',
+      name: 'admintest',
+      component: AdminPageTest
+    },
+    {
+      path: '/test1',
+      name: 'logintest',
+      component: LoginTest
+    },
+
+
   ]
 })

@@ -88,10 +88,14 @@ export default {
     signOut() {
       FirebaseService.logout().then(function() {
 
-        }),
-        firebase.auth().signOut().then(function() {
+      }),
+      firebase.auth().signOut().then(function() {
 
-        });
+      });
+      this.$router.push({
+        name: "home"
+      });
+
     },
     check() {
       return $store.state.check

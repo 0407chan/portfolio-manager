@@ -37,7 +37,7 @@
   </v-card>
 
   <v-layout mt-5 wrap text-xs-center v-else-if="isAdmin">
-    <v-container mt-5>
+    <v-container mt-2>
       <v-flex xs12 text-xs-center>
         <v-text-field label="Search" v-model="search"></v-text-field>
       </v-flex>
@@ -47,6 +47,8 @@
           v-model="tab"
           centered
           icons-and-text
+
+          transition="fade"
         >
           <v-tabs-slider></v-tabs-slider>
 
@@ -81,7 +83,7 @@
         </v-tabs>
 
         <v-tabs-items v-model="tab">
-          <v-tab-item :value="'tab-'+1">
+          <v-tab-item :value="'tab-'+1" transition="fade-transition" reverse-transition="fade-transition">
             <v-card flat>
               <v-flex xs12 text-xs-center>
                 <v-data-table :headers="userHeaders" :items="userSearchList" class="elevation-1">
@@ -118,7 +120,7 @@
           </v-tab-item>
 
 
-          <v-tab-item :value="'tab-'+2">
+          <v-tab-item :value="'tab-'+2" transition="fade-transition" reverse-transition="fade-transition">
             <v-card flat>
               <v-flex xs12 text-xs-center>
                 <v-data-table :headers="portfolioHeaders" :items="portfolioSearchList" class="elevation-1">
@@ -146,7 +148,7 @@
 
 
 
-          <v-tab-item :value="'tab-'+3">
+          <v-tab-item :value="'tab-'+3"  transition="fade-transition" reverse-transition="fade-transition">
             <v-card flat>
               <v-flex xs12 text-xs-center>
                 <v-data-table :headers="postHeaders" :items="postSearchList" class="elevation-1">
@@ -172,7 +174,7 @@
             </v-card>
           </v-tab-item>
 
-          <v-tab-item :value="'tab-'+4">
+          <v-tab-item :value="'tab-'+4" transition="fade-transition" reverse-transition="fade-transition">
             <v-card flat>
               <v-flex xs12 text-xs-center>
                 <iframe width="100%" height="840" src="https://datastudio.google.com/embed/reporting/1y7uMo_N_o-sHKJNg1HNBQsu9B6fFKHF4/page/LPSw" frameborder="0" style="border:0" allowfullscreen></iframe>

@@ -101,9 +101,19 @@ export default {
 		});
 	},
 
+	postAddToCommentList(postId,commentId){
+		return firestore.collection(POSTS).doc(postId).update({
+    	comments: firebase.firestore.FieldValue.arrayUnion(commentId),
+		})
+	},
+
+
+
+
 	/********************\
 	\  PostCommnet 함수들  \
 	\********************/
+
 	postPostComment(postId, body, name, userImageUrl){
 		return firestore.collection(POSTCOMMENTS).add({
 			postId,
@@ -133,6 +143,21 @@ export default {
 					})
 				})
 	},
+
+	getPostComment(commentId) {
+		const postCommentCollection = firestore.collection(POSTCOMMENTS).doc(commentId)
+		return postCommentCollection.get().then(function(doc) {
+				if (doc.exists) {
+					let data = doc.data();
+					data.id = doc.id;
+					data.created_at = new Date(data.created_at.toDate())
+					return data;
+				} else {
+
+				}
+			})
+	},
+
 	canModify(comment){
 		return firestore.collection(POSTCOMMENTS).doc(comment.id).set({
 			body: comment.body,
@@ -155,11 +180,14 @@ export default {
 			"userId":store.state.user.uid,
 		})
 	},
-	deleteComment(commentId){
+	deleteComment(postId, commentId){
 		var userId = firebase.auth().currentUser.uid;
 		firestore.collection(USERS).doc(userId).update({
     		postcomments: firebase.firestore.FieldValue.arrayRemove(commentId),
-		})
+		});
+		firestore.collection(POSTS).doc(postId).update({
+    		comments: firebase.firestore.FieldValue.arrayRemove(commentId),
+		});
 
 		return firestore.collection(POSTCOMMENTS).doc(commentId).delete().then(function() {
 
@@ -167,6 +195,8 @@ export default {
 				console.error("Error removing postComment: ", error);
 		});
 	},
+
+
 
 	/********************\
  \   Portfolio 함수들   \
@@ -214,7 +244,23 @@ export default {
 					})
 				})
 	},
+	getPortfoliosById(userId) {
+		console.log("왔냐")
+		const portfoliosCollection = firestore.collection(PORTFOLIOS)
+		return portfoliosCollection
+				.where("userId", "==", userId)
+				.orderBy('created_at', 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
 
+						let data = doc.data();
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate());
+						return data
+					})
+				})
+	},
 
 	modifyPortfolio(title,body,img,id,name){
 		return firestore.collection(PORTFOLIOS).doc(id).update({
@@ -222,18 +268,17 @@ export default {
 			"img":img,
 			"body":body,
 			"name":name,
-			"userId":store.state.user.uid,
 			"email":store.state.user.email
 		})
 	},
 
-	postPortfolio(title, body, img, name) {
+	postPortfolio(title, body, img, id, name) {
 		return firestore.collection(PORTFOLIOS).add({
 			title,
 			body,
 			img,
 			name,
-			userId:store.state.user.uid,
+			userId:id,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
 			email:store.state.user.email
 		}).then(function(docRef) {
@@ -241,9 +286,17 @@ export default {
 		})
 	},
 
+	portfolioAddToCommentList(portfolioId,commentId){
+		return firestore.collection(PORTFOLIOS).doc(portfolioId).update({
+    	comments: firebase.firestore.FieldValue.arrayUnion(commentId),
+		})
+	},
 	/**************************\
  \ Portfolio Comment 함수들   \
 	\**************************/
+
+
+
 	postPortfolioComment(portfolioId, body, name, userImageUrl){
 		return firestore.collection(PORTFOLIOCOMMENTS).add({
 			portfolioId,
@@ -295,11 +348,15 @@ export default {
 			"userId":store.state.user.uid,
 		})
 	},
-	deletePortfolioComment(commentId){
+	deletePortfolioComment(portfolioId,commentId){
 		var userId = firebase.auth().currentUser.uid;
 		firestore.collection(USERS).doc(userId).update({
     		portfoliocomments: firebase.firestore.FieldValue.arrayRemove(commentId),
-		})
+		});
+
+		firestore.collection(PORTFOLIOS).doc(portfolioId).update({
+    		comments: firebase.firestore.FieldValue.arrayRemove(commentId),
+		});
 
 		return firestore.collection(PORTFOLIOCOMMENTS).doc(commentId).delete().then(function() {
 
