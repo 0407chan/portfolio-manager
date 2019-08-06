@@ -87,42 +87,11 @@ export default {
         name: "post"
       });
     },
-
     async getPost(id) {
 			this.post = await FirebaseService.getPost(id);
       this.title = this.post.title;
       this.body = this.post.body;
 		},
-    async postWriteAndNotify () {
-      let result = await FirebaseService.getUserData();
-      if(this.id==null){
-        let res= await FirebaseService.postPost(this.title, this.body, result.id, result.name);
-        await FirebaseService.addToPostList(res);
-      }else{
-        await FirebaseService.modifyPost(this.title, this.body ,this.id, result.name);
-      }
-      this.$router.push({
-        name: "post"
-      });
-      if (window.Notification) {
-        Notification.requestPermission();
-      }
-      function pushNotification() {
-        setTimeout(function () {
-          notify();
-        }, 1500);
-      }
-      pushNotification();
-      function notify() {
-        var notification = new Notification('EEEAZY Notification', {
-          icon: 'https://i.imgur.com/wxV4WcW.png',
-          body: '새 글이 등록되었습니다.',
-        });
-        notification.onclick = function () {
-          window.open('http://localhost:8080/portfolio');
-        };
-      }
-    }
   }
 };
 </script>

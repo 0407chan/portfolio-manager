@@ -35,7 +35,9 @@ firebase.initializeApp(config)
 const firestore = firebase.firestore();
 // const firestorage = firebase.storage();
 const fireFunctions = firebase.functions();
-const fireMessage  = firebase.messaging();
+if (firebase.messaging.isSupported()){
+	const fireMessage  = firebase.messaging();
+}
 
 
 export default {
@@ -687,6 +689,7 @@ export default {
  \ push 함수들   \
 	\**************************/
 	alarmOnFirstVisit() {
+		if (window.Notification) {
         return fireMessage.requestPermission()
             .then(function () {
                 return fireMessage.getToken().then(idToken=>{
@@ -695,7 +698,8 @@ export default {
             })
             .catch(function (err) {
                 console.log(err + 'occured')
-            })
+			})
+		}
     },
     onMessageResponse() {
         return fireMessage.onMessage(function (payload) {
