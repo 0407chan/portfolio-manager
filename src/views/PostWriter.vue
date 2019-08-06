@@ -10,12 +10,12 @@
         </v-flex>
         <v-flex xs12 text-xs-center round my-5>
           <template v-if="id==null">
-            <v-btn color="two" round dark v-on:click="postWriteAndNotify">
+            <v-btn color="two" round dark v-on:click="postPost">
             <v-icon size="17" class="mr-2">fa-pencil</v-icon>Write
             </v-btn>
           </template>
           <template v-else>
-            <v-btn color="two" round dark v-on:click="postWriteAndNotify">
+            <v-btn color="two" round dark v-on:click="postPost">
             <v-icon size="17" class="mr-2">fa-pencil</v-icon>Modify
             </v-btn>
           </template>
@@ -77,9 +77,9 @@ export default {
   methods: {
     async postPost() {
       let result = await FirebaseService.getUserData();
-      console.log(result)
       if(this.id==null){
-        await FirebaseService.postPost(this.title, this.body, result.name);
+        let res= await FirebaseService.postPost(this.title, this.body, result.name);
+        await FirebaseService.addToPostList(res);
       }else{
         await FirebaseService.modifyPost(this.title, this.body ,this.id, result.name);
       }

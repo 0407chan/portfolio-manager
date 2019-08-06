@@ -123,7 +123,7 @@
               <v-flex xs12 text-xs-center>
                 <v-data-table :headers="portfolioHeaders" :items="portfolioSearchList" class="elevation-1">
                   <template v-slot:items="props">
-                    <td><p class="testbody"> {{ props.item.title }} </p></td>
+                    <td><span class="testbody"> {{ props.item.title }} </span></td>
                     <td>{{ props.item.name }}</td>
                     <td>{{ props.item.email }}</td>
                     <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>

@@ -34,12 +34,12 @@
         </v-flex>
         <v-flex xs12 text-xs-center round my-5>
           <template v-if="id==null">
-            <v-btn color="two" round dark v-on:click="portfolioWriteAndNotify">
+            <v-btn color="two" round dark v-on:click="writePortfolio">
             <v-icon size="17" class="mr-2">fa-pencil</v-icon>Write
             </v-btn>
           </template>
             <template v-else>
-              <v-btn color="two" round dark v-on:click="portfolioWriteAndNotify">
+              <v-btn color="two" round dark v-on:click="writePortfolio">
               <v-icon size="17" class="mr-2">fa-pencil</v-icon>Modify
               </v-btn>
             </template>
@@ -108,13 +108,15 @@ export default {
   methods: {
     async writePortfolio() {
       let result = await FirebaseService.getUserData();
-      console.log(result)
-
+      let res = '';
       if(this.id==null){
-        await FirebaseService.postPortfolio(this.title, this.body, this.imageUrl, result.name);
+        res = await FirebaseService.postPortfolio(this.title, this.body, this.imageUrl, result.name);
+        await FirebaseService.addToPortfolioList(res);
       }else{
         await FirebaseService.modifyPortfolio(this.title, this.body, this.imageUrl, this.id, result.name);
       }
+
+
       this.$router.push({
         name: "portfolio"
       });
@@ -207,7 +209,7 @@ export default {
         name: "portfolio"
       });
       if (window.Notification) {
-        Notification.requestPermission();
+        Notification.requestPermission().then(idtoken=>{console.log(idtoken,'dddddd')})
       }
       function pushNotification() {
         setTimeout(function () {

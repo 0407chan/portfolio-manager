@@ -3,7 +3,7 @@
   <v-layout wrap align-center justify-center>
       <v-flex xs4>
         <v-progress-circular v-if="loading" indeterminate color="four"></v-progress-circular>
-        <v-img :src="imageUrl" width="300" height="300" v-if="imageUrl" />
+        <v-img :src="imageUrl" max-width="300" max-height="300" v-if="imageUrl" />
 
         <v-text-field label="Select Image" @click="pickFile" v-model="imageUrl" prepend-icon="attach_file" color="four" v-if="user.email==pageuser.email"></v-text-field>
 

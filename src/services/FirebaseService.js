@@ -2,6 +2,8 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 import store from '../store'
+import 'firebase/functions'
+import 'firebase/messaging'
 
 const POSTS = 'posts'
 const PORTFOLIOS = 'portfolios'
@@ -16,7 +18,9 @@ const config = {
 	authDomain: 'todo-vue-3ea4e.firebaseapp.com',
 	apiKey: 'AIzaSyBSufO4FShHm8XHe6mD9CotDFQfzpkTxUU',
 	databaseURL: 'https://todo-vue-3ea4e.firebaseio.com',
-	storageBucket: 'gs://todo-vue-3ea4e.appspot.com'
+	storageBucket: 'todo-vue-3ea4e.appspot.com',
+	messagingSenderId: "437302839629",
+	appId: "1:437302839629:web:6c403028be6fe081"
 
 	// projectId: 'elice-ssafy',
 	// authDomain: 'elice-ssafy.firebaseapp.com',
@@ -28,7 +32,10 @@ const config = {
 
 
 firebase.initializeApp(config)
-const firestore = firebase.firestore()
+const firestore = firebase.firestore();
+// const firestorage = firebase.storage();
+const fireFunctions = firebase.functions();
+const fireMessage  = firebase.messaging();
 
 
 export default {
@@ -563,5 +570,41 @@ export default {
   //       });
   //     // [END use_from_cache]
   //   })
+
+	/**************************\
+ \ push 함수들   \
+	\**************************/
+	alarmOnFirstVisit() {
+        return fireMessage.requestPermission()
+            .then(function () {
+                return fireMessage.getToken().then(idToken=>{
+					return idToken
+                });
+            })
+            .catch(function (err) {
+                console.log(err + 'occured')
+            })
+    },
+    onMessageResponse() {
+        return fireMessage.onMessage(function (payload) {
+			var notification = new Notification('EEEAZY Notification', {
+				icon: 'https://i.imgur.com/wxV4WcW.png',
+				body: '읽지않은 알림이 있습니다..',
+			  });
+			  notification.onclick = function () {
+				window.open('http://localhost:8080/');
+			  };
+        });
+    },
+    addToCloudMessagingUserList(token) {
+        const saveObject = firestore.collection('messageList').doc(token);
+        return saveObject.set({
+                cloudMessaging: token,
+            },
+            {
+                merge: true
+            }
+        )
+    },
 
 }
