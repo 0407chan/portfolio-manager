@@ -326,7 +326,6 @@ export default {
   methods: {
 
     async modifyUser() {
-      console.log("어떠케이래??",this.pageuser);
       if (this.imageUrl === '') {
         this.imageUrl = this.pageuser.userImageUrl
       }
