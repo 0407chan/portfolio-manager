@@ -97,7 +97,7 @@
   </v-flex>
   <!-- post comment, need authority -->
   <v-flex xs9>
-    <v-text-field v-if="username" v-model="comment_input" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
+    <v-text-field v-if="username" v-model="comment_input" :rules="[rules.required]" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
   </v-flex>
   <v-flex xs3 text-xs-right>
     <v-btn v-if="username" round color="four" dark @click="postComment" class="post_btn">
@@ -136,6 +136,7 @@ export default {
     comment: {
       type: String
     },
+    comments: Array,
     limit_postComment: {
       type: Number,
       default: 4,
@@ -156,6 +157,11 @@ export default {
       users: [],
       colors: ['two', 'three', 'four', 'five'],
       newComment: '',
+
+      rules: {
+        required: value => !!value || "Required.",
+      },
+      btnCheck: false,
     }
   },
   computed: {
@@ -190,7 +196,7 @@ export default {
   },
   methods: {
     async deleteComment(commentId){
-      await FirebaseService.deleteComment(commentId);
+      await FirebaseService.deleteComment(this.id, commentId);
       this.getPostComments(this.id);
     },
     async modifyComment(comment){
@@ -207,11 +213,17 @@ export default {
       await FirebaseService.canModify(comment);
     },
     async postComment() {
-      let result = await FirebaseService.getUserData();
-      let res = await FirebaseService.postPostComment(this.id, this.comment_input, result.name, result.userImageUrl);
-      await FirebaseService.addToPostcommentList(res);
-      this.comment_input = '';
-      this.getPostComments(this.id)
+      if(this.comment_input.length != 0 && !this.btnCheck){
+
+        this.btnCheck = true;
+        let result = await FirebaseService.getUserData();
+        let res = await FirebaseService.postPostComment(this.id, this.comment_input, result.name, result.userImageUrl);
+        await FirebaseService.addToPostcommentList(res);
+        await FirebaseService.postAddToCommentList(this.id,res);
+        this.comment_input = '';
+        await this.getPostComments(this.id);
+        this.btnCheck = false;
+      }
     },
     async deletePost() {
       swal('삭제되었습니다.');
@@ -222,8 +234,17 @@ export default {
       this.post = await FirebaseService.getPost(id);
     },
     async getPostComments(postId) {
-      this.postComments = await FirebaseService.getPostComments(postId);
+      //TODO 글 추가 삭제 수정 시 오류가 있어서 일단 보류
+      // this.postComments = [];
+      // for(var i = 0; i<this.comments.length; i++){
+      //   let res = await FirebaseService.getPostComment(this.comments[i]);
+      //   //console.log(res);
+      //   this.postComments.push(res);
+      // }
+      // console.log(this.postComments);
 
+
+      this.postComments = await FirebaseService.getPostComments(postId);
       // 후후
       this.users = await FirebaseService.getUsers();
       for(var i in this.postComments){
