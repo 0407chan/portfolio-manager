@@ -5,7 +5,7 @@
       <v-flex xs12 md5>
         <div class="img_div">
           <div class="img_scale">
-            <img v-bind:src="portfolio.img" width="100%" />
+            <img v-bind:src="portfolio.img" width="100%" @click="imageview(portfolio.img)"/>
           </div>
         </div>
       </v-flex>
@@ -16,13 +16,14 @@
           <h2>{{portfolio.title}} </h2>
         </v-flex>
         <v-flex xs12>
-          <br><hr><br>
+          <br>
+          <hr><br>
         </v-flex>
         <v-flex xs12 test-xs-left>
           <vue-markdown :source="portfolio.body"></vue-markdown>
         </v-flex>
       </v-flex>
-        <!-- <vue-markdown :source="portfolio.body" style="margin-left:1vw; margin-right:3vw;"></vue-markdown> -->
+      <!-- <vue-markdown :source="portfolio.body" style="margin-left:1vw; margin-right:3vw;"></vue-markdown> -->
 
     </v-layout>
     <v-flex xs12 text-xs-center>
@@ -97,6 +98,17 @@ export default {
     async getPortfolio(id) {
       this.portfolio = await FirebaseService.getPortfolio(id);
     },
+    imageview(url) {
+      var img = new Image();
+      img.onload = function() {
+        var imgW = this.width;
+        var imgH = this.height;
+        if ((imgW != 0) && (imgH != 0)) {
+          window.open(url, 'guide', 'width=' + imgW + ', height=' + imgH + ', scrollbars=no');
+        }
+      }
+      img.src = url;
+    },
   }
 }
 </script>
@@ -105,22 +117,26 @@ export default {
   max-width: 700px;
   margin: auto;
 }
-.img_scale{
+
+.img_scale {
   transform: scale(1);
--webkit-transform: scale(1);
--moz-transform: scale(1);
--ms-transform: scale(1);
--o-transform: scale(1);
-transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transition: all 0.3s ease-in-out;
+  /* 부드러운 모션을 위해 추가*/
 }
-.img_scale:hover{
+
+.img_scale:hover {
   transform: scale(1.2);
   -webkit-transform: scale(1.2);
   -moz-transform: scale(1.2);
   -ms-transform: scale(1.2);
   -o-transform: scale(1.2);
 }
-.img_div{
-  overflow:hidden
+
+.img_div {
+  overflow: hidden
 }
 </style>

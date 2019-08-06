@@ -9,7 +9,7 @@
       <v-timeline-item :color="colors[index%4]" small style="padding-bottom:5px">
         <template v-slot:icon>
           <v-avatar>
-            <img :src="comment.userImageUrl">
+            <img :src="comment.userImageUrl" @click="imageview(comment.userImageUrl)" style="cursor: pointer">
           </v-avatar>
         </template>
         <template>
@@ -158,6 +158,17 @@ export default {
     },
     morePortfolioComments(data) {
       this.limit_Comment = data + 2;
+    },
+    imageview(url) {
+      var img = new Image();
+      img.onload = function() {
+        var imgW = this.width/2;
+        var imgH = this.height/2;
+        if ((imgW != 0) && (imgH != 0)) {
+          window.open(url, 'guide', 'width=' + imgW + ', height=' + imgH + ', scrollbars=no');
+        }
+      }
+      img.src = url;
     },
   }
 }
