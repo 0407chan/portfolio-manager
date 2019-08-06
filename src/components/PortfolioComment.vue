@@ -7,6 +7,8 @@
   <v-flex xs12 v-for="(comment, index) in portfolioComments" :key="comment.id">
     <v-timeline v-if="index < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
       <v-timeline-item :color="colors[index%4]" small style="padding-bottom:5px">
+
+
           <template v-slot:icon>
             <v-avatar>
               <img :src="comment.userImageUrl">
@@ -14,27 +16,17 @@
           </template>
 
           <v-layout justify-space-between wrap align-center>
-            <v-flex xs10 v-if="!comment.isModify" >
-              <template>
-                <router-link :to="{ name: 'userinfo', params: {id:comment.userId}}"> {{comment.name}} </router-link>
-                {{comment.created_at.getFullYear()}}.
-                {{comment.created_at.getMonth()+1}}.
-                {{comment.created_at.getDate()}}
-                {{addZeros(comment.created_at.getHours())}}:
-                {{addZeros(comment.created_at.getMinutes())}}
-              </template>
+            <v-flex xs10>
+              <router-link :to="{ name: 'userinfo', params: {id:comment.userId}}"> {{comment.name}} </router-link>
+              {{comment.created_at.getFullYear()}}.
+              {{comment.created_at.getMonth()+1}}.
+              {{comment.created_at.getDate()}}
+              {{addZeros(comment.created_at.getHours())}}:
+              {{addZeros(comment.created_at.getMinutes())}}
               <template v-if="!comment.isModify">
                 <div style="background-color: #EDEDED; border-radius: 10px">{{comment.body}}</div>
               </template>
-
-
-
-              
-              <!-- 여기 작성하던 중!!!!!!!!!!!!!!!!!!!!!!!! 왜 안되는지 모르겠어!!!!!!
-                    수정버튼 누르면 이거 안나옴 ㅠㅠㅠㅠㅠㅠㅠㅠㅠ -->
-
-
-              <template v-if="comment.isModify">
+              <template v-else>
                 <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyPortfolioComment(comment)"></v-text-field>
               </template>
             </v-flex>
@@ -56,6 +48,8 @@
               </v-flex>
             </template>
           </v-layout>
+
+          
       </v-timeline-item>
     </v-timeline>
     <v-flex xs12 v-if="index === limit_Comment" text-xs-center>
