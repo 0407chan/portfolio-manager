@@ -20,7 +20,7 @@
           <v-icon size=17>account_box</v-icon>
         </v-tab>
 
-        <template v-if="user.isPortfoiloOpen">
+        <template v-if="pageuser.isPortfolioOpen">
           <v-tab href="#tab-2">
             Portfolios ({{portfolioSearchList.length}})
             <v-icon size=17>fa-pencil</v-icon>
@@ -32,7 +32,7 @@
           </v-tab>
         </template>
 
-        <template v-if="user.isPostOpen">
+        <template v-if="pageuser.isPostOpen">
         <v-tab href="#tab-3">
           <!-- Posts ({{posts.length}}) -->
           Posts ({{postSearchList.length}})
@@ -45,7 +45,7 @@
           </v-tab>
         </template>
 
-        <template v-if="user.isCommentOpen">
+        <template v-if="pageuser.isCommentOpen">
         <v-tab href="#tab-4">
           <!-- Posts ({{posts.length}}) -->
           Comments ({{commentSearchList.length}})
@@ -103,9 +103,9 @@
                 <v-layout align-center>
                   <v-flex text-xs-12 text-xs-center>
                     <h3>프로필 공개 설정</h3>
-                    <v-switch v-model="user.isPortfoiloOpen" label="Portfolio"></v-switch>
-                    <v-switch v-model="user.isPostOpen" label='Post'></v-switch>
-                    <v-switch v-model="user.isCommentOpen" label="Comment"></v-switch>
+                    <v-switch v-model="pageuser.isPortfolioOpen" label="Portfolio"></v-switch>
+                    <v-switch v-model="pageuser.isPostOpen" label='Post'></v-switch>
+                    <v-switch v-model="pageuser.isCommentOpen" label="Comment"></v-switch>
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -325,19 +325,18 @@ export default {
 
   methods: {
 
-    //TODO 왜 오류가 날까???? 
     async modifyUser() {
-      console.log(this.user);
+      console.log("어떠케이래??",this.pageuser);
       if (this.imageUrl === '') {
-        this.imageUrl = this.user.userImageUrl
+        this.imageUrl = this.pageuser.userImageUrl
       }
-      this.user.userImageUrl = this.imageUrl;
+      this.pageuser.userImageUrl = this.imageUrl;
       //console.log(this.pageuser);
 
 
       // TODO 내가 이름이 수정되면, 내가 작성한 모든 post, 포폴, 댓글에 들어간 name 수정하기
-      await FirebaseService.modifyUser(this.user)
-      this.$store.state.user = this.user
+      await FirebaseService.modifyUser(this.pageuser)
+      this.$store.state.user = this.pageuser
       swal("개인정보 수정이 완료되었습니다.")
       this.$router.push({
         name: "home"
@@ -506,11 +505,7 @@ export default {
        });
     },
 
-    async modifyUser(user) {
-      await FirebaseService.modifyUser(user);
-      swal("수정사항이 반영되었습니다.");
-      this.getUsers();
-    },
+
 
     async deleteUser(user) {
       await FirebaseService.deleteUserbyId(user.id);

@@ -454,7 +454,7 @@ export default {
 			"created_at": user.created_at,
 			"current_at": user.current_at,
 			"userImageUrl": user.userImageUrl,
-			"isPortfoiloOpen": user.isPortfoiloOpen,
+			"isPortfolioOpen": user.isPortfolioOpen,
 			"isPostOpen": user.isPostOpen,
 			"isCommentOpen": user.isCommentOpen,
 		})
@@ -579,7 +579,7 @@ export default {
 			current_at:"",
 			userImageUrl:"",
 			isPostOpen:true,
-			isPortfoiloOpen:true,
+			isPortfolioOpen:true,
 			isCommentOpen:true,
 
 		}).then(function(result){
