@@ -68,10 +68,29 @@ export default {
 					})
 				})
 	},
-	postPost(title, body, name) {
+	getPostsById(userId) {
+		const postsCollection = firestore.collection(POSTS)
+		return postsCollection
+				.where("userId", "==", userId)
+				.orderBy('created_at', 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+
+						let data = doc.data();
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate());
+						return data
+					})
+				})
+	},
+
+
+	postPost(title, body, userId, name) {
 		return firestore.collection(POSTS).add({
 			title,
 			body,
+			userId,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
 			email:store.state.user.email,
 			name: name
@@ -132,6 +151,21 @@ export default {
 		const postCommentCollection = firestore.collection(POSTCOMMENTS)
 		return postCommentCollection
 				.where("postId", "==", postId)
+				.orderBy("created_at", 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+						let data = doc.data()
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate())
+						return data
+					})
+				})
+	},
+	getPostCommentsById(userId) {
+		const postCommentCollection = firestore.collection(POSTCOMMENTS)
+		return postCommentCollection
+				.where("userId", "==", userId)
 				.orderBy("created_at", 'desc')
 				.get()
 				.then((docSnapshots) => {
@@ -245,7 +279,6 @@ export default {
 				})
 	},
 	getPortfoliosById(userId) {
-		console.log("왔냐")
 		const portfoliosCollection = firestore.collection(PORTFOLIOS)
 		return portfoliosCollection
 				.where("userId", "==", userId)
@@ -311,10 +344,26 @@ export default {
  		   	return docRef.id;
 		})
 	},
+
 	getPortfolioComments(portfolioId) {
 		const portfolioCommentCollection = firestore.collection(PORTFOLIOCOMMENTS)
 		return portfolioCommentCollection
 				.where("portfolioId", "==", portfolioId)
+				.orderBy("created_at", 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+						let data = doc.data()
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate())
+						return data
+					})
+				})
+	},
+	getPortfolioCommentsById(userId) {
+		const portfolioCommentCollection = firestore.collection(PORTFOLIOCOMMENTS)
+		return portfolioCommentCollection
+				.where("userId", "==", userId)
 				.orderBy("created_at", 'desc')
 				.get()
 				.then((docSnapshots) => {
@@ -396,6 +445,9 @@ export default {
 			"created_at": user.created_at,
 			"current_at": user.current_at,
 			"userImageUrl": user.userImageUrl,
+			"isPortfoiloOpen": user.isPortfoiloOpen,
+			"isPostOpen": user.isPostOpen,
+			"isCommentOpen": user.isCommentOpen,
 		})
 	},
 
@@ -517,6 +569,9 @@ export default {
 			created_at:"",
 			current_at:"",
 			userImageUrl:"",
+			isPostOpen:true,
+			isPortfoiloOpen:true,
+			isCommentOpen:true,
 
 		}).then(function(result){
 

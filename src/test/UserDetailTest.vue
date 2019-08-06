@@ -20,17 +20,43 @@
           <v-icon size=17>account_box</v-icon>
         </v-tab>
 
-        <v-tab href="#tab-2">
-          <!-- Portfolios ({{portfolios.length}}) -->
-          Portfolios ({{portfolioSearchList.length}})
-          <v-icon size=17>fa-pencil</v-icon>
-        </v-tab>
+        <template v-if="user.isPortfoiloOpen">
+          <v-tab href="#tab-2">
+            Portfolios ({{portfolioSearchList.length}})
+            <v-icon size=17>fa-pencil</v-icon>
+          </v-tab>
+        </template>
+        <template v-else>
+          <v-tab href="#tab-9">
+            <v-icon size=17>lock</v-icon>
+          </v-tab>
+        </template>
 
+        <template v-if="user.isPostOpen">
         <v-tab href="#tab-3">
           <!-- Posts ({{posts.length}}) -->
           Posts ({{postSearchList.length}})
           <v-icon size=17>fa-clipboard</v-icon>
         </v-tab>
+        </template>
+        <template v-else>
+          <v-tab href="#tab-9">
+            <v-icon size=17>lock</v-icon>
+          </v-tab>
+        </template>
+
+        <template v-if="user.isCommentOpen">
+        <v-tab href="#tab-4">
+          <!-- Posts ({{posts.length}}) -->
+          Comments ({{commentSearchList.length}})
+          <v-icon size=17>fa-clipboard</v-icon>
+        </v-tab>
+        </template>
+        <template v-else>
+          <v-tab href="#tab-9">
+            <v-icon size=17>lock</v-icon>
+          </v-tab>
+        </template>
 
       </v-tabs>
 
@@ -66,12 +92,20 @@
                   </v-flex>
                 </v-layout>
                 <v-layout align-center>
-
                   <v-flex text-xs-12>
                     <v-text-field label="Classify" v-model="pageuser.classify" readonly @click="cannotModify" v-if="user&&user.email==pageuser.email">
                     </v-text-field>
                     <v-text-field label="Classify" v-model="pageuser.classify" readonly v-else-if="user&&user.email!==pageuser.email">
                     </v-text-field>
+                  </v-flex>
+                </v-layout>
+
+                <v-layout align-center>
+                  <v-flex text-xs-12 text-xs-center>
+                    <h3>프로필 공개 설정</h3>
+                    <v-switch v-model="user.isPortfoiloOpen" label="Portfolio"></v-switch>
+                    <v-switch v-model="user.isPostOpen" label='Post'></v-switch>
+                    <v-switch v-model="user.isCommentOpen" label="Comment"></v-switch>
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -85,17 +119,21 @@
                 <v-icon size="17" class="mr-2">cancel</v-icon>탈퇴하기
               </v-btn>
             </v-flex>
+
           </v-card>
         </v-tab-item>
 
         <v-tab-item :value="'tab-'+2" transition="fade-transition" reverse-transition="fade-transition">
           <v-card flat>
             <v-flex xs12 text-xs-center>
-              <v-data-table :headers="portfolioHeaders" :items="portfolioSearchList" class="elevation-1">
+              <v-data-table :headers="portfolioHeaders" :items="portfolioSearchList" class="elevation-1" >
                 <template v-slot:items="props">
-                  <td><p class="testbody"> {{ props.item.title }} </p></td>
-                  <td>{{ props.item.name }}</td>
-                  <td>{{ props.item.email }}</td>
+                  <!-- <td><p class="testbody"> {{ props.item.title }} </p></td> -->
+                  <td>
+                    <template v-if="props.item.subTitle">{{ props.item.subTitle }}</template>
+                    <template v-else>{{ props.item.title }}</template>
+                    <template v-if="props.item.comments"> ({{props.item.comments.length}})</template>
+                  </td>
                   <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
                   <td>
                     <v-btn fab flat small color="three" v-on:click="modifyPortfolio(props.item)"><v-icon size="17">create</v-icon></v-btn>
@@ -104,11 +142,6 @@
                   <!-- </template> -->
                 </template>
 
-                <template v-slot:no-data transition="scale-transition">
-                  <v-alert v-if="alertinit" :value="portfolioSearchList.length == 0" color="error" icon="warning" outline>
-                    "{{search}}" is not in PORTFOLIOS
-                  </v-alert>
-                </template>
               </v-data-table>
             </v-flex>
           </v-card>
@@ -121,9 +154,11 @@
             <v-flex xs12 text-xs-center>
               <v-data-table :headers="postHeaders" :items="postSearchList" class="elevation-1">
                 <template v-slot:items="props">
-                  <td> <span class="testbody">{{ props.item.title }} </span></td>
-                  <td>{{ props.item.name }}</td>
-                  <td>{{ props.item.email }}</td>
+                  <td>
+                    <template v-if="props.item.subTitle">{{ props.item.subTitle }}</template>
+                    <template v-else>{{ props.item.title }}</template>
+                    <template v-if="props.item.comments"> ({{props.item.comments.length}})</template>
+                  </td>
                   <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
                   <td>
                     <v-btn fab flat small color="three" v-on:click="modifyPost(props.item)"><v-icon size="17">create</v-icon></v-btn>
@@ -132,16 +167,72 @@
                   <!-- </template> -->
                 </template>
 
-                <template v-slot:no-data transition="scale-transition">
-                  <v-alert v-if="alertinit" :value="postSearchList.length == 0" color="error" icon="warning" outline>
-                    "{{search}}" is not in POSTS
-                  </v-alert>
-                </template>
               </v-data-table>
             </v-flex>
           </v-card>
         </v-tab-item>
 
+        <v-tab-item :value="'tab-'+4"  transition="fade-transition" reverse-transition="fade-transition">
+          <v-card flat>
+            <v-flex xs12 text-xs-center>
+              <v-data-table :headers="commnetHeaders" :items="commentSearchList" class="elevation-1">
+                <template v-slot:items="props">
+                  <td>
+                    <v-flex v-if="!props.item.isModify" >
+                      {{props.item.body}}
+                    </v-flex>
+                    <v-flex v-if="props.item.isModify">
+                      <template v-if="props.item.classify=='post'">
+                        <v-text-field v-model="newComment" :value='props.item.body' @keyup.enter="modifyComment(props.item)"></v-text-field>
+                      </template>
+                      <template v-if="props.item.classify=='portfolio'">
+                        <v-text-field v-model="newComment" :value='props.item.body' @keyup.enter="modifyPortfolioComment(props.item)"></v-text-field>
+                      </template>
+                    </v-flex>
+                    <v-flex text-xs-right v-if="props.item.isModify">
+
+                    </v-flex>
+                  </td>
+                  <td>{{ props.item.classify}}</td>
+                  <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
+                  <td>
+                    <template v-if="props.item.isModify">
+                      <template v-if="props.item.classify=='post'">
+                        <v-btn fab dark small color="four" @click="modifyComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
+                      </template>
+                      <template v-if="props.item.classify=='portfolio'">
+                        <v-btn fab dark small color="four" @click="modifyPortfolioComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
+                      </template>
+                      <v-btn fab dark small color="red"  @click="modifyCommentForm(props.item)" hover > <v-icon size="17"> cancel</v-icon></v-btn>
+                    </template>
+                    <template v-else>
+                      <v-btn fab flat small color="three" v-on:click="modifyCommentForm(props.item)"><v-icon size="17">create</v-icon></v-btn>
+                      <template v-if="props.item.classify=='post'">
+                        <v-btn fab flat small color="two"   v-on:click="deleteComment(props.item)"><v-icon size="17">delete</v-icon></v-btn>
+                      </template>
+                      <template v-if="props.item.classify=='portfolio'">
+                        <v-btn fab flat small color="two"   v-on:click="deletePortfolioComment(props.item)"><v-icon size="17">delete</v-icon></v-btn>
+                      </template>
+
+                    </template>
+                  </td>
+                </template>
+
+              </v-data-table>
+            </v-flex>
+          </v-card>
+        </v-tab-item>
+
+
+
+        <!-- Lock Page -->
+        <v-tab-item :value="'tab-'+9"  transition="fade-transition" reverse-transition="fade-transition">
+          <v-card flat>
+            <v-flex xs12 text-xs-center>
+              <div>Sorry, This Page is Locked</div>
+            </v-flex>
+          </v-card>
+        </v-tab-item>
 
       </v-tabs-items>
     </v-card>
@@ -170,34 +261,18 @@ export default {
       clientid: "aac995cb6f223ce",
       callback: "feedback",
       id: "",
-
+      search:'',
       // i don't know Data
-      selected: [],
       edit: false,
-      alertinit: false,
 
       // Tab Data
       tab : null,
 
-      // users Data
-      classifies: ["팀원", "수퍼맨", "방문자", "지스맨", "지쓰구리"],
-      users: [],
-      user: '',
-      userHeaders: [
-        { text: 'Name',sortable: false, value: 'name', align: 'center' },
-        { text: 'Email', value: 'email', sortable: false, align: 'center' },
-        { text: 'Classify', value: 'classify', sortable: false, align: 'center' },
-        { text: 'Created_at', value: 'created_at', sortable: false, align: 'center' },
-        { text: 'Current_at', value: 'current_at', sortable: false, align: 'center' },
-        { text: 'Actions', value: 'btns', sortable: false, align: 'center' },
-      ],
 
       // Portfolio Data
       portfolios:[],
       portfolioHeaders:[
         { text: 'Title', value: 'title', sortable: false, align: 'center' },
-        { text: 'Name', value: 'writer', sortable: false, align: 'center' },
-        { text: 'Email', value: 'email', sortable: false, align: 'center' },
         { text: 'Created_at', value: 'created_at', sortable: false, align: 'center' },
         { text: 'Actions', value: 'btns', sortable: false, align: 'center' },
       ],
@@ -206,25 +281,31 @@ export default {
       posts:[],
       postHeaders:[
         { text: 'Title', value: 'title', sortable: false, align: 'center' },
-        { text: 'Name', value: 'writer', sortable: false, align: 'center' },
-        { text: 'Email', value: 'email', sortable: false, align: 'center' },
+        { text: 'Created_at', value: 'created_at', sortable: false, align: 'center' },
+        { text: 'Actions', value: 'btns', sortable: false, align: 'center' },
+      ],
+
+      //Comment data
+      portfolioComments:[],
+      postComments:[],
+      commnetHeaders:[
+        { text: 'Title', value: 'title', sortable: false, align: 'center' },
+        { text: 'Classify', value: 'classify', sortable: false, align: 'center' },
         { text: 'Created_at', value: 'created_at', sortable: false, align: 'center' },
         { text: 'Actions', value: 'btns', sortable: false, align: 'center' },
       ],
 
       // Search Data
       search: '',
-      userSearchList: [],
       portfolioSearchList: [],
       postSearchList: [],
+      commentSearchList:[],
     }
-  },
-  components: {
-    BlockAccess
   },
   mounted() {
     this.getPortfolios();
     this.getPosts();
+    this.getComments();
   },
   created() {
     firebase.auth().onAuthStateChanged(async user => {
@@ -243,23 +324,26 @@ export default {
   },
 
   methods: {
+
+    //TODO 왜 오류가 날까???? 
     async modifyUser() {
+      console.log(this.user);
       if (this.imageUrl === '') {
-        this.imageUrl = this.pageuser.userImageUrl
+        this.imageUrl = this.user.userImageUrl
       }
-      this.pageuser.userImageUrl = this.imageUrl;
+      this.user.userImageUrl = this.imageUrl;
       //console.log(this.pageuser);
 
 
       // TODO 내가 이름이 수정되면, 내가 작성한 모든 post, 포폴, 댓글에 들어간 name 수정하기
-
-      await FirebaseService.modifyUser(this.pageuser)
-      this.$store.state.user = this.pageuser
+      await FirebaseService.modifyUser(this.user)
+      this.$store.state.user = this.user
       swal("개인정보 수정이 완료되었습니다.")
       this.$router.push({
         name: "home"
       });
     },
+
     pickFile() {
       this.$refs.image.click();
     },
@@ -307,10 +391,6 @@ export default {
 
     async deleteUser(){
       const res = await FirebaseService.getUserData();
-      if(res.postcomments){
-        for(var i =0; i<res.postcomments.length; i++)
-        FirebaseService.deleteComment(res.postcomments[i]);
-      }
       if(res.posts){
         for(var i =0; i<res.posts.length; i++)
         FirebaseService.deletePost(res.posts[i]);
@@ -318,6 +398,10 @@ export default {
       if(res.portfolios){
         for(var i =0; i<res.portfolios.length; i++)
         FirebaseService.deletePortfolio(res.portfolios[i]);
+      }
+      if(res.postcomments){
+        for(var i =0; i<res.postcomments.length; i++)
+        FirebaseService.deleteComment(res.postcomments[i]);
       }
       if(res.portfoliocomments){
         for(var i =0; i<res.portfoliocomments.length; i++)
@@ -333,8 +417,6 @@ export default {
       this.$router.push({
         name: "home"
       });
-
-
     },
 
 
@@ -342,18 +424,87 @@ export default {
       this.portfolios = await FirebaseService.getPortfoliosById(this.id);
       this.portfolioSearchList = [];
       for (var i = 0; i < this.portfolios.length; i++) {
+        if(this.portfolios[i].title.length >= 15){
+          this.portfolios[i].subTitle = this.portfolios[i].title.substring(0, 15)+"⋯"
+        }
         this.portfolioSearchList.push(this.portfolios[i]);
       }
     },
 
     async getPosts() {
-      this.posts = await FirebaseService.getPosts();
+      this.posts = await FirebaseService.getPostsById(this.id);
       this.postSearchList = [];
       for (var i = 0; i < this.posts.length; i++) {
+        if(this.posts[i].title.length >= 15){
+          this.posts[i].subTitle = this.posts[i].title.substring(0, 15)+"⋯"
+        }
         this.postSearchList.push(this.posts[i]);
       }
     },
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                      현재 작업 중                                                 //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async getComments(){
+      this.portfolioComments = await FirebaseService.getPortfolioCommentsById(this.id);
+      this.postComments = await FirebaseService.getPostCommentsById(this.id);
+      this.commentSearchList = [];
+      for(var i =0; i<this.portfolioComments.length; i++){
+        this.portfolioComments[i].classify = "portfolio";
+        if(this.portfolioComments[i].body.length >= 15){
+          this.portfolioComments[i].subTitle = this.portfolioComments[i].body.substring(0, 15)+"⋯"
+        }
+        this.commentSearchList.push(this.portfolioComments[i]);
+      }
+      for(var i =0; i<this.postComments.length; i++){
+        this.postComments[i].classify = "post";
+        if(this.postComments[i].body.length >= 15){
+          this.postComments[i].subTitle = this.postComments[i].body.substring(0, 15)+"⋯"
+        }
+        this.commentSearchList.push(this.postComments[i]);
+      }
+    },
+
+    async modifyPortfolioComment(comment){
+      var temp = this.newComment;
+      await FirebaseService.modifyPortfolioComment(comment, this.newComment);
+      this.modifyCommentForm(comment);
+      comment.body = temp;
+    },
+    async modifyComment(comment){
+      var temp = this.newComment;
+      await FirebaseService.modifyComment(comment, this.newComment);
+      this.modifyCommentForm(comment);
+      comment.body =temp;
+    },
+
+    modifyCommentForm(comment) {
+      if(comment.isModify){
+        comment.isModify = false;
+      }else{
+        comment.isModify = true;
+      }
+      this.newComment = comment.body;
+      //await FirebaseService.canModify(comment);
+    },
+    async deleteComment(comment){
+      await FirebaseService.deleteComment(comment.postId, comment.id);
+      this.commentSearchList = this.arrayRemove(this.commentSearchList,comment);
+      this.postComments = this.arrayRemove(this.postComments,comment);
+    },
+
+    async deletePortfolioComment(comment){
+      await FirebaseService.deletePortfolioComment(comment.portfolioId, comment.id);
+      this.commentSearchList = this.arrayRemove(this.commentSearchList,comment);
+      this.portfolioComments = this.arrayRemove(this.portfolioComments,comment);
+    },
+
+    arrayRemove(arr, value) {
+       return arr.filter(function(ele){
+           return ele != value;
+       });
+    },
 
     async modifyUser(user) {
       await FirebaseService.modifyUser(user);
@@ -413,59 +564,67 @@ export default {
   watch: {
     search() {
       if (this.search.length == 0) {
-        var lenUser = this.users.length;
-        var lenPortfolio = this.portfolios.length;
-        var lenPost = this.posts.length;
-
-        this.userSearchList = [];
         this.portfolioSearchList= [];
         this.postSearchList= [];
+        this.commentSearchList=[];
 
-        for (var i = 0; i < lenUser; i++) {
-          this.userSearchList.push(this.users[i]);
-        }
-        for (var i = 0; i < lenPortfolio; i++) {
+        for (var i = 0; i < this.portfolios.length; i++) {
+          if(this.portfolios[i].title.length >= 15){
+            this.portfolios[i].subTitle = this.portfolios[i].title.substring(0, 15)+"⋯"
+          }
           this.portfolioSearchList.push(this.portfolios[i]);
         }
-        for (var i = 0; i < lenPost; i++) {
+        for (var i = 0; i < this.posts.length; i++) {
+          if(this.posts[i].title.length >= 15){
+            this.posts[i].subTitle = this.posts[i].title.substring(0, 15)+"⋯"
+          }
           this.postSearchList.push(this.posts[i]);
         }
+        for(var i =0; i<this.portfolioComments.length; i++){
+          if(this.portfolioComments[i].body.length >= 15){
+            this.portfolioComments[i].subTitle = this.portfolioComments[i].body.substring(0, 15)+"⋯"
+          }
+          this.commentSearchList.push(this.portfolioComments[i]);
+        }
+        for(var i =0; i<this.postComments.length; i++){
+          if(this.postComments[i].body.length >= 15){
+            this.postComments[i].subTitle = this.postComments[i].body.substring(0, 15)+"⋯"
+          }
+          this.commentSearchList.push(this.postComments[i]);
+        }
+
       } else {
-        this.userSearchList = [];
         this.portfolioSearchList= [];
         this.postSearchList= [];
-
-        var lenUser = this.users.length;
-        var lenPortfolio = this.portfolios.length;
-        var lenPost = this.posts.length;
+        this.commentSearchList=[];
 
         var search = this.search;
         search = search.toLowerCase();
 
-        for (var i = 0; i < lenUser; i++) {
-          var Usera = this.users[i].name.toLowerCase()
-          var Userb = this.users[i].email.toLowerCase()
-          var Userc = this.users[i].classify.toLowerCase()
-          if (Usera.includes(search) || Userb.includes(search) || Userc.includes(search)) {
-            this.userSearchList.push(this.users[i]);
-          }
-        }
-
-        for (var i = 0; i < lenPortfolio; i++) {
+        for (var i = 0; i < this.portfolios.length; i++) {
           var portfolioA = this.portfolios[i].title.toLowerCase()
-          var portfolioB = this.portfolios[i].name.toLowerCase()
-          var portfolioC = this.portfolios[i].email.toLowerCase()
-          if (portfolioA.includes(search) || portfolioB.includes(search) ||portfolioC.includes(search)) {
+          if (portfolioA.includes(search) ) {
             this.portfolioSearchList.push(this.portfolios[i]);
           }
         }
 
-        for (var i = 0; i < lenPost; i++) {
+        for (var i = 0; i < this.posts.length; i++) {
           var postA = this.posts[i].title.toLowerCase()
-          var postB = this.posts[i].name.toLowerCase()
-          var postC = this.posts[i].email.toLowerCase()
-          if (postA.includes(search) || postB.includes(search) || postC.includes(search)) {
+          if (postA.includes(search) ) {
             this.postSearchList.push(this.posts[i]);
+          }
+        }
+
+        for(var i =0; i<this.portfolioComments.length; i++){
+          var body = this.portfolioComments[i].body.toLowerCase()
+          if (body.includes(search) ) {
+            this.commentSearchList.push(this.portfolioComments[i]);
+          }
+        }
+        for(var i =0; i<this.postComments.length; i++){
+          var body = this.postComments[i].body.toLowerCase()
+          if (body.includes(search) ) {
+            this.commentSearchList.push(this.postComments[i]);
           }
         }
 

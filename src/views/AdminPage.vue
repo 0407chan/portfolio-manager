@@ -7,7 +7,6 @@
    max-width: 150px;
    -webkit-line-clamp: 1;
    -webkit-box-orient: vertical;
-  text-align: center;
 }
 
 </style>
