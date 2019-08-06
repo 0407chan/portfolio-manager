@@ -252,6 +252,7 @@ export default {
 			name: name,
 			email:store.state.user.email,
 			isModify: false,
+			reply: false,
 			userImageUrl: userImageUrl,
 			userId:store.state.user.uid,
 		}).then(function(docRef) {

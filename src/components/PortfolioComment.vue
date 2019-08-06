@@ -5,7 +5,7 @@
     <v-divider></v-divider>
   </v-flex>
   <v-flex xs12 v-for="(comment, index) in portfolioComments" :key="comment.id">
-    <v-timeline v-if="index < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
+    <v-timeline align-top v-if="index < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
       <v-timeline-item :color="colors[index%4]" small style="padding-bottom:5px">
         <template v-slot:icon>
           <v-avatar>
@@ -16,16 +16,21 @@
           <router-link :to="{ name: 'userinfo', params: {id:comment.userId}}"> {{comment.name}} </router-link>
         </template>
         <v-layout justify-space-between wrap align-center>
-          <v-flex xs8 sm9 v-if="!comment.isModify" style="background-color: #EDEDED; border-radius: 10px">
+          <v-flex xs7 sm8 v-if="!comment.isModify" style="background-color: #EDEDED; border-radius: 10px">
             {{comment.body}}
+          </v-flex>
+          <v-flex xs1 sm1 v-if="!comment.isModify">
+            <v-btn @click="PortfolioReCommentForm(comment)" fab dark class="mr-2 modifyComment_btn" hover color="four">
+              <v-icon size="15">fa-reply</v-icon>
+            </v-btn>
           </v-flex>
           <v-flex xs7 sm8 v-if="comment.isModify">
             <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyPortfolioComment(comment)"></v-text-field>
           </v-flex>
           <v-flex xs1 sm1 text-xs-right v-if="comment.isModify">
-            <v-btn fab dark v-if="useremail === comment.email"  @click="modifyPortfolioComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
+            <v-btn fab dark v-if="useremail === comment.email" @click="modifyPortfolioComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
               <v-icon size="15">
-                  fa-pencil
+                fa-pencil
               </v-icon>
             </v-btn>
           </v-flex>
@@ -36,9 +41,27 @@
             {{addZeros(comment.created_at.getMinutes())}}
           </v-flex>
           <v-flex xs2 sm1 text-xs-right>
-            <v-icon v-if="useremail === comment.email"  @click="modifyPortfolioCommentForm(comment)" size="17" class="mr-2 comment_btn" hover color="three">create</v-icon>
+            <v-icon v-if="useremail === comment.email" @click="modifyPortfolioCommentForm(comment)" size="17" class="mr-2 comment_btn" hover color="three">create</v-icon>
             <v-icon v-if="useremail === comment.email" @click="deletePortfolioComment(comment.id)" size="17" class="mr-2 comment_btn" hover color="two">delete</v-icon>
           </v-flex>
+
+          <v-flex xs7 sm8 v-if="comment.reply">
+            <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyPortfolioComment(comment)"></v-text-field>
+          </v-flex>
+          <v-flex xs1 sm1 text-xs-right v-if="comment.reply">
+            <v-btn fab dark v-if="useremail === comment.email" @click="modifyPortfolioComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
+              <v-icon size="15">
+                fa-pencil
+              </v-icon>
+            </v-btn>
+          </v-flex>
+          <v-flex xs4 sm3 v-if="comment.reply">
+          </v-flex>
+
+          <v-flex xs12>
+            <PortfolioReComment></PortfolioReComment>
+          </v-flex>
+
         </v-layout>
       </v-timeline-item>
     </v-timeline>
@@ -65,11 +88,12 @@ import FirebaseService from '@/services/FirebaseService'
 import firebase from "firebase/app";
 import firebaseApp from 'firebase/app'
 import store from '../store'
+import PortfolioReComment from '@/components/PortfolioReComment'
 
 export default {
   name: 'PortfolioComment',
   props: {
-    id:{
+    id: {
       type: String
     },
     comment: {
@@ -79,6 +103,9 @@ export default {
       type: Number,
       default: 4,
     },
+  },
+  components: {
+    PortfolioReComment,
   },
   data() {
     return {
@@ -109,22 +136,21 @@ export default {
     this.getPortfolioComments(portfolioId);
   },
   methods: {
-    async deletePortfolioComment(commentId){
+    async deletePortfolioComment(commentId) {
       await FirebaseService.deletePortfolioComment(commentId);
       this.getPortfolioComments(this.id);
     },
-    async modifyPortfolioComment(comment){
+    async modifyPortfolioComment(comment) {
       await FirebaseService.modifyPortfolioComment(comment, this.newComment);
       this.getPortfolioComments(this.id);
     },
     async modifyPortfolioCommentForm(comment) {
-      if(comment.isModify){
+      if (comment.isModify) {
         comment.isModify = false;
-      }else{
+      } else {
         comment.isModify = true;
       }
       this.newComment = comment.body;
-      await FirebaseService.canPortfolioModify(comment);
     },
     async postPortfolioComment() {
       let result = await FirebaseService.getUserData();
@@ -137,13 +163,20 @@ export default {
     async getPortfolioComments(portfolioId) {
       this.portfolioComments = await FirebaseService.getPortfolioComments(portfolioId);
       this.users = await FirebaseService.getUsers();
-      for(var i in this.portfolioComments){
-        for(var j in this.users){
-            if(this.portfolioComments[i].email === this.users[j].email){
-              this.portfolioComments[i].userImageUrl = this.users[j].userImageUrl;
-              this.portfolioComments[i].name = this.users[j].name;
-            }
+      for (var i in this.portfolioComments) {
+        for (var j in this.users) {
+          if (this.portfolioComments[i].email === this.users[j].email) {
+            this.portfolioComments[i].userImageUrl = this.users[j].userImageUrl;
+            this.portfolioComments[i].name = this.users[j].name;
+          }
         }
+      }
+    },
+    PortfolioReCommentForm(comment){
+      if (comment.reply) {
+        comment.reply = false;
+      } else {
+        comment.reply = true;
       }
     },
     addZeros(num) {
@@ -162,8 +195,8 @@ export default {
     imageview(url) {
       var img = new Image();
       img.onload = function() {
-        var imgW = this.width/2;
-        var imgH = this.height/2;
+        var imgW = this.width / 2;
+        var imgH = this.height / 2;
         if ((imgW != 0) && (imgH != 0)) {
           window.open(url, 'guide', 'width=' + imgW + ', height=' + imgH + ', scrollbars=no');
         }
@@ -191,7 +224,7 @@ export default {
   width: 110px;
 }
 
-.modifyComment_btn{
+.modifyComment_btn {
   width: 35px;
   height: 35px;
 }
@@ -206,7 +239,7 @@ export default {
   font-weight: bold;
 }
 
-.comment_title_margin_top{
+.comment_title_margin_top {
   margin-top: 50px;
 }
 
