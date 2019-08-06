@@ -14,6 +14,10 @@
 <template>
 <v-container mt-5>
   <v-flex xs12 text-xs-center>
+      TEST PAGE
+  </v-flex>
+
+  <v-flex xs12 text-xs-center>
     <v-text-field label="Search" v-model="search"></v-text-field>
   </v-flex>
 

@@ -90,10 +90,14 @@ export default {
       FirebaseService.logout().then(function() {
           swal('로그아웃되었습니다')
 
-        }),
-        firebase.auth().signOut().then(function() {
-          swal('로그아웃되었습니다')
-        });
+      }),
+      firebase.auth().signOut().then(function() {
+
+      });
+      this.$router.push({
+        name: "home"
+      });
+
     },
     check() {
       return $store.state.check

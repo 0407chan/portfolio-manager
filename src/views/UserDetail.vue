@@ -3,7 +3,7 @@
   <v-layout wrap align-center justify-center>
       <v-flex xs4>
         <v-progress-circular v-if="loading" indeterminate color="four"></v-progress-circular>
-        <v-img :src="imageUrl" width="300" height="300" v-if="imageUrl" />
+        <v-img :src="imageUrl" max-width="300" max-height="300" v-if="imageUrl" />
 
         <v-text-field label="Select Image" @click="pickFile" v-model="imageUrl" prepend-icon="attach_file" color="four" v-if="user.email==pageuser.email"></v-text-field>
 
@@ -40,15 +40,11 @@
     </v-flex>
   </v-layout>
   <v-flex text-xs-center my5>
-    <v-btn color="two" v-if="user&&user.email===pageuser.email" round dark v-on:click="modifyUser">
+    <v-btn color="two" v-if="user&&user.email==pageuser.email" round dark v-on:click="modifyUser">
       <v-icon size="17" class="mr-2">create</v-icon>Modify
     </v-btn>
-    <router-link :to="{name:'admin'}">
-      <v-btn color="three" v-if="user&&user.classify==='관리자'&&user.email===pageuser.email" dark round>
-        <v-icon size="17" class="mr-2">people</v-icon>Admin
-      </v-btn>
-    </router-link>
-    <v-btn color="three" v-if="user&&user.classify!=='관리자'&&user.email===pageuser.email" dark round v-on:click="deleteUser">
+
+    <v-btn color="three" v-if="user&&user.email==pageuser.email" dark round v-on:click="deleteUser">
       <v-icon size="17" class="mr-2">cancel</v-icon>탈퇴하기
     </v-btn>
 
@@ -63,7 +59,6 @@ import {
 } from 'os';
 import firebase from "firebase/app";
 import axios from "axios";
-
 
 
 export default {
@@ -87,7 +82,8 @@ export default {
     this.id = this.$route.params.id;
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        this.user = await FirebaseService.getUserData();
+        var currentUser = firebase.auth().currentUser;
+        this.user = currentUser;
         this.pageuser = await FirebaseService.getUser(this.id);
         this.imageUrl = this.pageuser.userImageUrl;
       }

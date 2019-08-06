@@ -2,6 +2,8 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 import store from '../store'
+import 'firebase/functions'
+import 'firebase/messaging'
 
 const POSTS = 'posts'
 const PORTFOLIOS = 'portfolios'
@@ -16,7 +18,9 @@ const config = {
 	authDomain: 'todo-vue-3ea4e.firebaseapp.com',
 	apiKey: 'AIzaSyBSufO4FShHm8XHe6mD9CotDFQfzpkTxUU',
 	databaseURL: 'https://todo-vue-3ea4e.firebaseio.com',
-	storageBucket: 'gs://todo-vue-3ea4e.appspot.com'
+	storageBucket: 'todo-vue-3ea4e.appspot.com',
+	messagingSenderId: "437302839629",
+	appId: "1:437302839629:web:6c403028be6fe081"
 
 	// projectId: 'elice-ssafy',
 	// authDomain: 'elice-ssafy.firebaseapp.com',
@@ -28,7 +32,10 @@ const config = {
 
 
 firebase.initializeApp(config)
-const firestore = firebase.firestore()
+const firestore = firebase.firestore();
+// const firestorage = firebase.storage();
+const fireFunctions = firebase.functions();
+const fireMessage  = firebase.messaging();
 
 
 export default {
@@ -68,10 +75,29 @@ export default {
 					})
 				})
 	},
-	postPost(title, body, name) {
+	getPostsById(userId) {
+		const postsCollection = firestore.collection(POSTS)
+		return postsCollection
+				.where("userId", "==", userId)
+				.orderBy('created_at', 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+
+						let data = doc.data();
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate());
+						return data
+					})
+				})
+	},
+
+
+	postPost(title, body, userId, name) {
 		return firestore.collection(POSTS).add({
 			title,
 			body,
+			userId,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
 			email:store.state.user.email,
 			name: name
@@ -101,9 +127,19 @@ export default {
 		});
 	},
 
+	postAddToCommentList(postId,commentId){
+		return firestore.collection(POSTS).doc(postId).update({
+    	comments: firebase.firestore.FieldValue.arrayUnion(commentId),
+		})
+	},
+
+
+
+
 	/********************\
 	\  PostCommnet 함수들  \
 	\********************/
+
 	postPostComment(postId, body, name, userImageUrl){
 		return firestore.collection(POSTCOMMENTS).add({
 			postId,
@@ -133,6 +169,36 @@ export default {
 					})
 				})
 	},
+	getPostCommentsById(userId) {
+		const postCommentCollection = firestore.collection(POSTCOMMENTS)
+		return postCommentCollection
+				.where("userId", "==", userId)
+				.orderBy("created_at", 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+						let data = doc.data()
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate())
+						return data
+					})
+				})
+	},
+
+	getPostComment(commentId) {
+		const postCommentCollection = firestore.collection(POSTCOMMENTS).doc(commentId)
+		return postCommentCollection.get().then(function(doc) {
+				if (doc.exists) {
+					let data = doc.data();
+					data.id = doc.id;
+					data.created_at = new Date(data.created_at.toDate())
+					return data;
+				} else {
+
+				}
+			})
+	},
+
 	canModify(comment){
 		return firestore.collection(POSTCOMMENTS).doc(comment.id).set({
 			body: comment.body,
@@ -155,11 +221,14 @@ export default {
 			"userId":store.state.user.uid,
 		})
 	},
-	deleteComment(commentId){
+	deleteComment(postId, commentId){
 		var userId = firebase.auth().currentUser.uid;
 		firestore.collection(USERS).doc(userId).update({
     		postcomments: firebase.firestore.FieldValue.arrayRemove(commentId),
-		})
+		});
+		firestore.collection(POSTS).doc(postId).update({
+    		comments: firebase.firestore.FieldValue.arrayRemove(commentId),
+		});
 
 		return firestore.collection(POSTCOMMENTS).doc(commentId).delete().then(function() {
 
@@ -167,6 +236,8 @@ export default {
 				console.error("Error removing postComment: ", error);
 		});
 	},
+
+
 
 	/********************\
  \   Portfolio 함수들   \
@@ -214,7 +285,22 @@ export default {
 					})
 				})
 	},
+	getPortfoliosById(userId) {
+		const portfoliosCollection = firestore.collection(PORTFOLIOS)
+		return portfoliosCollection
+				.where("userId", "==", userId)
+				.orderBy('created_at', 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
 
+						let data = doc.data();
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate());
+						return data
+					})
+				})
+	},
 
 	modifyPortfolio(title,body,img,id,name){
 		return firestore.collection(PORTFOLIOS).doc(id).update({
@@ -222,18 +308,17 @@ export default {
 			"img":img,
 			"body":body,
 			"name":name,
-			"userId":store.state.user.uid,
 			"email":store.state.user.email
 		})
 	},
 
-	postPortfolio(title, body, img, name) {
+	postPortfolio(title, body, img, id, name) {
 		return firestore.collection(PORTFOLIOS).add({
 			title,
 			body,
 			img,
 			name,
-			userId:store.state.user.uid,
+			userId:id,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
 			email:store.state.user.email
 		}).then(function(docRef) {
@@ -241,9 +326,17 @@ export default {
 		})
 	},
 
+	portfolioAddToCommentList(portfolioId,commentId){
+		return firestore.collection(PORTFOLIOS).doc(portfolioId).update({
+    	comments: firebase.firestore.FieldValue.arrayUnion(commentId),
+		})
+	},
 	/**************************\
  \ Portfolio Comment 함수들   \
 	\**************************/
+
+
+
 	postPortfolioComment(portfolioId, body, name, userImageUrl){
 		return firestore.collection(PORTFOLIOCOMMENTS).add({
 			portfolioId,
@@ -259,10 +352,26 @@ export default {
  		   	return docRef.id;
 		})
 	},
+
 	getPortfolioComments(portfolioId) {
 		const portfolioCommentCollection = firestore.collection(PORTFOLIOCOMMENTS)
 		return portfolioCommentCollection
 				.where("portfolioId", "==", portfolioId)
+				.orderBy("created_at", 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+						let data = doc.data()
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate())
+						return data
+					})
+				})
+	},
+	getPortfolioCommentsById(userId) {
+		const portfolioCommentCollection = firestore.collection(PORTFOLIOCOMMENTS)
+		return portfolioCommentCollection
+				.where("userId", "==", userId)
 				.orderBy("created_at", 'desc')
 				.get()
 				.then((docSnapshots) => {
@@ -296,11 +405,15 @@ export default {
 			"userId":store.state.user.uid,
 		})
 	},
-	deletePortfolioComment(commentId){
+	deletePortfolioComment(portfolioId,commentId){
 		var userId = firebase.auth().currentUser.uid;
 		firestore.collection(USERS).doc(userId).update({
     		portfoliocomments: firebase.firestore.FieldValue.arrayRemove(commentId),
-		})
+		});
+
+		firestore.collection(PORTFOLIOS).doc(portfolioId).update({
+    		comments: firebase.firestore.FieldValue.arrayRemove(commentId),
+		});
 
 		return firestore.collection(PORTFOLIOCOMMENTS).doc(commentId).delete().then(function() {
 
@@ -340,6 +453,9 @@ export default {
 			"created_at": user.created_at,
 			"current_at": user.current_at,
 			"userImageUrl": user.userImageUrl,
+			"isPortfoiloOpen": user.isPortfoiloOpen,
+			"isPostOpen": user.isPostOpen,
+			"isCommentOpen": user.isCommentOpen,
 		})
 	},
 
@@ -461,6 +577,9 @@ export default {
 			created_at:"",
 			current_at:"",
 			userImageUrl:"",
+			isPostOpen:true,
+			isPortfoiloOpen:true,
+			isCommentOpen:true,
 
 		}).then(function(result){
 
@@ -564,5 +683,41 @@ export default {
   //       });
   //     // [END use_from_cache]
   //   })
+
+	/**************************\
+ \ push 함수들   \
+	\**************************/
+	alarmOnFirstVisit() {
+        return fireMessage.requestPermission()
+            .then(function () {
+                return fireMessage.getToken().then(idToken=>{
+					return idToken
+                });
+            })
+            .catch(function (err) {
+                console.log(err + 'occured')
+            })
+    },
+    onMessageResponse() {
+        return fireMessage.onMessage(function (payload) {
+			var notification = new Notification('EEEAZY Notification', {
+				icon: 'https://i.imgur.com/wxV4WcW.png',
+				body: '읽지않은 알림이 있습니다..',
+			  });
+			  notification.onclick = function () {
+				window.open('http://localhost:8080/');
+			  };
+        });
+    },
+    addToCloudMessagingUserList(token) {
+        const saveObject = firestore.collection('messageList').doc(token);
+        return saveObject.set({
+                cloudMessaging: token,
+            },
+            {
+                merge: true
+            }
+        )
+    },
 
 }

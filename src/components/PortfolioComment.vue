@@ -73,7 +73,7 @@
   </v-flex>
   <!-- portfolio comment, need authority -->
   <v-flex xs9>
-    <v-text-field v-if="username" v-model="comment_input" autofocus label="Comment" @keyup.enter="postPortfolioComment"></v-text-field>
+    <v-text-field v-if="username" v-model="comment_input"  autofocus label="Comment" @keyup.enter="postPortfolioComment"></v-text-field>
   </v-flex>
   <v-flex xs3 text-xs-right>
     <v-btn v-if="username" round color="four" dark @click="postPortfolioComment" class="portfolio_btn">
@@ -104,9 +104,14 @@ export default {
       default: 4,
     },
   },
+<<<<<<< HEAD
   components: {
     PortfolioReComment,
   },
+=======
+
+
+>>>>>>> f1ecb3e3d07eea68ec35dc5175fb58bc695d0fef
   data() {
     return {
       username: '',
@@ -118,8 +123,13 @@ export default {
       colors: ['two', 'three', 'four', 'five'],
       newComment: '',
       comment_input: '',
+      rules: {
+        required: value => !!value || "Required.",
+      },
+      btnCheck: false,
     }
   },
+
   created() {
     firebaseApp.auth().onAuthStateChanged(async user => {
       var username = '';
@@ -136,8 +146,8 @@ export default {
     this.getPortfolioComments(portfolioId);
   },
   methods: {
-    async deletePortfolioComment(commentId) {
-      await FirebaseService.deletePortfolioComment(commentId);
+    async deletePortfolioComment(commentId){
+      await FirebaseService.deletePortfolioComment(this.id, commentId);
       this.getPortfolioComments(this.id);
     },
     async modifyPortfolioComment(comment) {
@@ -153,12 +163,16 @@ export default {
       this.newComment = comment.body;
     },
     async postPortfolioComment() {
-      let result = await FirebaseService.getUserData();
-      let res = await FirebaseService.postPortfolioComment(this.id, this.comment_input, result.name, result.userImageUrl);
-      await FirebaseService.addToPortfoliocommentList(res);
-
-      this.comment_input = '';
-      this.getPortfolioComments(this.id);
+      if(this.comment_input.length != 0 && !this.btnCheck){
+        this.btnCheck = true;
+        let result = await FirebaseService.getUserData();
+        let res = await FirebaseService.postPortfolioComment(this.id, this.comment_input, result.name, result.userImageUrl);
+        await FirebaseService.addToPortfoliocommentList(res);
+        await FirebaseService.portfolioAddToCommentList(this.id,res);
+        this.comment_input = '';
+        await this.getPortfolioComments(this.id);
+        this.btnCheck = false;
+      }
     },
     async getPortfolioComments(portfolioId) {
       this.portfolioComments = await FirebaseService.getPortfolioComments(portfolioId);

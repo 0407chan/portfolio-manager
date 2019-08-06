@@ -46,6 +46,7 @@ import mainHeader from './components/Header.vue'
 import mainFooter from './components/Footer.vue'
 import buttonTop from './components/ButtonTop.vue'
 import buttonWrite from './components/ButtonWrite.vue'
+import FirebaseService from './services/FirebaseService'
 
 export default {
 	name: 'App',
@@ -54,9 +55,15 @@ export default {
   'buttonWrite':buttonWrite,
   'buttonTop':buttonTop
   },
-	store,
-
-
+  store,
+  created() {
+            FirebaseService.alarmOnFirstVisit()
+                .then(token=>{
+                    FirebaseService.addToCloudMessagingUserList(token);
+                    // console.log(token)
+                });
+            FirebaseService.onMessageResponse();
+        }
 }
 </script>
 <style>
