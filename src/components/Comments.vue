@@ -4,9 +4,9 @@
     <span class="comment_title">Comment</span>
     <v-divider></v-divider>
   </v-flex>
-  <v-flex xs12 v-for="(comment, index) in portfolioComments" :key="comment.id">
+  <v-flex xs12 v-for="(comment, index) in comments" :key="comment.id">
     <v-timeline align-top v-if="index < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
-      <v-timeline-item :color="colors[index%4]" small style="padding-bottom:5px">
+      <v-timeline-item small style="padding-bottom:5px">
         <template v-slot:icon>
           <v-avatar>
             <img :src="comment.userImageUrl" @click="imageview(comment.userImageUrl)" style="cursor: pointer">
@@ -20,15 +20,15 @@
             {{comment.body}}
           </v-flex>
           <v-flex xs1 sm1 v-if="!comment.isModify">
-            <v-btn @click="PortfolioReCommentForm(comment)" fab dark class="mr-2 modifyComment_btn" hover color="four">
+            <v-btn @click="ReCommentForm(comment)" fab dark class="mr-2 large_comment_btn" hover color="four">
               <v-icon size="15">fa-reply</v-icon>
             </v-btn>
           </v-flex>
           <v-flex xs7 sm8 v-if="comment.isModify">
-            <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyPortfolioComment(comment)"></v-text-field>
+            <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyComment(comment)"></v-text-field>
           </v-flex>
           <v-flex xs1 sm1 text-xs-right v-if="comment.isModify">
-            <v-btn fab dark v-if="useremail === comment.email" @click="modifyPortfolioComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
+            <v-btn fab dark v-if="useremail === comment.email" @click="modifyComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
               <v-icon size="15">
                 fa-pencil
               </v-icon>
@@ -41,15 +41,15 @@
             {{addZeros(comment.created_at.getMinutes())}}
           </v-flex>
           <v-flex xs2 sm1 text-xs-right>
-            <v-icon v-if="useremail === comment.email" @click="modifyPortfolioCommentForm(comment)" size="17" class="mr-2 comment_btn" hover color="three">create</v-icon>
-            <v-icon v-if="useremail === comment.email" @click="deletePortfolioComment(comment.id)" size="17" class="mr-2 comment_btn" hover color="two">delete</v-icon>
+            <v-icon v-if="useremail === comment.email" @click="modifyCommentForm(comment)" size="17" class="mr-2 small_comment_btn" hover color="three">create</v-icon>
+            <v-icon v-if="useremail === comment.email" @click="deleteComment(comment.id)" size="17" class="mr-2 small_comment_btn" hover color="two">delete</v-icon>
           </v-flex>
 
           <v-flex xs7 sm8 v-if="comment.reply">
-            <v-text-field v-model="reComment" :value='comment.body' @keyup.enter="modifyPortfolioComment(comment)"></v-text-field>
+            <v-text-field v-model="reComment" :value='comment.body' @keyup.enter="postReComment(comment)"></v-text-field>
           </v-flex>
           <v-flex xs1 sm1 text-xs-right v-if="comment.reply">
-            <v-btn fab dark @click="modifyPortfolioComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
+            <v-btn fab dark @click="postReComment(comment)" class="mr-2 large_comment_btn" hover color="four">
               <v-icon size="15">
                 fa-pencil
               </v-icon>
@@ -58,25 +58,25 @@
           <v-flex xs4 sm3 v-if="comment.reply">
           </v-flex>
 
-          <v-flex xs12>
+          <!-- <v-flex xs12>
             <ReComment></ReComment>
-          </v-flex>
+          </v-flex> -->
 
         </v-layout>
       </v-timeline-item>
     </v-timeline>
     <v-flex xs12 v-if="index === limit_Comment" text-xs-center>
-      <v-btn fab dark icon flat @click="morePortfolioComments(limit_Comment)" class="two" style="height:30px; width:30px">
+      <v-btn fab dark icon flat @click="morePortfolioComments(limit_Comment)" class="two large_comment_btn">
         <v-icon size="20">keyboard_arrow_down</v-icon>
       </v-btn>
     </v-flex>
   </v-flex>
   <!-- portfolio comment, need authority -->
   <v-flex xs9>
-    <v-text-field v-if="username" v-model="comment_input"  autofocus label="Comment" @keyup.enter="postPortfolioComment"></v-text-field>
+    <v-text-field v-if="username" v-model="comment_input"  autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
   </v-flex>
   <v-flex xs3 text-xs-right>
-    <v-btn v-if="username" round color="four" dark @click="postPortfolioComment" class="portfolio_btn">
+    <v-btn v-if="username" round color="four" dark @click="postComment" class="portfolio_btn">
       <v-icon size="17" class="mr-2">fa-pencil</v-icon>Write
     </v-btn>
   </v-flex>
@@ -91,7 +91,7 @@ import store from '../store'
 import ReComment from '@/components/ReComment'
 
 export default {
-  name: 'PortfolioComment',
+  name: 'Comments',
   props: {
     id: {
       type: String
@@ -106,6 +106,9 @@ export default {
       type: Number,
       default: 4,
     },
+    classify: {
+      type: String
+    },
   },
   components: {
     ReComment
@@ -116,9 +119,8 @@ export default {
       useremail: '',
       portfolioId: '',
       user: '',
-      portfolioComments: [],
+      comments: [],
       users: [],
-      colors: ['two', 'three', 'four', 'five'],
       newComment: '',
       comment_input: '',
       rules: {
@@ -140,19 +142,25 @@ export default {
         this.useremail = useremail;
       }
     });
-    var portfolioId = this.$route.params.id;
-    this.getPortfolioComments(portfolioId);
+    var parentId = this.$route.params.id;
+    this.getComments(parentId);
+    var urlPath = (window.location.href).split('/');
+    if(urlPath[3] == 'post'){
+      this.classify = 'post';
+    }else{
+      this.classify = 'portfolio';
+    }
   },
   methods: {
-    async deletePortfolioComment(commentId){
-      await FirebaseService.deletePortfolioComment(this.id, commentId);
-      this.getPortfolioComments(this.id);
+    async deleteComment(commentId){
+      await FirebaseService.deleteComment(this.id, this.classify, commentId);
+      this.getComments(this.id);
     },
-    async modifyPortfolioComment(comment) {
-      await FirebaseService.modifyPortfolioComment(comment, this.newComment);
-      this.getPortfolioComments(this.id);
+    async modifyComment(comment) {
+      await FirebaseService.modifyComment(comment, this.newComment);
+      this.getComments(this.id);
     },
-    async modifyPortfolioCommentForm(comment) {
+    async modifyCommentForm(comment) {
       if (comment.isModify) {
         comment.isModify = false;
       } else {
@@ -160,31 +168,31 @@ export default {
       }
       this.newComment = comment.body;
     },
-    async postPortfolioComment() {
+    async postComment() {
       if(this.comment_input.length != 0 && !this.btnCheck){
         this.btnCheck = true;
         let result = await FirebaseService.getUserData();
-        let res = await FirebaseService.postPortfolioComment(this.id, this.comment_input, result.name, result.userImageUrl);
-        await FirebaseService.addToPortfoliocommentList(res);
-        await FirebaseService.portfolioAddToCommentList(this.id,res);
+        let res = await FirebaseService.postComment(this.id, this.classify, this.comment_input, result.name, result.userImageUrl);
+        await FirebaseService.addToUserCommentList(res);
+        await FirebaseService.addToCommentList(this.id, this.classify, res);
         this.comment_input = '';
-        await this.getPortfolioComments(this.id);
+        await this.getComments(this.id);
         this.btnCheck = false;
       }
     },
-    async getPortfolioComments(portfolioId) {
-      this.portfolioComments = await FirebaseService.getPortfolioComments(portfolioId);
+    async getComments(parentId) {
+      this.comments = await FirebaseService.getComments(parentId);
       this.users = await FirebaseService.getUsers();
-      for (var i in this.portfolioComments) {
+      for (var i in this.comments) {
         for (var j in this.users) {
-          if (this.portfolioComments[i].email === this.users[j].email) {
-            this.portfolioComments[i].userImageUrl = this.users[j].userImageUrl;
-            this.portfolioComments[i].name = this.users[j].name;
+          if (this.comments[i].email === this.users[j].email) {
+            this.comments[i].userImageUrl = this.users[j].userImageUrl;
+            this.comments[i].name = this.users[j].name;
           }
         }
       }
     },
-    PortfolioReCommentForm(comment){
+    ReCommentForm(comment){
       if (comment.reply) {
         comment.reply = false;
       } else {
@@ -201,7 +209,7 @@ export default {
       }
       return zero + num;
     },
-    morePortfolioComments(data) {
+    moreComments(data) {
       this.limit_Comment = data + 2;
     },
     imageview(url) {
@@ -236,12 +244,12 @@ export default {
   width: 110px;
 }
 
-.modifyComment_btn {
+.large_comment_btn {
   width: 35px;
   height: 35px;
 }
 
-.comment_btn {
+.small_comment_btn {
   width: 20px;
   height: 20px;
 }

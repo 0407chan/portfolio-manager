@@ -22,9 +22,9 @@
 
 <script>
 export default {
-	name: 'PortfolioReComment',
+	name: 'ReComment',
   props: {
-    PortfolioCommentId: {
+    CommentId: {
       type: String
     },
     comment: {
@@ -39,17 +39,29 @@ export default {
     return {
       username: '',
       useremail: '',
-      portfolioId: '',
+      parentId: '',
       user: '',
-      portfolioComments: [],
+      ReComments: [],
       users: [],
-      colors: ['two', 'three', 'four', 'five'],
-      newComment: '',
-      comment_input: '',
+      newReComment: '',
+      reComment_input: '',
     }
   },
   created() {
-
+    firebaseApp.auth().onAuthStateChanged(async user => {
+      var username = '';
+      var useremail = '';
+      if (user) {
+        var result = await FirebaseService.getUserData();
+        username = result.name;
+        this.username = username;
+        useremail = result.email;
+        this.useremail = useremail;
+      }
+    });
+    // TODO 포트폴리오 대댓글 읽어오기
+    // var portfolioId = this.$route.params.id;
+    // this.getPortfolioComments(portfolioId);
   },
   methods: {
 

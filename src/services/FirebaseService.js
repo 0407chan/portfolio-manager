@@ -11,6 +11,7 @@ const PAGELOGS = 'pagelogs'
 const USERS = 'users'
 const POSTCOMMENTS = "postcomments"
 const PORTFOLIOCOMMENTS = 'portfoliocomments'
+const COMMENTS = 'comments'
 
 // Setup Firebase
 const config = {
@@ -338,7 +339,6 @@ export default {
 	\**************************/
 
 
-
 	postPortfolioComment(portfolioId, body, name, userImageUrl){
 		return firestore.collection(PORTFOLIOCOMMENTS).add({
 			portfolioId,
@@ -353,22 +353,6 @@ export default {
 		}).then(function(docRef) {
  		   	return docRef.id;
 		})
-	},
-
-	getPortfolioComments(portfolioId) {
-		const portfolioCommentCollection = firestore.collection(PORTFOLIOCOMMENTS)
-		return portfolioCommentCollection
-				.where("portfolioId", "==", portfolioId)
-				.orderBy("created_at", 'desc')
-				.get()
-				.then((docSnapshots) => {
-					return docSnapshots.docs.map((doc) => {
-						let data = doc.data()
-						data.id = doc.id;
-						data.created_at = new Date(data.created_at.toDate())
-						return data
-					})
-				})
 	},
 	getPortfolioCommentsById(userId) {
 		const portfolioCommentCollection = firestore.collection(PORTFOLIOCOMMENTS)
@@ -422,6 +406,91 @@ export default {
 		}).catch(function(error) {
 				console.error("Error removing portfolioComment: ", error);
 		});
+	},
+
+	/**************************\
+ \       Comment 함수들       \
+	\**************************/
+	postComment(parentId, classify, body, name, userImageUrl){
+		return firestore.collection(COMMENTS).add({
+			parentId: parentId,
+			classify: classify,
+			body: body,
+			created_at: firebase.firestore.FieldValue.serverTimestamp(),
+			name: name,
+			email:store.state.user.email,
+			isModify: false,
+			reply: false,
+			userImageUrl: userImageUrl,
+			userId:store.state.user.uid,
+		}).then(function(docRef) {
+				return docRef.id;
+		})
+	},
+	addToUserCommentList(id){
+		var userId = firebase.auth().currentUser.uid;
+		return firestore.collection(USERS).doc(userId).update({
+    	comments: firebase.firestore.FieldValue.arrayUnion(id),
+		})
+	},
+	addToCommentList(parentId, classify, commentId){
+		if(classify == 'post'){
+			return firestore.collection(POST).doc(parentId).update({
+				comments: firebase.firestore.FieldValue.arrayUnion(commentId),
+			})
+		}else{
+			return firestore.collection(PORTFOLIOS).doc(parentId).update({
+				comments: firebase.firestore.FieldValue.arrayUnion(commentId),
+			})
+		}
+	},
+	getComments(parentId) {
+		const commentCollection = firestore.collection(COMMENTS)
+		return commentCollection
+				.where("parentId", "==", parentId)
+				.orderBy("created_at", 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+						let data = doc.data()
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate())
+						return data
+					})
+				})
+	},
+	deleteComment(parentId, classify, commentId){
+		var userId = firebase.auth().currentUser.uid;
+		firestore.collection(USERS).doc(userId).update({
+    		comments: firebase.firestore.FieldValue.arrayRemove(commentId),
+		});
+		if(classify == 'post'){
+			firestore.collection(POST).doc(parentId).update({
+				comments: firebase.firestore.FieldValue.arrayRemove(commentId),
+			});
+		}else{
+			firestore.collection(PORTFOLIOS).doc(parentId).update({
+				comments: firebase.firestore.FieldValue.arrayRemove(commentId),
+			});
+		}
+		return firestore.collection(COMMENTS).doc(commentId).delete().then(function() {
+		}).catch(function(error) {
+				console.error("Error removing portfolioComment: ", error);
+		});
+	},
+	modifyComment(comment, newComment){
+		return firestore.collection(COMMENTS).doc(comment.id).update({
+			"body": newComment,
+			"classify" : comment.classify,
+			"created_at": comment.created_at,
+			"isModify": false,
+			"reply": false,
+			"name": comment.name,
+			"portfolioId": comment.parentId,
+			"userImageUrl": comment.userImageUrl,
+			"email": store.state.user.email,
+			"userId":store.state.user.uid,
+		})
 	},
 
 	/********************\

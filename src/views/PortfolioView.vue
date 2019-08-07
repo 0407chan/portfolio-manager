@@ -41,7 +41,7 @@
       <div id="disqus_thread"></div>
     </v-flex> -->
     <v-flex xs12>
-      <PortfolioComment :id="portfolio.id"></PortfolioComment>
+      <Comments :id="portfolio.id" classify="portfolio"></Comments>
     </v-flex>
   </v-container>
 </div>
@@ -54,6 +54,7 @@ import Portfolio from '@/components/Portfolio'
 import firebase from "firebase/app"
 import firebaseApp from 'firebase/app'
 import PortfolioComment from '../components/PortfolioComment'
+import Comments from '../components/Comments'
 
 
 export default {
@@ -83,6 +84,7 @@ export default {
     ImgBanner,
     PortfolioList,
     PortfolioComment,
+    Comments,
   },
 
   mounted() {
