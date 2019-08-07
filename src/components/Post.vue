@@ -38,6 +38,7 @@
   <v-flex xs12 row>
     <vue-markdown>{{body}}</vue-markdown>
   </v-flex>
+
   <v-flex xs12 text-xs-right round class="comment_title_margin_top">
     <v-btn class="post_btn" v-if="useremail === this.email" round color="two" dark :to="{ name: 'modifypost', params: {id: this.id} }">
       <v-icon size="17" class="mr-2">fa-pencil</v-icon>Modify
@@ -46,75 +47,9 @@
       <v-icon size="17" class="mr-2">delete</v-icon>Delete
     </v-btn>
   </v-flex>
-  <v-flex xs12 class="comment_title_margin_top">
-    <span class="comment_title">Comment</span>
-    <v-divider></v-divider>
-  </v-flex>
 
-  <v-flex xs12 v-for="(comment, index) in postComments" :key="comment.id">
-    <v-timeline v-if="index < limit_postComment" dense clipped style="margin-left: 5px; padding-top:5px">
-
-
-      <v-timeline-item :color="colors[index%4]" small style="padding-bottom:5px">
-
-
-        <template v-slot:icon>
-          <v-avatar>
-            <img :src="comment.userImageUrl">
-          </v-avatar>
-        </template>
-
-        <v-layout justify-space-between wrap align-center>
-          <v-flex xs10>
-            <router-link :to="{ name: 'userinfo', params: {id:comment.userId}}"> {{comment.name}} </router-link>
-            {{comment.created_at.getFullYear()}}.
-            {{comment.created_at.getMonth()+1}}.
-            {{comment.created_at.getDate()}}
-            {{addZeros(comment.created_at.getHours())}}:
-            {{addZeros(comment.created_at.getMinutes())}}
-            <template v-if="!comment.isModify">
-              <div style="background-color: #EDEDED; border-radius: 10px">{{comment.body}}</div>
-            </template>
-            <template v-else>
-              <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyComment(comment)"></v-text-field>
-            </template>
-          </v-flex>
-
-          <template v-if="!comment.isModify">
-            <v-flex xs2 text-xs-center>
-              <v-btn fab flat small color="three" v-if="useremail === comment.email" @click="modifyCommentForm(comment)">
-                <v-icon size="17">create</v-icon>
-              </v-btn>
-              <v-btn fab flat small color="two" v-if="useremail === comment.email" @click="deleteComment(comment.id)">
-                <v-icon size="17">delete</v-icon>
-              </v-btn>
-            </v-flex>
-          </template>
-          <template v-else >
-            <v-flex xs2 text-xs-center>
-              <v-btn fab dark small color="four" @click="modifyComment(comment)" hover > <v-icon size="17"> create</v-icon></v-btn>
-              <v-btn fab dark small color="red"  @click="modifyCommentForm(comment)" hover > <v-icon size="17"> cancel</v-icon></v-btn>
-            </v-flex>
-          </template>
-        </v-layout>
-
-
-      </v-timeline-item>
-    </v-timeline>
-    <v-flex xs12 v-if="index === limit_postComment" text-xs-center>
-      <v-btn fab dark icon flat @click="morePost(limit_postComment)" class="two" style="height:30px; width:30px">
-        <v-icon size="20">keyboard_arrow_down</v-icon>
-      </v-btn>
-    </v-flex>
-  </v-flex>
-  <!-- post comment, need authority -->
-  <v-flex xs9>
-    <v-text-field v-if="username" v-model="comment_input" :rules="[rules.required]" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
-  </v-flex>
-  <v-flex xs3 text-xs-right>
-    <v-btn v-if="username" round color="four" dark @click="postComment" class="post_btn">
-      <v-icon size="17" class="mr-2">fa-pencil</v-icon>Write
-    </v-btn>
+  <v-flex xs12>
+    <Comments :id="id" classify="post"></Comments>
   </v-flex>
 </v-layout>
 </template>
@@ -126,6 +61,7 @@ import Post from '@/components/Post'
 import firebase from "firebase/app";
 import firebaseApp from 'firebase/app'
 import store from '../store'
+import Comments from '../components/Comments'
 
 export default {
   name: 'Post',
@@ -153,6 +89,9 @@ export default {
       type: Number,
       default: 4,
     },
+  },
+  components:{
+    Comments
   },
   data() {
     return {
@@ -281,6 +220,17 @@ export default {
     },
     morePost(data) {
       this.limit_postComment = data + 2;
+    },
+    imageview(url) {
+      var img = new Image();
+      img.onload = function() {
+        var imgW = this.width/2;
+        var imgH = this.height/2;
+        if ((imgW != 0) && (imgH != 0)) {
+          window.open(url, 'guide', 'width=' + imgW + ', height=' + imgH + ', scrollbars=no');
+        }
+      }
+      img.src = url;
     },
   }
 }
