@@ -737,8 +737,5 @@ export default {
             }
         )
     },
-	getMessagingUsers() {
-
-	}
 
 }
