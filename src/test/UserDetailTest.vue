@@ -67,55 +67,50 @@
                 <v-flex xs4>
                   <v-progress-circular v-if="loading" indeterminate color="four"></v-progress-circular>
                   <v-img :src="imageUrl" width="300" height="300" v-if="imageUrl" />
-
-                  <v-text-field label="Select Image" @click="pickFile" v-model="imageUrl" prepend-icon="attach_file" color="four" v-if="user.email==pageuser.email"></v-text-field>
-
+                  <v-text-field label="Select Image" @click="pickFile" v-model="imageUrl" prepend-icon="attach_file" color="four" v-if="isOwner"></v-text-field>
                   <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked" />
+
                 </v-flex>
               <v-flex xs2></v-flex>
               <v-flex xs4>
                 <v-layout align-center>
 
                   <v-flex text-xs-12>
-                    <v-text-field label="Name" v-model="pageuser.name" v-if="user&&user.email==pageuser.email">
+                    <v-text-field label="Name" v-model="pageuser.name" v-if="isOwner">
                     </v-text-field>
-                    <v-text-field label="Name" v-model="pageuser.name" readonly v-else-if="user&&user.email!==pageuser.email">
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout align-center>
-                  <v-flex text-xs-12>
-                    <v-text-field label="Email" v-model="pageuser.email" readonly @click="cannotModify" v-if="user&&user.email==pageuser.email">
-                    </v-text-field>
-                    <v-text-field label="Email" v-model="pageuser.email" readonly v-else-if="user&&user.email!==pageuser.email">
+                    <v-text-field label="Name" v-model="pageuser.name" readonly v-else-if="!isOwner">
                     </v-text-field>
                   </v-flex>
                 </v-layout>
                 <v-layout align-center>
                   <v-flex text-xs-12>
-                    <v-text-field label="Classify" v-model="pageuser.classify" readonly @click="cannotModify" v-if="user&&user.email==pageuser.email">
+                    <v-text-field label="Email" v-model="pageuser.email" readonly>
                     </v-text-field>
-                    <v-text-field label="Classify" v-model="pageuser.classify" readonly v-else-if="user&&user.email!==pageuser.email">
+                  </v-flex>
+                </v-layout>
+                <v-layout align-center>
+                  <v-flex text-xs-12>
+                    <v-text-field label="Classify" v-model="pageuser.classify" readonly>
                     </v-text-field>
                   </v-flex>
                 </v-layout>
 
-                <v-layout align-center>
+                <v-layout align-center v-if="isOwner">
                   <v-flex text-xs-12 text-xs-center>
                     <h3>프로필 공개 설정</h3>
                     <v-switch v-model="pageuser.isPortfolioOpen" label="Portfolio"></v-switch>
                     <v-switch v-model="pageuser.isPostOpen" label='Post'></v-switch>
                     <v-switch v-model="pageuser.isCommentOpen" label="Comment"></v-switch>
+                    <!-- <v-btn v-on:click ="test"></v-btn> -->
                   </v-flex>
                 </v-layout>
               </v-flex>
             </v-layout>
-            <v-flex text-xs-center my5>
-              <v-btn color="two" v-if="user&&user.email==pageuser.email" round dark v-on:click="modifyUser">
+            <v-flex text-xs-center my5 v-if="isOwner">
+              <v-btn color="two" round dark v-on:click="modifyUser">
                 <v-icon size="17" class="mr-2">create</v-icon>Modify
               </v-btn>
-
-              <v-btn color="three" v-if="user&&user.email==pageuser.email" dark round v-on:click="deleteUser">
+              <v-btn color="three" dark round v-on:click="deleteUser">
                 <v-icon size="17" class="mr-2">cancel</v-icon>탈퇴하기
               </v-btn>
             </v-flex>
@@ -130,14 +125,20 @@
                 <template v-slot:items="props">
                   <!-- <td><p class="testbody"> {{ props.item.title }} </p></td> -->
                   <td>
-                    <template v-if="props.item.subTitle">{{ props.item.subTitle }}</template>
-                    <template v-else>{{ props.item.title }}</template>
+                    <template v-if="props.item.subTitle">
+                      <router-link :to="{ name: 'portfolioview', params: {id:props.item.id}}">{{ props.item.subTitle }} </router-link>
+                    </template>
+                    <template v-else>
+                      <router-link :to="{ name: 'portfolioview', params: {id:props.item.id}}"> {{ props.item.title }} </router-link>
+                    </template>
                     <template v-if="props.item.comments"> ({{props.item.comments.length}})</template>
                   </td>
                   <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
                   <td>
-                    <v-btn fab flat small color="three" v-on:click="modifyPortfolio(props.item)"><v-icon size="17">create</v-icon></v-btn>
-                    <v-btn fab flat small color ="two" v-on:click="deletePortfolio(props.item)"><v-icon size="17">delete</v-icon></v-btn>
+                    <template v-if="isOwner">
+                      <v-btn fab flat small color="three" v-on:click="modifyPortfolio(props.item)"><v-icon size="17">create</v-icon></v-btn>
+                      <v-btn fab flat small color ="two" v-on:click="deletePortfolio(props.item)"><v-icon size="17">delete</v-icon></v-btn>
+                    </template>
                   </td>
                   <!-- </template> -->
                 </template>
@@ -161,8 +162,10 @@
                   </td>
                   <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
                   <td>
-                    <v-btn fab flat small color="three" v-on:click="modifyPost(props.item)"><v-icon size="17">create</v-icon></v-btn>
-                    <v-btn fab flat small color ="two" v-on:click="deletePost(props.item)"><v-icon size="17">delete</v-icon></v-btn>
+                    <template v-if="isOwner">
+                      <v-btn fab flat small color="three" v-on:click="modifyPost(props.item)"><v-icon size="17">create</v-icon></v-btn>
+                      <v-btn fab flat small color ="two" v-on:click="deletePost(props.item)"><v-icon size="17">delete</v-icon></v-btn>
+                    </template>
                   </td>
                   <!-- </template> -->
                 </template>
@@ -196,24 +199,25 @@
                   <td>{{ props.item.classify}}</td>
                   <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
                   <td>
-                    <template v-if="props.item.isModify">
-                      <template v-if="props.item.classify=='post'">
-                        <v-btn fab dark small color="four" @click="modifyComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
+                    <template v-if="isOwner">
+                      <template v-if="props.item.isModify">
+                        <template v-if="props.item.classify=='post'">
+                          <v-btn fab dark small color="four" @click="modifyComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
+                        </template>
+                        <template v-if="props.item.classify=='portfolio'">
+                          <v-btn fab dark small color="four" @click="modifyPortfolioComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
+                        </template>
+                        <v-btn fab dark small color="red"  @click="modifyCommentForm(props.item)" hover > <v-icon size="17"> cancel</v-icon></v-btn>
                       </template>
-                      <template v-if="props.item.classify=='portfolio'">
-                        <v-btn fab dark small color="four" @click="modifyPortfolioComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
+                      <template v-else>
+                        <v-btn fab flat small color="three" v-on:click="modifyCommentForm(props.item)"><v-icon size="17">create</v-icon></v-btn>
+                        <template v-if="props.item.classify=='post'">
+                          <v-btn fab flat small color="two"   v-on:click="deleteComment(props.item)"><v-icon size="17">delete</v-icon></v-btn>
+                        </template>
+                        <template v-if="props.item.classify=='portfolio'">
+                          <v-btn fab flat small color="two"   v-on:click="deletePortfolioComment(props.item)"><v-icon size="17">delete</v-icon></v-btn>
+                        </template>
                       </template>
-                      <v-btn fab dark small color="red"  @click="modifyCommentForm(props.item)" hover > <v-icon size="17"> cancel</v-icon></v-btn>
-                    </template>
-                    <template v-else>
-                      <v-btn fab flat small color="three" v-on:click="modifyCommentForm(props.item)"><v-icon size="17">create</v-icon></v-btn>
-                      <template v-if="props.item.classify=='post'">
-                        <v-btn fab flat small color="two"   v-on:click="deleteComment(props.item)"><v-icon size="17">delete</v-icon></v-btn>
-                      </template>
-                      <template v-if="props.item.classify=='portfolio'">
-                        <v-btn fab flat small color="two"   v-on:click="deletePortfolioComment(props.item)"><v-icon size="17">delete</v-icon></v-btn>
-                      </template>
-
                     </template>
                   </td>
                 </template>
@@ -229,7 +233,9 @@
         <v-tab-item :value="'tab-'+9"  transition="fade-transition" reverse-transition="fade-transition">
           <v-card flat>
             <v-flex xs12 text-xs-center>
+              <v-icon size=17>lock</v-icon>
               <div>Sorry, This Page is Locked</div>
+              <v-alert >으아아아아아앙</v-alert>
             </v-flex>
           </v-card>
         </v-tab-item>
@@ -262,6 +268,7 @@ export default {
       callback: "feedback",
       id: "",
       search:'',
+      isOwner:false,
       // i don't know Data
       edit: false,
 
@@ -308,23 +315,32 @@ export default {
     this.getComments();
   },
   created() {
+    this.id= this.$route.params.id;
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         var currentUser = firebase.auth().currentUser;
         this.user = currentUser;
         this.pageuser = await FirebaseService.getUser(this.id);
         this.imageUrl = this.pageuser.userImageUrl;
+        if(this.user.uid == this.pageuser.id){
+          this.isOwner = true;
+        }else {
+          this.isOwner = false;
+        }
       }
     })
-    this.id = '3uB1Si78L8ZZy4UJuzbcjv06BVs2'
-    //this.id= this.$route.params.id;
-    // if(this.id==''){
-    //   this.id=this.user.id;
-    // }
+    if(this.id==''){
+      this.id=this.user.uid;
+    }
+    // this.id = '3uB1Si78L8ZZy4UJuzbcjv06BVs2'
   },
 
   methods: {
-
+    test(){
+      console.log("user.id",this.user.uid);
+      console.log("pageuser.id",this.pageuser.id);
+      console.log("isOwner",this.isOwner);
+    },
     async modifyUser() {
       if (this.imageUrl === '') {
         this.imageUrl = this.pageuser.userImageUrl
@@ -624,6 +640,8 @@ export default {
 
       }
     },
+
+
   },
 
 }

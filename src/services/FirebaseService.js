@@ -589,12 +589,12 @@ export default {
 
 	userDataToDB(email,classify,name,created_at,userImageUrl){
 		var userId = firebase.auth().currentUser.uid;
-		return firestore.collection(USERS).doc(userId).set({
-			email,
-			classify,
-			name,
-			created_at,
-			userImageUrl,
+		return firestore.collection(USERS).doc(userId).update({
+			"email":email,
+			"classify":classify,
+			"name":name,
+			"created_at":created_at,
+			"userImageUrl":userImageUrl,
 			current_at: firebase.firestore.FieldValue.serverTimestamp(),
 		}).then(function(result){
 
