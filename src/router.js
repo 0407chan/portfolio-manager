@@ -10,6 +10,8 @@ import PortfolioWriterPage from './views/PortfolioWriter.vue'
 
 import ModifyPortfolioPage from './views/PortfolioWriter.vue'
 import ModifyPostPage from './views/PostWriter.vue'
+import UserDetail from './views/UserDetail.vue'
+import MyPage from './views/UserDetail.vue'
 
 import AdminPage from './views/AdminPage.vue'
 
@@ -18,7 +20,6 @@ import AdminPageTest from './test/AdminPageTest.vue'
 import LoginTest from './test/LoginTest.vue'
 import InputTest from './test/InputTest.vue'
 
-import UserDetail from './views/UserDetail.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -88,7 +89,7 @@ export default new Router({
    \     test rounter     \
     \********************/
     {
-      path: '/test4',
+      path: '/test',
       name: 'userdetailtest',
       component: UserDetailTest
     },
