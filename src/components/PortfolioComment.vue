@@ -104,14 +104,6 @@ export default {
       default: 4,
     },
   },
-<<<<<<< HEAD
-  components: {
-    PortfolioReComment,
-  },
-=======
-
-
->>>>>>> f1ecb3e3d07eea68ec35dc5175fb58bc695d0fef
   data() {
     return {
       username: '',

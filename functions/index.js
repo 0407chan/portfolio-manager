@@ -1,7 +1,7 @@
 const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-var serviceAccount = require("./todo-vue-3ea4e-firebase-adminsdk-33i4j-f348aa7434.json");
-admin.initializeApp();
+// const admin = require("firebase-admin");
+// var serviceAccount = require("./todo-vue-3ea4e-firebase-adminsdk-33i4j-f348aa7434.json");
+// admin.initializeApp();
 // exports.newPortfolioNotification = functions.firestore
 //     .document("portfolios/{docId}")
 //     .onCreate((snap, context) => {
@@ -141,24 +141,24 @@ admin.initializeApp();
 //                 console.log(error);
 //             });
 //     });
-exports.sendMessageOnCreatePortfolio = functions.firestore
-.document('/portfolios/{portfolioID}')
-.onWrite((change, context) => {
-    const registrationToken = "dIm8eaZ0uo8:APA91bHYWAz9lIx6Qx2_4qZwN9BzWZW1c4M3jS9v6AR6i6yDU5gksVWpFLckBKgBkxCgKtxpyzCRn7hfROwdhwFgzSLYCdaGIq8CM5qKbwEmJE3hOAAsKwEQuAJOpwPomAtkUH5eGLv9"
-    const options = {
-        priority: "high",                                                                    
-        timeToLive: 60 * 60 * 24
-    };
-    const payload={
-        data:{
-            userID:"hihi"
-        }
-    };
-    admin.messaging().sendToDevice(registrationToken, payload, options)
-        .then(function (response) {
-            return response
-        })
-        .catch(function (err) {
-            return err
-        });
-});
+// exports.sendMessageOnCreatePortfolio = functions.firestore
+// .document('/portfolios/{portfolioID}')
+// .onWrite((change, context) => {
+//     const registrationToken = "dIm8eaZ0uo8:APA91bHYWAz9lIx6Qx2_4qZwN9BzWZW1c4M3jS9v6AR6i6yDU5gksVWpFLckBKgBkxCgKtxpyzCRn7hfROwdhwFgzSLYCdaGIq8CM5qKbwEmJE3hOAAsKwEQuAJOpwPomAtkUH5eGLv9"
+//     const options = {
+//         priority: "high",
+//         timeToLive: 60 * 60 * 24
+//     };
+//     const payload={
+//         data:{
+//             userID:"hihi"
+//         }
+//     };
+//     admin.messaging().sendToDevice(registrationToken, payload, options)
+//         .then(function (response) {
+//             return response
+//         })
+//         .catch(function (err) {
+//             return err
+//         });
+// });
