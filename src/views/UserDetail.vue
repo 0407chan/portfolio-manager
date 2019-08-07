@@ -20,42 +20,26 @@
           <v-icon size=17>account_box</v-icon>
         </v-tab>
 
-        <template v-if="pageuser.isPortfolioOpen">
+        <template v-if="pageuser.isPortfolioOpen || this.isOwner">
           <v-tab href="#tab-2">
             Portfolios ({{portfolioSearchList.length}})
             <v-icon size=17>fa-pencil</v-icon>
           </v-tab>
         </template>
-        <template v-else>
-          <v-tab href="#tab-9">
-            <v-icon size=17>lock</v-icon>
-          </v-tab>
-        </template>
 
-        <template v-if="pageuser.isPostOpen">
+        <template v-if="pageuser.isPostOpen || this.isOwner">
         <v-tab href="#tab-3">
           <!-- Posts ({{posts.length}}) -->
           Posts ({{postSearchList.length}})
           <v-icon size=17>fa-clipboard</v-icon>
         </v-tab>
         </template>
-        <template v-else>
-          <v-tab href="#tab-9">
-            <v-icon size=17>lock</v-icon>
-          </v-tab>
-        </template>
-
-        <template v-if="pageuser.isCommentOpen">
+        <template v-if="pageuser.isCommentOpen|| this.isOwner">
         <v-tab href="#tab-4">
           <!-- Posts ({{posts.length}}) -->
           Comments ({{commentSearchList.length}})
           <v-icon size=17>fa-clipboard</v-icon>
         </v-tab>
-        </template>
-        <template v-else>
-          <v-tab href="#tab-9">
-            <v-icon size=17>lock</v-icon>
-          </v-tab>
         </template>
 
       </v-tabs>
@@ -106,11 +90,19 @@
                 </v-layout>
               </v-flex>
             </v-layout>
+
+
+
             <v-flex text-xs-center my5 v-if="isOwner">
               <v-btn color="two" round dark v-on:click="modifyUser">
-                <v-icon size="17" class="mr-2">create</v-icon>Modify
+                  <v-icon size="17" class="mr-2">create</v-icon>Modify
               </v-btn>
-              <v-btn color="three" dark round v-on:click="deleteUser">
+              <router-link :to="{name:'admin'}">
+                <v-btn color="three" v-if="pageuser.classify ==='관리자'" dark round>
+                  <v-icon size="17" class="mr-2">people</v-icon>Admin
+                </v-btn>
+              </router-link>
+              <v-btn color="three" v-if="pageuser.classify !=='관리자'" dark round v-on:click="deleteUser">
                 <v-icon size="17" class="mr-2">cancel</v-icon>탈퇴하기
               </v-btn>
             </v-flex>
@@ -228,17 +220,6 @@
         </v-tab-item>
 
 
-
-        <!-- Lock Page -->
-        <v-tab-item :value="'tab-'+9"  transition="fade-transition" reverse-transition="fade-transition">
-          <v-card flat>
-            <v-flex xs12 text-xs-center>
-              <v-icon size=17>lock</v-icon>
-              <div>Sorry, This Page is Locked</div>
-              <v-alert >으아아아아아앙</v-alert>
-            </v-flex>
-          </v-card>
-        </v-tab-item>
 
       </v-tabs-items>
     </v-card>
