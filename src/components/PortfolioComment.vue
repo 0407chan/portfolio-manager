@@ -49,7 +49,7 @@
             </template>
           </v-layout>
 
-          
+
       </v-timeline-item>
     </v-timeline>
     <v-flex xs12 v-if="index === limit_Comment" text-xs-center>
@@ -128,11 +128,11 @@ export default {
   methods: {
     async deletePortfolioComment(commentId){
       await FirebaseService.deletePortfolioComment(this.id, commentId);
-      this.getPortfolioComments(this.id);
+      await this.getPortfolioComments(this.id);
     },
     async modifyPortfolioComment(comment){
       await FirebaseService.modifyPortfolioComment(comment, this.newComment);
-      this.getPortfolioComments(this.id);
+      await this.getPortfolioComments(this.id);
     },
     async modifyPortfolioCommentForm(comment) {
       if(comment.isModify){

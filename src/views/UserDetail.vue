@@ -117,12 +117,8 @@
                 <template v-slot:items="props">
                   <!-- <td><p class="testbody"> {{ props.item.title }} </p></td> -->
                   <td>
-                    <template v-if="props.item.subTitle">
-                      <router-link :to="{ name: 'portfolioview', params: {id:props.item.id}}">{{ props.item.subTitle }} </router-link>
-                    </template>
-                    <template v-else>
-                      <router-link :to="{ name: 'portfolioview', params: {id:props.item.id}}"> {{ props.item.title }} </router-link>
-                    </template>
+                      <router-link v-if="props.item.subTitle"  :to="{ name: 'portfolioview', params: {id:props.item.id}}">{{ props.item.subTitle }} </router-link>
+                      <router-link v-if="!props.item.subTitle" :to="{ name: 'portfolioview', params: {id:props.item.id}}"> {{ props.item.title }} </router-link>
                     <template v-if="props.item.comments"> ({{props.item.comments.length}})</template>
                   </td>
                   <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
@@ -132,14 +128,12 @@
                       <v-btn fab flat small color ="two" v-on:click="deletePortfolio(props.item)"><v-icon size="17">delete</v-icon></v-btn>
                     </template>
                   </td>
-                  <!-- </template> -->
                 </template>
 
               </v-data-table>
             </v-flex>
           </v-card>
         </v-tab-item>
-
 
 
         <v-tab-item :value="'tab-'+3"  transition="fade-transition" reverse-transition="fade-transition">
@@ -177,15 +171,8 @@
                       {{props.item.body}}
                     </v-flex>
                     <v-flex v-if="props.item.isModify">
-                      <template v-if="props.item.classify=='post'">
-                        <v-text-field v-model="newComment" :value='props.item.body' @keyup.enter="modifyComment(props.item)"></v-text-field>
-                      </template>
-                      <template v-if="props.item.classify=='portfolio'">
-                        <v-text-field v-model="newComment" :value='props.item.body' @keyup.enter="modifyPortfolioComment(props.item)"></v-text-field>
-                      </template>
-                    </v-flex>
-                    <v-flex text-xs-right v-if="props.item.isModify">
-
+                      <v-text-field v-if="props.item.classify=='post'"      v-model="newComment" :value='props.item.body' @keyup.enter="modifyComment(props.item)"></v-text-field>
+                      <v-text-field v-if="props.item.classify=='portfolio'" v-model="newComment" :value='props.item.body' @keyup.enter="modifyPortfolioComment(props.item)"></v-text-field>
                     </v-flex>
                   </td>
                   <td>{{ props.item.classify}}</td>
@@ -193,33 +180,22 @@
                   <td>
                     <template v-if="isOwner">
                       <template v-if="props.item.isModify">
-                        <template v-if="props.item.classify=='post'">
-                          <v-btn fab dark small color="four" @click="modifyComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
-                        </template>
-                        <template v-if="props.item.classify=='portfolio'">
-                          <v-btn fab dark small color="four" @click="modifyPortfolioComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
-                        </template>
+                        <v-btn fab dark small color="four" v-if="props.item.classify=='post'" @click="modifyComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
+                        <v-btn fab dark small color="four" v-if="props.item.classify=='portfolio'"@click="modifyPortfolioComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
                         <v-btn fab dark small color="red"  @click="modifyCommentForm(props.item)" hover > <v-icon size="17"> cancel</v-icon></v-btn>
                       </template>
                       <template v-else>
                         <v-btn fab flat small color="three" v-on:click="modifyCommentForm(props.item)"><v-icon size="17">create</v-icon></v-btn>
-                        <template v-if="props.item.classify=='post'">
-                          <v-btn fab flat small color="two"   v-on:click="deleteComment(props.item)"><v-icon size="17">delete</v-icon></v-btn>
-                        </template>
-                        <template v-if="props.item.classify=='portfolio'">
-                          <v-btn fab flat small color="two"   v-on:click="deletePortfolioComment(props.item)"><v-icon size="17">delete</v-icon></v-btn>
-                        </template>
+                        <v-btn fab flat small color="two"   v-on:click="deleteComment(props.item)"          v-if="props.item.classify=='post'"><v-icon size="17">delete</v-icon></v-btn>
+                        <v-btn fab flat small color="two"   v-on:click="deletePortfolioComment(props.item)" v-if="props.item.classify=='portfolio'"><v-icon size="17">delete</v-icon></v-btn>
                       </template>
                     </template>
                   </td>
                 </template>
-
               </v-data-table>
             </v-flex>
           </v-card>
         </v-tab-item>
-
-
 
       </v-tabs-items>
     </v-card>
@@ -502,8 +478,6 @@ export default {
        });
     },
 
-
-
     async deleteUser(user) {
       await FirebaseService.deleteUserbyId(user.id);
       this.getUsers();
@@ -627,7 +601,16 @@ export default {
       this.id= this.$route.params.id;
       this.pageuser = await FirebaseService.getUser(this.id);
       this.imageUrl = this.pageuser.userImageUrl;
-      this.isOwner = true;
+
+      if(this.user.uid == this.pageuser.id){
+        this.isOwner = true;
+      }else {
+        this.isOwner = false;
+      }
+      this.getPortfolios();
+      this.getPosts();
+      this.getComments();
+
     }
 
   },

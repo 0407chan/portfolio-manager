@@ -105,16 +105,12 @@ export default {
   },
   created() {
     // 로그인, 로그아웃 을 위한 사용자 감지
-    firebase.auth().onAuthStateChanged(user => {
-      this.user = user;
-      if (!user) {
-        this.username = ""
-      }
-    });
+    //   
     //헤더에 사용자 이름을 표시
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         var result = await FirebaseService.getUserData();
+        this.user = user;
         this.username = result.name
         this.email = result.email
         this.id = user.uid

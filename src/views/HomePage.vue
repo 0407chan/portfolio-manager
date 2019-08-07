@@ -123,11 +123,7 @@ export default {
 			return require('../assets/' + img)
 		}
   },
-  watch:{
-    async '$route' (to, from) {
-      this.id= this.$route.params.id;
-    }
-  }
+
 }
 
 var isChromium = window.chrome;
