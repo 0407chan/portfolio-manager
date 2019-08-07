@@ -10,7 +10,7 @@ import router from './router'
 import store from './store'
 import './registerServiceWorker'
 import swal from 'sweetalert';
-
+import Notifications from 'vue-notification'
 import axios from 'axios'
 
 Vue.prototype.$http = axios
@@ -24,7 +24,7 @@ import VueRouter from 'vue-router';
 Vue.use(VueCarousel);
 Vue.component('vue-markdown', VueMarkdown);
 Vue.config.productionTip = false
-
+Vue.use(Notifications)
 // var router = new VueRouter();
 router.beforeEach((to, from, next) => {
 

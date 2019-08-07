@@ -238,7 +238,6 @@ export default {
       }
     },
     async deletePost() {
-      swal('삭제되었습니다.');
       await FirebaseService.deletePost(this.id);
       location.reload();
     },

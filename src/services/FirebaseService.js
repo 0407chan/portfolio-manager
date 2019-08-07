@@ -4,6 +4,7 @@ import 'firebase/auth'
 import store from '../store'
 import 'firebase/functions'
 import 'firebase/messaging'
+import Vue from 'vue'
 
 const POSTS = 'posts'
 const PORTFOLIOS = 'portfolios'
@@ -36,7 +37,7 @@ firebase.initializeApp(config)
 const firestore = firebase.firestore();
 // const firestorage = firebase.storage();
 const fireFunctions = firebase.functions();
-const fireMessage  = firebase.messaging();
+// const fireMessage  = firebase.messaging();
 if (firebase.messaging.isSupported()){
 	const fireMessage  = firebase.messaging();
 }
@@ -707,23 +708,35 @@ export default {
         return fireMessage.onMessage(function (payload) {
         	// console.log(payload)
 			if (payload.data.messageAbout === "Create") {
-				var notification = new Notification('EEEAZY Notification', {
-					icon: 'https://i.imgur.com/wxV4WcW.png',
-					body: '새 글이 등록되었습니다.',
+				// var notification = new Notification('EEEAZY Notification', {
+				// 	icon: 'https://i.imgur.com/wxV4WcW.png',
+				// 	title:  "작성자: " + payload.data.displayName,
+				// 	body: '새 글이 등록되었습니다.',
+				// });
+				// notification.onclick = function () {
+				// 	window.open('http://localhost:8080/');
+				// };
+
+				Vue.notify({
+					group: 'foo',
+					type: 'warn',
+					title: payload.data.displayName +"&nbsp"+"-"+"&nbsp"+ payload.data.title,
+					text: "새글이 등록되었습니다.\n",
+					duration: 5000,
 				});
-				notification.onclick = function () {
-					window.open('http://localhost:8080/');
-				};
+
+
+
 			} else if (payload.data.messageAbout === "Update") {
 
 			} else if (payload.data.messageAbout === "Delete") {
-				var notification = new Notification('EEEAZY Notification', {
-					icon: 'https://i.imgur.com/wxV4WcW.png',
-					body: '글이 삭제되었습니다.',
+				Vue.notify({
+					group: 'foo',
+					type: 'error',
+					title: "작성자: " + payload.data.displayName +"&nbsp"+ "&nbsp"+ "제목: " + payload.data.title,
+					text: "글이 삭제되었습니다.\n",
+					duration: 5000,
 				});
-				notification.onclick = function () {
-					window.open('http://localhost:8080/');
-				};
 			}
         });
     },

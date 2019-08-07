@@ -46,7 +46,7 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item :value="'tab-'+1" transition="fade-transition" reverse-transition="fade-transition">
-          <v-card flat>
+          <v-card flat min-height="480">
             <v-layout wrap align-center justify-center my-3>
                 <v-flex xs4>
                   <v-progress-circular v-if="loading" indeterminate color="four"></v-progress-circular>
@@ -81,7 +81,7 @@
 
                 <v-layout align-center v-if="isOwner">
                   <v-flex text-xs-12 text-xs-center>
-                    <h3>프로필 공개 설정</h3>
+                    <h3 style="color:#696969;">프로필 공개 설정</h3>
                       <v-layout>
                       <v-flex text-xs-4>
                           <v-checkbox v-model="pageuser.isPortfolioOpen" label="Portfolio" color="two"></v-checkbox>
@@ -98,8 +98,7 @@
               </v-flex>
             </v-layout>
 
-
-
+            <v-layout>
             <v-flex text-xs-center mb2 v-if="isOwner">
               <v-btn color="two" round dark v-on:click="modifyUser">
                   <v-icon size="17" class="mr-2">create</v-icon>Modify
@@ -113,6 +112,7 @@
                 <v-icon size="17" class="mr-2">cancel</v-icon>탈퇴하기
               </v-btn>
             </v-flex>
+            </v-layout>
 
           </v-card>
         </v-tab-item>
