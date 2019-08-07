@@ -5,7 +5,7 @@
     <v-divider></v-divider>
   </v-flex>
   <v-flex xs12 v-for="(comment, index) in portfolioComments" :key="comment.id">
-    <v-timeline v-if="index < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
+    <v-timeline align-top v-if="index < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
       <v-timeline-item :color="colors[index%4]" small style="padding-bottom:5px">
 
 
@@ -75,14 +75,18 @@ import FirebaseService from '@/services/FirebaseService'
 import firebase from "firebase/app";
 import firebaseApp from 'firebase/app'
 import store from '../store'
+import ReComment from '@/components/ReComment'
 
 export default {
   name: 'PortfolioComment',
   props: {
-    id:{
+    id: {
       type: String
     },
     comment: {
+      type: String
+    },
+    reComment: {
       type: String
     },
     limit_Comment: {
@@ -90,8 +94,9 @@ export default {
       default: 4,
     },
   },
-
-
+  components: {
+    ReComment
+  },
   data() {
     return {
       username: '',
@@ -130,18 +135,17 @@ export default {
       await FirebaseService.deletePortfolioComment(this.id, commentId);
       await this.getPortfolioComments(this.id);
     },
-    async modifyPortfolioComment(comment){
+    async modifyPortfolioComment(comment) {
       await FirebaseService.modifyPortfolioComment(comment, this.newComment);
       await this.getPortfolioComments(this.id);
     },
     async modifyPortfolioCommentForm(comment) {
-      if(comment.isModify){
+      if (comment.isModify) {
         comment.isModify = false;
-      }else{
+      } else {
         comment.isModify = true;
       }
       this.newComment = comment.body;
-      await FirebaseService.canPortfolioModify(comment);
     },
     async postPortfolioComment() {
       if(this.comment_input.length != 0 && !this.btnCheck){
@@ -158,13 +162,20 @@ export default {
     async getPortfolioComments(portfolioId) {
       this.portfolioComments = await FirebaseService.getPortfolioComments(portfolioId);
       this.users = await FirebaseService.getUsers();
-      for(var i in this.portfolioComments){
-        for(var j in this.users){
-            if(this.portfolioComments[i].email === this.users[j].email){
-              this.portfolioComments[i].userImageUrl = this.users[j].userImageUrl;
-              this.portfolioComments[i].name = this.users[j].name;
-            }
+      for (var i in this.portfolioComments) {
+        for (var j in this.users) {
+          if (this.portfolioComments[i].email === this.users[j].email) {
+            this.portfolioComments[i].userImageUrl = this.users[j].userImageUrl;
+            this.portfolioComments[i].name = this.users[j].name;
+          }
         }
+      }
+    },
+    PortfolioReCommentForm(comment){
+      if (comment.reply) {
+        comment.reply = false;
+      } else {
+        comment.reply = true;
       }
     },
     addZeros(num) {
@@ -179,6 +190,17 @@ export default {
     },
     morePortfolioComments(data) {
       this.limit_Comment = data + 2;
+    },
+    imageview(url) {
+      var img = new Image();
+      img.onload = function() {
+        var imgW = this.width / 2;
+        var imgH = this.height / 2;
+        if ((imgW != 0) && (imgH != 0)) {
+          window.open(url, 'guide', 'width=' + imgW + ', height=' + imgH + ', scrollbars=no');
+        }
+      }
+      img.src = url;
     },
   }
 }
@@ -201,7 +223,7 @@ export default {
   width: 110px;
 }
 
-.modifyComment_btn{
+.modifyComment_btn {
   width: 35px;
   height: 35px;
 }
@@ -216,7 +238,7 @@ export default {
   font-weight: bold;
 }
 
-.comment_title_margin_top{
+.comment_title_margin_top {
   margin-top: 50px;
 }
 
