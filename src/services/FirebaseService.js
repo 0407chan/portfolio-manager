@@ -11,6 +11,7 @@ const PAGELOGS = 'pagelogs'
 const USERS = 'users'
 const POSTCOMMENTS = "postcomments"
 const PORTFOLIOCOMMENTS = 'portfoliocomments'
+const TOKENS = 'tokens'
 
 // Setup Firebase
 const config = {
@@ -35,6 +36,7 @@ firebase.initializeApp(config)
 const firestore = firebase.firestore();
 // const firestorage = firebase.storage();
 const fireFunctions = firebase.functions();
+const fireMessage  = firebase.messaging();
 if (firebase.messaging.isSupported()){
 	const fireMessage  = firebase.messaging();
 }
@@ -703,13 +705,26 @@ export default {
     },
     onMessageResponse() {
         return fireMessage.onMessage(function (payload) {
-			var notification = new Notification('EEEAZY Notification', {
-				icon: 'https://i.imgur.com/wxV4WcW.png',
-				body: '읽지않은 알림이 있습니다..',
-			  });
-			  notification.onclick = function () {
-				window.open('http://localhost:8080/');
-			  };
+        	console.log(payload)
+			if (payload.data.messageAbout === "Create") {
+				var notification = new Notification('EEEAZY Notification', {
+					icon: 'https://i.imgur.com/wxV4WcW.png',
+					body: '새 글이 등록되었습니다.',
+				});
+				notification.onclick = function () {
+					window.open('http://localhost:8080/');
+				};
+			} else if (payload.data.messageAbout === "Update") {
+
+			} else if (payload.data.messageAbout === "Delete") {
+				var notification = new Notification('EEEAZY Notification', {
+					icon: 'https://i.imgur.com/wxV4WcW.png',
+					body: '글이 삭제되었습니다.',
+				});
+				notification.onclick = function () {
+					window.open('http://localhost:8080/');
+				};
+			}
         });
     },
     addToCloudMessagingUserList(token) {
