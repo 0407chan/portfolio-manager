@@ -435,7 +435,7 @@ export default {
 	},
 	addToCommentList(parentId, classify, commentId){
 		if(classify == 'post'){
-			return firestore.collection(POST).doc(parentId).update({
+			return firestore.collection(POSTS).doc(parentId).update({
 				comments: firebase.firestore.FieldValue.arrayUnion(commentId),
 			})
 		}else{
@@ -465,7 +465,7 @@ export default {
     		comments: firebase.firestore.FieldValue.arrayRemove(commentId),
 		});
 		if(classify == 'post'){
-			firestore.collection(POST).doc(parentId).update({
+			firestore.collection(POSTS).doc(parentId).update({
 				comments: firebase.firestore.FieldValue.arrayRemove(commentId),
 			});
 		}else{

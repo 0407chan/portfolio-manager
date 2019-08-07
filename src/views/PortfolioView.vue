@@ -37,9 +37,7 @@
         <v-icon size="17" class="mr-2">fa-undo</v-icon>Back
       </v-btn>
     </v-flex>
-    <!-- <v-flex xs12>
-      <div id="disqus_thread"></div>
-    </v-flex> -->
+
     <v-flex xs12>
       <Comments :id="portfolio.id" classify="portfolio"></Comments>
     </v-flex>
@@ -75,7 +73,6 @@ export default {
       if (user) {
         this.user = await FirebaseService.getUserData();
       }
-
     });
     this.id = this.$route.params.id;
   },

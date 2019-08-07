@@ -38,6 +38,7 @@
   <v-flex xs12 row>
     <vue-markdown>{{body}}</vue-markdown>
   </v-flex>
+
   <v-flex xs12 text-xs-right round class="comment_title_margin_top">
     <v-btn class="post_btn" v-if="useremail === this.email" round color="two" dark :to="{ name: 'modifypost', params: {id: this.id} }">
       <v-icon size="17" class="mr-2">fa-pencil</v-icon>Modify
@@ -46,63 +47,9 @@
       <v-icon size="17" class="mr-2">delete</v-icon>Delete
     </v-btn>
   </v-flex>
-  <v-flex xs12 class="comment_title_margin_top">
-    <span class="comment_title">Comment</span>
-    <v-divider></v-divider>
-  </v-flex>
 
-  <v-flex xs12 v-for="(comment, index) in postComments" :key="comment.id">
-    <v-timeline v-if="index < limit_postComment" dense clipped style="margin-left: 5px; padding-top:5px">
-      <v-timeline-item :color="colors[index%4]" small style="padding-bottom:5px">
-        <template v-slot:icon>
-          <v-avatar>
-            <img :src="comment.userImageUrl" @click="imageview(comment.userImageUrl)" style="cursor: pointer">
-          </v-avatar>
-        </template>
-        <template>
-          <router-link :to="{ name: 'userinfo', params: {id: comment.userId}}">{{comment.name}}</router-link>
-        </template>
-        <v-layout justify-space-between wrap align-center>
-          <v-flex xs8 sm9 v-if="!comment.isModify" style="background-color: #f8f8f8; border-radius: 10px">
-            {{comment.body}}
-          </v-flex>
-          <v-flex xs7 sm8 v-if="comment.isModify">
-            <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyComment(comment)"></v-text-field>
-          </v-flex>
-          <v-flex xs1 sm1 text-xs-right v-if="comment.isModify">
-            <v-btn fab dark v-if="useremail === comment.email"  @click="modifyComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
-              <v-icon size="15">
-                  fa-pencil
-              </v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2 sm2 text-xs-center fill-height>
-            {{comment.created_at.getMonth()+1}}.
-            {{comment.created_at.getDate()}}
-            {{addZeros(comment.created_at.getHours())}}:
-            {{addZeros(comment.created_at.getMinutes())}}
-          </v-flex>
-          <v-flex xs2 sm1 text-xs-right>
-            <v-icon v-if="useremail === comment.email"  @click="modifyCommentForm(comment)" size="17" class="mr-2 comment_btn" hover color="three">create</v-icon>
-            <v-icon v-if="useremail === comment.email" @click="deleteComment(comment.id)" size="17" class="mr-2 comment_btn" hover color="two">delete</v-icon>
-          </v-flex>
-        </v-layout>
-      </v-timeline-item>
-    </v-timeline>
-    <v-flex xs12 v-if="index === limit_postComment" text-xs-center>
-      <v-btn fab dark icon flat @click="morePost(limit_postComment)" class="two" style="height:30px; width:30px">
-        <v-icon size="20">keyboard_arrow_down</v-icon>
-      </v-btn>
-    </v-flex>
-  </v-flex>
-  <!-- post comment, need authority -->
-  <v-flex xs9>
-    <v-text-field v-if="username" v-model="comment_input" :rules="[rules.required]" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
-  </v-flex>
-  <v-flex xs3 text-xs-right>
-    <v-btn v-if="username" round color="four" dark @click="postComment" class="post_btn">
-      <v-icon size="17" class="mr-2">fa-pencil</v-icon>Write
-    </v-btn>
+  <v-flex xs12>
+    <Comments :id="id" classify="post"></Comments>
   </v-flex>
 </v-layout>
 </template>
@@ -114,6 +61,7 @@ import Post from '@/components/Post'
 import firebase from "firebase/app";
 import firebaseApp from 'firebase/app'
 import store from '../store'
+import Comments from '../components/Comments'
 
 export default {
   name: 'Post',
@@ -141,6 +89,9 @@ export default {
       type: Number,
       default: 4,
     },
+  },
+  components:{
+    Comments
   },
   data() {
     return {

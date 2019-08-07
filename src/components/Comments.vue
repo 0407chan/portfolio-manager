@@ -142,13 +142,11 @@ export default {
         this.useremail = useremail;
       }
     });
-    var parentId = this.$route.params.id;
-    this.getComments(parentId);
-    var urlPath = (window.location.href).split('/');
-    if(urlPath[3] == 'post'){
-      this.classify = 'post';
+    if(this.classify == "post"){
+      this.getComments(this.id);
     }else{
-      this.classify = 'portfolio';
+      var parentId = this.$route.params.id;
+      this.getComments(parentId);
     }
   },
   methods: {
