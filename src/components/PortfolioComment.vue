@@ -7,39 +7,49 @@
   <v-flex xs12 v-for="(comment, index) in portfolioComments" :key="comment.id">
     <v-timeline v-if="index < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
       <v-timeline-item :color="colors[index%4]" small style="padding-bottom:5px">
-        <template v-slot:icon>
-          <v-avatar>
-            <img :src="comment.userImageUrl">
-          </v-avatar>
-        </template>
-        <template>
-          <router-link :to="{ name: 'userinfo', params: {id:comment.userId}}"> {{comment.name}} </router-link>
-        </template>
-        <v-layout justify-space-between wrap align-center>
-          <v-flex xs8 sm9 v-if="!comment.isModify" style="background-color: #EDEDED; border-radius: 10px">
-            {{comment.body}}
-          </v-flex>
-          <v-flex xs7 sm8 v-if="comment.isModify">
-            <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyPortfolioComment(comment)"></v-text-field>
-          </v-flex>
-          <v-flex xs1 sm1 text-xs-right v-if="comment.isModify">
-            <v-btn fab dark v-if="useremail === comment.email"  @click="modifyPortfolioComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
-              <v-icon size="15">
-                  fa-pencil
-              </v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2 sm2 text-xs-center fill-height>
-            {{comment.created_at.getMonth()+1}}.
-            {{comment.created_at.getDate()}}
-            {{addZeros(comment.created_at.getHours())}}:
-            {{addZeros(comment.created_at.getMinutes())}}
-          </v-flex>
-          <v-flex xs2 sm1 text-xs-right>
-            <v-icon v-if="useremail === comment.email"  @click="modifyPortfolioCommentForm(comment)" size="17" class="mr-2 comment_btn" hover color="three">create</v-icon>
-            <v-icon v-if="useremail === comment.email" @click="deletePortfolioComment(comment.id)" size="17" class="mr-2 comment_btn" hover color="two">delete</v-icon>
-          </v-flex>
-        </v-layout>
+
+
+          <template v-slot:icon>
+            <v-avatar>
+              <img :src="comment.userImageUrl">
+            </v-avatar>
+          </template>
+
+          <v-layout justify-space-between wrap align-center>
+            <v-flex xs10>
+              <router-link :to="{ name: 'userinfo', params: {id:comment.userId}}"> {{comment.name}} </router-link>
+              {{comment.created_at.getFullYear()}}.
+              {{comment.created_at.getMonth()+1}}.
+              {{comment.created_at.getDate()}}
+              {{addZeros(comment.created_at.getHours())}}:
+              {{addZeros(comment.created_at.getMinutes())}}
+              <template v-if="!comment.isModify">
+                <div style="background-color: #EDEDED; border-radius: 10px">{{comment.body}}</div>
+              </template>
+              <template v-else>
+                <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyPortfolioComment(comment)"></v-text-field>
+              </template>
+            </v-flex>
+
+            <template v-if="!comment.isModify">
+              <v-flex xs2 text-xs-center>
+                <v-btn fab flat small color="three" v-if="useremail === comment.email" @click="modifyPortfolioCommentForm(comment)">
+                  <v-icon size="17">create</v-icon>
+                </v-btn>
+                <v-btn fab flat small color="two" v-if="useremail === comment.email" @click="deletePortfolioComment(comment.id)">
+                  <v-icon size="17">delete</v-icon>
+                </v-btn>
+              </v-flex>
+            </template>
+            <template v-else>
+              <v-flex xs2 text-xs-center>
+                <v-btn fab dark small color="four" @click="modifyPortfolioComment(comment)" hover > <v-icon size="17"> create</v-icon></v-btn>
+                <v-btn fab dark small color="red"  @click="modifyPortfolioCommentForm(comment)" hover > <v-icon size="17"> cancel</v-icon></v-btn>
+              </v-flex>
+            </template>
+          </v-layout>
+
+          
       </v-timeline-item>
     </v-timeline>
     <v-flex xs12 v-if="index === limit_Comment" text-xs-center>
