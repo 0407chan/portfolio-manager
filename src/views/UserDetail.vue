@@ -47,7 +47,7 @@
       <v-tabs-items v-model="tab">
         <v-tab-item :value="'tab-'+1" transition="fade-transition" reverse-transition="fade-transition">
           <v-card flat>
-            <v-layout wrap align-center justify-center>
+            <v-layout wrap align-center justify-center my-3>
                 <v-flex xs4>
                   <v-progress-circular v-if="loading" indeterminate color="four"></v-progress-circular>
                   <v-img :src="imageUrl" width="300" height="300" v-if="imageUrl" />
@@ -55,7 +55,7 @@
                   <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked" />
 
                 </v-flex>
-              <v-flex xs2></v-flex>
+              <v-flex xs1></v-flex>
               <v-flex xs4>
                 <v-layout align-center>
 
@@ -82,10 +82,17 @@
                 <v-layout align-center v-if="isOwner">
                   <v-flex text-xs-12 text-xs-center>
                     <h3>프로필 공개 설정</h3>
-                    <v-switch v-model="pageuser.isPortfolioOpen" label="Portfolio"></v-switch>
-                    <v-switch v-model="pageuser.isPostOpen" label='Post'></v-switch>
-                    <v-switch v-model="pageuser.isCommentOpen" label="Comment"></v-switch>
-
+                      <v-layout>
+                      <v-flex text-xs-4>
+                          <v-checkbox v-model="pageuser.isPortfolioOpen" label="Portfolio" color="two"></v-checkbox>
+                      </v-flex>
+                      <v-flex text-xs-4>
+                          <v-checkbox v-model="pageuser.isPostOpen" label='Post' color="four"></v-checkbox>
+                      </v-flex>
+                      <v-flex text-xs-4>
+                          <v-checkbox v-model="pageuser.isCommentOpen" label="Comment" color="three"></v-checkbox>
+                      </v-flex>
+                      </v-layout>
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -93,7 +100,7 @@
 
 
 
-            <v-flex text-xs-center my5 v-if="isOwner">
+            <v-flex text-xs-center mb2 v-if="isOwner">
               <v-btn color="two" round dark v-on:click="modifyUser">
                   <v-icon size="17" class="mr-2">create</v-icon>Modify
               </v-btn>

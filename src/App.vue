@@ -60,7 +60,7 @@ export default {
             FirebaseService.alarmOnFirstVisit()
                 .then(token=>{
                     FirebaseService.addToCloudMessagingUserList(token);
-                    console.log(token)
+                    // console.log(token)
                 });
             FirebaseService.onMessageResponse();
         }

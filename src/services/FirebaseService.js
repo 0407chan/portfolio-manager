@@ -705,7 +705,7 @@ export default {
     },
     onMessageResponse() {
         return fireMessage.onMessage(function (payload) {
-        	console.log(payload)
+        	// console.log(payload)
 			if (payload.data.messageAbout === "Create") {
 				var notification = new Notification('EEEAZY Notification', {
 					icon: 'https://i.imgur.com/wxV4WcW.png',
