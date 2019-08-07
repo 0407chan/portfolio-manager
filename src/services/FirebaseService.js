@@ -35,7 +35,9 @@ firebase.initializeApp(config)
 const firestore = firebase.firestore();
 // const firestorage = firebase.storage();
 const fireFunctions = firebase.functions();
-const fireMessage  = firebase.messaging();
+if (firebase.messaging.isSupported()){
+	const fireMessage  = firebase.messaging();
+}
 
 
 export default {
@@ -453,7 +455,7 @@ export default {
 			"created_at": user.created_at,
 			"current_at": user.current_at,
 			"userImageUrl": user.userImageUrl,
-			"isPortfoiloOpen": user.isPortfoiloOpen,
+			"isPortfolioOpen": user.isPortfolioOpen,
 			"isPostOpen": user.isPostOpen,
 			"isCommentOpen": user.isCommentOpen,
 		})
@@ -578,7 +580,7 @@ export default {
 			current_at:"",
 			userImageUrl:"",
 			isPostOpen:true,
-			isPortfoiloOpen:true,
+			isPortfolioOpen:true,
 			isCommentOpen:true,
 
 		}).then(function(result){
@@ -688,6 +690,7 @@ export default {
  \ push 함수들   \
 	\**************************/
 	alarmOnFirstVisit() {
+		if (window.Notification) {
         return fireMessage.requestPermission()
             .then(function () {
                 return fireMessage.getToken().then(idToken=>{
@@ -696,7 +699,8 @@ export default {
             })
             .catch(function (err) {
                 console.log(err + 'occured')
-            })
+			})
+		}
     },
     onMessageResponse() {
         return fireMessage.onMessage(function (payload) {
