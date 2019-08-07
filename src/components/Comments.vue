@@ -12,74 +12,91 @@
             <img :src="comment.userImageUrl" @click="imageview(comment.userImageUrl)" style="cursor: pointer">
           </v-avatar>
         </template>
-        <template>
-          <router-link :to="{ name: 'userinfo', params: {id:comment.userId}}"> {{comment.name}} </router-link>
-        </template>
+
         <v-layout justify-space-between wrap align-center>
-          <v-flex xs7 sm8 v-if="!comment.isModify" style="background-color: #EDEDED; border-radius: 10px">
-            {{comment.body}}
-          </v-flex>
-          <v-flex xs1 sm1 v-if="!comment.isModify">
-            <v-btn @click="ReCommentForm(comment)" fab dark class="mr-2 large_comment_btn" hover color="four">
-              <v-icon size="15">fa-reply</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs7 sm8 v-if="comment.isModify">
-            <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyComment(comment)"></v-text-field>
-          </v-flex>
-          <v-flex xs1 sm1 text-xs-right v-if="comment.isModify">
-            <v-btn fab dark v-if="useremail === comment.email" @click="modifyComment(comment)" class="mr-2 modifyComment_btn" hover color="four">
-              <v-icon size="15">
-                fa-pencil
-              </v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs2 sm2 text-xs-center fill-height>
-            {{comment.created_at.getMonth()+1}}.
-            {{comment.created_at.getDate()}}
-            {{addZeros(comment.created_at.getHours())}}:
-            {{addZeros(comment.created_at.getMinutes())}}
-          </v-flex>
-          <v-flex xs2 sm1 text-xs-right>
-            <v-icon v-if="useremail === comment.email" @click="modifyCommentForm(comment)" size="17" class="mr-2 small_comment_btn" hover color="three">create</v-icon>
-            <v-icon v-if="useremail === comment.email" @click="deleteComment(comment.id)" size="17" class="mr-2 small_comment_btn" hover color="two">delete</v-icon>
-          </v-flex>
+            <v-flex xs10>
+              <router-link :to="{ name: 'userinfo', params: {id:comment.userId}}"> {{comment.name}} </router-link>
+              {{comment.created_at.getFullYear()}}.
+              {{comment.created_at.getMonth()+1}}.
+              {{comment.created_at.getDate()}}
+              {{addZeros(comment.created_at.getHours())}}:
+              {{addZeros(comment.created_at.getMinutes())}}
+              <v-btn @click="ReCommentForm(comment)" fab dark class="mr-2 large_comment_btn" hover color="four">
+                <v-icon size="15">fa-reply</v-icon>
+              </v-btn>
 
-          <v-flex xs7 sm8 v-if="comment.reply">
-            <v-text-field v-model="reComment" :value='comment.body' @keyup.enter="postReComment(comment)"></v-text-field>
-          </v-flex>
-          <v-flex xs1 sm1 text-xs-right v-if="comment.reply">
-            <v-btn fab dark @click="postReComment(comment)" class="mr-2 large_comment_btn" hover color="four">
-              <v-icon size="15">
-                fa-pencil
-              </v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs4 sm3 v-if="comment.reply">
-          </v-flex>
+              <template v-if="!comment.isModify">
+                <div style="background-color: #EDEDED; border-radius: 10px">{{comment.body}}</div>
+              </template>
+              <template v-else>
+                <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyComment(comment)"></v-text-field>
+              </template>
+            </v-flex>
 
-          <!-- <v-flex xs12>
-            <ReComment></ReComment>
-          </v-flex> -->
+            <template v-if="!comment.isModify">
+              <v-flex xs2 text-xs-center>
+                <v-btn fab flat small color="three" v-if="useremail === comment.email" @click="modifyCommentForm(comment)">
+                  <v-icon size="17">create</v-icon>
+                </v-btn>
+                <v-btn fab flat small color="two" v-if="useremail === comment.email" @click="deleteComment(comment.id)">
+                  <v-icon size="17">delete</v-icon>
+                </v-btn>
+              </v-flex>
+            </template>
+            <template v-else>
+              <v-flex xs2 text-xs-center>
+                <template v-if="isCommentModify">
+                  <v-btn fab dark small color="four" @click="modifyComment(comment)" hover > <v-icon size="17"> create</v-icon></v-btn>
+                </template>
+                <template v-else>
+                  <v-btn fab small disabled>
+                    <v-icon size="17">create</v-icon>
+                  </v-btn>
+                </template>
 
-        </v-layout>
+                <v-btn fab dark small color="red"  @click="modifyCommentForm(comment)" hover > <v-icon size="17"> cancel</v-icon></v-btn>
+              </v-flex>
+            </template>
+
+            <template v-if="comment.reply">
+              <v-flex xs10>
+                <v-text-field v-model="reComment" :value='comment.body' @keyup.enter="postReComment(comment)"></v-text-field>
+              </v-flex>
+              <v-flex xs2 text-xs-center>
+                <v-btn fab dark small hover color="four" @click="postReComment(comment)"><v-icon size="17">create</v-icon></v-btn>
+                <v-btn fab dark small hover color="red"  @click="ReCommentForm(comment)"><v-icon size="17">cancel</v-icon></v-btn>
+              </v-flex>
+            </template>
+          </v-layout>
+
       </v-timeline-item>
     </v-timeline>
     <v-flex xs12 v-if="index === limit_Comment" text-xs-center>
-      <v-btn fab dark icon flat @click="morePortfolioComments(limit_Comment)" class="two large_comment_btn">
+      <v-btn fab dark icon flat @click="moreComments(limit_Comment)" class="two large_comment_btn">
         <v-icon size="20">keyboard_arrow_down</v-icon>
       </v-btn>
     </v-flex>
   </v-flex>
   <!-- portfolio comment, need authority -->
-  <v-flex xs9>
-    <v-text-field v-if="username" v-model="comment_input"  autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
-  </v-flex>
-  <v-flex xs3 text-xs-right>
-    <v-btn v-if="username" round color="four" dark @click="postComment" class="portfolio_btn">
-      <v-icon size="17" class="mr-2">fa-pencil</v-icon>Write
-    </v-btn>
-  </v-flex>
+  <template v-if="username">
+    <v-layout justify-space-between wrap align-center>
+      <v-flex xs10 text-xs-center>
+        <v-text-field v-model="comment_input" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
+      </v-flex>
+      <v-flex xs2 text-xs-center>
+        <template v-if="isComment">
+          <v-btn round color="four" dark @click="postComment">
+            <v-icon size="17" class="mr-2">create</v-icon>Write
+          </v-btn>
+        </template>
+        <template v-else>
+          <v-btn round disabled>
+            <v-icon size="17" class="mr-2">create</v-icon>Write
+          </v-btn>
+        </template>
+      </v-flex>
+    </v-layout>
+  </template>
 </v-layout>
 </template>
 
@@ -122,7 +139,11 @@ export default {
       comments: [],
       users: [],
       newComment: '',
+
       comment_input: '',
+      isComment:false,
+      isCommentModify:false,
+
       rules: {
         required: value => !!value || "Required.",
       },
@@ -167,7 +188,7 @@ export default {
       this.newComment = comment.body;
     },
     async postComment() {
-      if(this.comment_input.length != 0 && !this.btnCheck){
+      if(!this.btnCheck){
         this.btnCheck = true;
         let result = await FirebaseService.getUserData();
         let res = await FirebaseService.postComment(this.id, this.classify, this.comment_input, result.name, result.userImageUrl);
@@ -221,6 +242,25 @@ export default {
       }
       img.src = url;
     },
+  },
+
+
+  watch:{
+    comment_input(){
+      if(this.comment_input.length == 0){
+        this.isComment = false;
+      }else {
+        this.isComment = true;
+      }
+    },
+
+    newComment(){
+      if(this.newComment.length ==0){
+        this.isCommentModify = false;
+      }else {
+        this.isCommentModify = true;
+      }
+    }
   }
 }
 </script>

@@ -171,8 +171,7 @@
                       {{props.item.body}}
                     </v-flex>
                     <v-flex v-if="props.item.isModify">
-                      <v-text-field v-if="props.item.classify=='post'"      v-model="newComment" :value='props.item.body' @keyup.enter="modifyComment(props.item)"></v-text-field>
-                      <v-text-field v-if="props.item.classify=='portfolio'" v-model="newComment" :value='props.item.body' @keyup.enter="modifyPortfolioComment(props.item)"></v-text-field>
+                      <v-text-field v-model="newComment" :value='props.item.body' @keyup.enter="modifyComment(props.item)"></v-text-field>
                     </v-flex>
                   </td>
                   <td>{{ props.item.classify}}</td>
@@ -180,14 +179,12 @@
                   <td>
                     <template v-if="isOwner">
                       <template v-if="props.item.isModify">
-                        <v-btn fab dark small color="four" v-if="props.item.classify=='post'" @click="modifyComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
-                        <v-btn fab dark small color="four" v-if="props.item.classify=='portfolio'"@click="modifyPortfolioComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
-                        <v-btn fab dark small color="red"  @click="modifyCommentForm(props.item)" hover > <v-icon size="17"> cancel</v-icon></v-btn>
+                        <v-btn fab dark small color="four" hover @click="modifyComment(props.item)"    ><v-icon size="17">create</v-icon></v-btn>
+                        <v-btn fab dark small color="red"  hover @click="modifyCommentForm(props.item)"><v-icon size="17">cancel</v-icon></v-btn>
                       </template>
                       <template v-else>
                         <v-btn fab flat small color="three" v-on:click="modifyCommentForm(props.item)"><v-icon size="17">create</v-icon></v-btn>
-                        <v-btn fab flat small color="two"   v-on:click="deleteComment(props.item)"          v-if="props.item.classify=='post'"><v-icon size="17">delete</v-icon></v-btn>
-                        <v-btn fab flat small color="two"   v-on:click="deletePortfolioComment(props.item)" v-if="props.item.classify=='portfolio'"><v-icon size="17">delete</v-icon></v-btn>
+                        <v-btn fab flat small color="two"   v-on:click="deleteComment(props.item)"    ><v-icon size="17">delete</v-icon></v-btn>
                       </template>
                     </template>
                   </td>
@@ -252,6 +249,7 @@ export default {
       //Comment data
       portfolioComments:[],
       postComments:[],
+      comments:[],
       commnetHeaders:[
         { text: 'Title', value: 'title', sortable: false, align: 'center' },
         { text: 'Classify', value: 'classify', sortable: false, align: 'center' },
@@ -414,41 +412,22 @@ export default {
       }
     },
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                      현재 작업 중                                                 //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-
     async getComments(){
-      this.portfolioComments = await FirebaseService.getPortfolioCommentsById(this.id);
-      this.postComments = await FirebaseService.getPostCommentsById(this.id);
+      this.comments = await FirebaseService.getCommentsById(this.id);
       this.commentSearchList = [];
-      for(var i =0; i<this.portfolioComments.length; i++){
-        this.portfolioComments[i].classify = "portfolio";
-        if(this.portfolioComments[i].body.length >= 15){
-          this.portfolioComments[i].subTitle = this.portfolioComments[i].body.substring(0, 15)+"⋯"
+      for(var i =0; i<this.comments.length; i++){
+        if(this.comments[i].body.length >= 15){
+          this.comments[i].subTitle = this.comments[i].body.substring(0, 15)+"⋯"
         }
-        this.commentSearchList.push(this.portfolioComments[i]);
-      }
-      for(var i =0; i<this.postComments.length; i++){
-        this.postComments[i].classify = "post";
-        if(this.postComments[i].body.length >= 15){
-          this.postComments[i].subTitle = this.postComments[i].body.substring(0, 15)+"⋯"
-        }
-        this.commentSearchList.push(this.postComments[i]);
+        this.commentSearchList.push(this.comments[i]);
       }
     },
 
-    async modifyPortfolioComment(comment){
-      var temp = this.newComment;
-      await FirebaseService.modifyPortfolioComment(comment, this.newComment);
-      this.modifyCommentForm(comment);
-      comment.body = temp;
-    },
     async modifyComment(comment){
       var temp = this.newComment;
       await FirebaseService.modifyComment(comment, this.newComment);
       this.modifyCommentForm(comment);
-      comment.body =temp;
+      comment.body = temp;
     },
 
     modifyCommentForm(comment) {
@@ -458,18 +437,12 @@ export default {
         comment.isModify = true;
       }
       this.newComment = comment.body;
-      //await FirebaseService.canModify(comment);
-    },
-    async deleteComment(comment){
-      await FirebaseService.deleteComment(comment.postId, comment.id);
-      this.commentSearchList = this.arrayRemove(this.commentSearchList,comment);
-      this.postComments = this.arrayRemove(this.postComments,comment);
     },
 
-    async deletePortfolioComment(comment){
-      await FirebaseService.deletePortfolioComment(comment.portfolioId, comment.id);
+    async deleteComment(comment){
+      await FirebaseService.deleteComment(comment.parentId, comment.classify, comment.id);
       this.commentSearchList = this.arrayRemove(this.commentSearchList,comment);
-      this.portfolioComments = this.arrayRemove(this.portfolioComments,comment);
+      this.comments = this.arrayRemove(this.comments,comment);
     },
 
     arrayRemove(arr, value) {
@@ -546,17 +519,11 @@ export default {
           }
           this.postSearchList.push(this.posts[i]);
         }
-        for(var i =0; i<this.portfolioComments.length; i++){
-          if(this.portfolioComments[i].body.length >= 15){
-            this.portfolioComments[i].subTitle = this.portfolioComments[i].body.substring(0, 15)+"⋯"
+        for(var i =0; i<this.comments.length; i++){
+          if(this.comments[i].body.length >= 15){
+            this.comments[i].subTitle = this.comments[i].body.substring(0, 15)+"⋯"
           }
-          this.commentSearchList.push(this.portfolioComments[i]);
-        }
-        for(var i =0; i<this.postComments.length; i++){
-          if(this.postComments[i].body.length >= 15){
-            this.postComments[i].subTitle = this.postComments[i].body.substring(0, 15)+"⋯"
-          }
-          this.commentSearchList.push(this.postComments[i]);
+          this.commentSearchList.push(this.comments[i]);
         }
 
       } else {
@@ -581,19 +548,12 @@ export default {
           }
         }
 
-        for(var i =0; i<this.portfolioComments.length; i++){
-          var body = this.portfolioComments[i].body.toLowerCase()
+        for(var i =0; i<this.comments.length; i++){
+          var body = this.comments[i].body.toLowerCase()
           if (body.includes(search) ) {
-            this.commentSearchList.push(this.portfolioComments[i]);
+            this.commentSearchList.push(this.comments[i]);
           }
         }
-        for(var i =0; i<this.postComments.length; i++){
-          var body = this.postComments[i].body.toLowerCase()
-          if (body.includes(search) ) {
-            this.commentSearchList.push(this.postComments[i]);
-          }
-        }
-
       }
     },
 
