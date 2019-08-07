@@ -13,11 +13,22 @@
       </v-flex>
       <v-flex xs12 md6>
         <v-flex xs12 text-xs-center>
-          <h2>{{portfolio.title}} </h2>
+          <h2>{{portfolio.title}}</h2>
         </v-flex>
         <v-flex xs12>
-          <br><hr><br>
+          <br><hr>
         </v-flex>
+        <v-flex xs12 text-xs-right>
+          {{portfolio.created_at.getFullYear()}}.
+          {{portfolio.created_at.getMonth()+1}}.
+          {{portfolio.created_at.getDate()}}
+        </v-flex>
+        <v-flex xs12 text-xs-right>
+          <router-link :to="{ name: 'userinfo', params: {id: portfolio.userId}}">
+            by.{{result.name}}
+          </router-link>
+        </v-flex>
+        <br>
         <v-flex xs12 test-xs-left>
           <vue-markdown :source="portfolio.body"></vue-markdown>
         </v-flex>
@@ -65,7 +76,8 @@ export default {
       img: '',
       index: 0,
       portfolio: '',
-      user: ""
+      user: "",
+      result:"",
     }
   },
   created() {
@@ -101,6 +113,9 @@ export default {
     },
     async getPortfolio(id) {
       this.portfolio = await FirebaseService.getPortfolio(id);
+      if(this.portfolio.userId){
+        this.result = await FirebaseService.getUser(this.portfolio.userId)
+      }
     },
   }
 }
