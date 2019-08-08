@@ -156,6 +156,7 @@ export default {
 					data.title = doc.data().title;
 					data.body = doc.data().body;
 					data.img = doc.data().img;
+					data.created_at = new Date(data.created_at.toDate())
 					data.id = id;
 					return data;
 				} else {
