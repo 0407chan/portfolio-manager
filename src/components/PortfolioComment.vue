@@ -133,11 +133,11 @@ export default {
   methods: {
     async deletePortfolioComment(commentId){
       await FirebaseService.deletePortfolioComment(this.id, commentId);
-      this.getPortfolioComments(this.id);
+      await this.getPortfolioComments(this.id);
     },
     async modifyPortfolioComment(comment) {
       await FirebaseService.modifyPortfolioComment(comment, this.newComment);
-      this.getPortfolioComments(this.id);
+      await this.getPortfolioComments(this.id);
     },
     async modifyPortfolioCommentForm(comment) {
       if (comment.isModify) {

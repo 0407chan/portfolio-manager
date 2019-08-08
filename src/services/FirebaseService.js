@@ -214,35 +214,6 @@ export default {
 			email: store.state.user.email
 		})
 	},
-	modifyComment(comment, newComment){
-		return firestore.collection(POSTCOMMENTS).doc(comment.id).update({
-			"body": newComment,
-			"created_at": comment.created_at,
-			"isModify": false,
-			"name": comment.name,
-			"postId": comment.postId,
-			"userImageUrl": comment.userImageUrl,
-			"email": store.state.user.email,
-			"userId":store.state.user.uid,
-		})
-	},
-	deleteComment(postId, commentId){
-		var userId = firebase.auth().currentUser.uid;
-		firestore.collection(USERS).doc(userId).update({
-    		postcomments: firebase.firestore.FieldValue.arrayRemove(commentId),
-		});
-		firestore.collection(POSTS).doc(postId).update({
-    		comments: firebase.firestore.FieldValue.arrayRemove(commentId),
-		});
-
-		return firestore.collection(POSTCOMMENTS).doc(commentId).delete().then(function() {
-
-		}).catch(function(error) {
-				console.error("Error removing postComment: ", error);
-		});
-	},
-
-
 
 	/********************\
  \   Portfolio 함수들   \
@@ -410,6 +381,9 @@ export default {
 		});
 	},
 
+
+
+
 	/**************************\
  \       Comment 함수들       \
 	\**************************/
@@ -449,18 +423,35 @@ export default {
 	getComments(parentId) {
 		const commentCollection = firestore.collection(COMMENTS)
 		return commentCollection
-				.where("parentId", "==", parentId)
-				.orderBy("created_at", 'desc')
-				.get()
-				.then((docSnapshots) => {
-					return docSnapshots.docs.map((doc) => {
-						let data = doc.data()
-						data.id = doc.id;
-						data.created_at = new Date(data.created_at.toDate())
-						return data
-					})
+			.where("parentId", "==", parentId)
+			.orderBy("created_at", 'desc')
+			.get()
+			.then((docSnapshots) => {
+				return docSnapshots.docs.map((doc) => {
+					let data = doc.data()
+					data.id = doc.id;
+					data.created_at = new Date(data.created_at.toDate())
+					return data
 				})
+			})
 	},
+
+	getCommentsById(userId) {
+		const portfolioCommentCollection = firestore.collection(COMMENTS)
+		return portfolioCommentCollection
+			.where("userId", "==", userId)
+			.orderBy("created_at", 'desc')
+			.get()
+			.then((docSnapshots) => {
+				return docSnapshots.docs.map((doc) => {
+					let data = doc.data()
+					data.id = doc.id;
+					data.created_at = new Date(data.created_at.toDate())
+					return data
+				})
+			})
+	},
+
 	deleteComment(parentId, classify, commentId){
 		var userId = firebase.auth().currentUser.uid;
 		firestore.collection(USERS).doc(userId).update({

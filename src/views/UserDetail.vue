@@ -117,12 +117,8 @@
                 <template v-slot:items="props">
                   <!-- <td><p class="testbody"> {{ props.item.title }} </p></td> -->
                   <td>
-                    <template v-if="props.item.subTitle">
-                      <router-link :to="{ name: 'portfolioview', params: {id:props.item.id}}">{{ props.item.subTitle }} </router-link>
-                    </template>
-                    <template v-else>
-                      <router-link :to="{ name: 'portfolioview', params: {id:props.item.id}}"> {{ props.item.title }} </router-link>
-                    </template>
+                      <router-link v-if="props.item.subTitle"  :to="{ name: 'portfolioview', params: {id:props.item.id}}">{{ props.item.subTitle }} </router-link>
+                      <router-link v-if="!props.item.subTitle" :to="{ name: 'portfolioview', params: {id:props.item.id}}"> {{ props.item.title }} </router-link>
                     <template v-if="props.item.comments"> ({{props.item.comments.length}})</template>
                   </td>
                   <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
@@ -132,14 +128,12 @@
                       <v-btn fab flat small color ="two" v-on:click="deletePortfolio(props.item)"><v-icon size="17">delete</v-icon></v-btn>
                     </template>
                   </td>
-                  <!-- </template> -->
                 </template>
 
               </v-data-table>
             </v-flex>
           </v-card>
         </v-tab-item>
-
 
 
         <v-tab-item :value="'tab-'+3"  transition="fade-transition" reverse-transition="fade-transition">
@@ -177,15 +171,7 @@
                       {{props.item.body}}
                     </v-flex>
                     <v-flex v-if="props.item.isModify">
-                      <template v-if="props.item.classify=='post'">
-                        <v-text-field v-model="newComment" :value='props.item.body' @keyup.enter="modifyComment(props.item)"></v-text-field>
-                      </template>
-                      <template v-if="props.item.classify=='portfolio'">
-                        <v-text-field v-model="newComment" :value='props.item.body' @keyup.enter="modifyPortfolioComment(props.item)"></v-text-field>
-                      </template>
-                    </v-flex>
-                    <v-flex text-xs-right v-if="props.item.isModify">
-
+                      <v-text-field v-model="newComment" :value='props.item.body' @keyup.enter="modifyComment(props.item)"></v-text-field>
                     </v-flex>
                   </td>
                   <td>{{ props.item.classify}}</td>
@@ -193,33 +179,20 @@
                   <td>
                     <template v-if="isOwner">
                       <template v-if="props.item.isModify">
-                        <template v-if="props.item.classify=='post'">
-                          <v-btn fab dark small color="four" @click="modifyComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
-                        </template>
-                        <template v-if="props.item.classify=='portfolio'">
-                          <v-btn fab dark small color="four" @click="modifyPortfolioComment(props.item)" hover > <v-icon size="17"> fa-pencil</v-icon></v-btn>
-                        </template>
-                        <v-btn fab dark small color="red"  @click="modifyCommentForm(props.item)" hover > <v-icon size="17"> cancel</v-icon></v-btn>
+                        <v-btn fab dark small color="four" hover @click="modifyComment(props.item)"    ><v-icon size="17">create</v-icon></v-btn>
+                        <v-btn fab dark small color="red"  hover @click="modifyCommentForm(props.item)"><v-icon size="17">cancel</v-icon></v-btn>
                       </template>
                       <template v-else>
                         <v-btn fab flat small color="three" v-on:click="modifyCommentForm(props.item)"><v-icon size="17">create</v-icon></v-btn>
-                        <template v-if="props.item.classify=='post'">
-                          <v-btn fab flat small color="two"   v-on:click="deleteComment(props.item)"><v-icon size="17">delete</v-icon></v-btn>
-                        </template>
-                        <template v-if="props.item.classify=='portfolio'">
-                          <v-btn fab flat small color="two"   v-on:click="deletePortfolioComment(props.item)"><v-icon size="17">delete</v-icon></v-btn>
-                        </template>
+                        <v-btn fab flat small color="two"   v-on:click="deleteComment(props.item)"    ><v-icon size="17">delete</v-icon></v-btn>
                       </template>
                     </template>
                   </td>
                 </template>
-
               </v-data-table>
             </v-flex>
           </v-card>
         </v-tab-item>
-
-
 
       </v-tabs-items>
     </v-card>
@@ -276,6 +249,7 @@ export default {
       //Comment data
       portfolioComments:[],
       postComments:[],
+      comments:[],
       commnetHeaders:[
         { text: 'Title', value: 'title', sortable: false, align: 'center' },
         { text: 'Classify', value: 'classify', sortable: false, align: 'center' },
@@ -438,41 +412,22 @@ export default {
       }
     },
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                      현재 작업 중                                                 //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-
     async getComments(){
-      this.portfolioComments = await FirebaseService.getPortfolioCommentsById(this.id);
-      this.postComments = await FirebaseService.getPostCommentsById(this.id);
+      this.comments = await FirebaseService.getCommentsById(this.id);
       this.commentSearchList = [];
-      for(var i =0; i<this.portfolioComments.length; i++){
-        this.portfolioComments[i].classify = "portfolio";
-        if(this.portfolioComments[i].body.length >= 15){
-          this.portfolioComments[i].subTitle = this.portfolioComments[i].body.substring(0, 15)+"⋯"
+      for(var i =0; i<this.comments.length; i++){
+        if(this.comments[i].body.length >= 15){
+          this.comments[i].subTitle = this.comments[i].body.substring(0, 15)+"⋯"
         }
-        this.commentSearchList.push(this.portfolioComments[i]);
-      }
-      for(var i =0; i<this.postComments.length; i++){
-        this.postComments[i].classify = "post";
-        if(this.postComments[i].body.length >= 15){
-          this.postComments[i].subTitle = this.postComments[i].body.substring(0, 15)+"⋯"
-        }
-        this.commentSearchList.push(this.postComments[i]);
+        this.commentSearchList.push(this.comments[i]);
       }
     },
 
-    async modifyPortfolioComment(comment){
-      var temp = this.newComment;
-      await FirebaseService.modifyPortfolioComment(comment, this.newComment);
-      this.modifyCommentForm(comment);
-      comment.body = temp;
-    },
     async modifyComment(comment){
       var temp = this.newComment;
       await FirebaseService.modifyComment(comment, this.newComment);
       this.modifyCommentForm(comment);
-      comment.body =temp;
+      comment.body = temp;
     },
 
     modifyCommentForm(comment) {
@@ -482,18 +437,12 @@ export default {
         comment.isModify = true;
       }
       this.newComment = comment.body;
-      //await FirebaseService.canModify(comment);
-    },
-    async deleteComment(comment){
-      await FirebaseService.deleteComment(comment.postId, comment.id);
-      this.commentSearchList = this.arrayRemove(this.commentSearchList,comment);
-      this.postComments = this.arrayRemove(this.postComments,comment);
     },
 
-    async deletePortfolioComment(comment){
-      await FirebaseService.deletePortfolioComment(comment.portfolioId, comment.id);
+    async deleteComment(comment){
+      await FirebaseService.deleteComment(comment.parentId, comment.classify, comment.id);
       this.commentSearchList = this.arrayRemove(this.commentSearchList,comment);
-      this.portfolioComments = this.arrayRemove(this.portfolioComments,comment);
+      this.comments = this.arrayRemove(this.comments,comment);
     },
 
     arrayRemove(arr, value) {
@@ -501,8 +450,6 @@ export default {
            return ele != value;
        });
     },
-
-
 
     async deleteUser(user) {
       await FirebaseService.deleteUserbyId(user.id);
@@ -572,17 +519,11 @@ export default {
           }
           this.postSearchList.push(this.posts[i]);
         }
-        for(var i =0; i<this.portfolioComments.length; i++){
-          if(this.portfolioComments[i].body.length >= 15){
-            this.portfolioComments[i].subTitle = this.portfolioComments[i].body.substring(0, 15)+"⋯"
+        for(var i =0; i<this.comments.length; i++){
+          if(this.comments[i].body.length >= 15){
+            this.comments[i].subTitle = this.comments[i].body.substring(0, 15)+"⋯"
           }
-          this.commentSearchList.push(this.portfolioComments[i]);
-        }
-        for(var i =0; i<this.postComments.length; i++){
-          if(this.postComments[i].body.length >= 15){
-            this.postComments[i].subTitle = this.postComments[i].body.substring(0, 15)+"⋯"
-          }
-          this.commentSearchList.push(this.postComments[i]);
+          this.commentSearchList.push(this.comments[i]);
         }
 
       } else {
@@ -607,19 +548,12 @@ export default {
           }
         }
 
-        for(var i =0; i<this.portfolioComments.length; i++){
-          var body = this.portfolioComments[i].body.toLowerCase()
+        for(var i =0; i<this.comments.length; i++){
+          var body = this.comments[i].body.toLowerCase()
           if (body.includes(search) ) {
-            this.commentSearchList.push(this.portfolioComments[i]);
+            this.commentSearchList.push(this.comments[i]);
           }
         }
-        for(var i =0; i<this.postComments.length; i++){
-          var body = this.postComments[i].body.toLowerCase()
-          if (body.includes(search) ) {
-            this.commentSearchList.push(this.postComments[i]);
-          }
-        }
-
       }
     },
 
@@ -627,7 +561,16 @@ export default {
       this.id= this.$route.params.id;
       this.pageuser = await FirebaseService.getUser(this.id);
       this.imageUrl = this.pageuser.userImageUrl;
-      this.isOwner = true;
+
+      if(this.user.uid == this.pageuser.id){
+        this.isOwner = true;
+      }else {
+        this.isOwner = false;
+      }
+      this.getPortfolios();
+      this.getPosts();
+      this.getComments();
+
     }
 
   },

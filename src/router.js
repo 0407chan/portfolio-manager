@@ -79,9 +79,9 @@ export default new Router({
 			component: AdminPage
   	},
   	{
-  			path: '/userinfo/:id',
-  			name: 'userinfo',
-  			component: UserDetail
+			path: '/userinfo/:id',
+			name: 'userinfo',
+			component: UserDetail
   	},
 
 
