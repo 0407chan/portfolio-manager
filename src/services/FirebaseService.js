@@ -9,8 +9,6 @@ const POSTS = 'posts'
 const PORTFOLIOS = 'portfolios'
 const PAGELOGS = 'pagelogs'
 const USERS = 'users'
-const POSTCOMMENTS = "postcomments"
-const PORTFOLIOCOMMENTS = 'portfoliocomments'
 const TOKENS = 'tokens'
 const COMMENTS = 'comments'
 
@@ -37,7 +35,7 @@ firebase.initializeApp(config)
 const firestore = firebase.firestore();
 // const firestorage = firebase.storage();
 const fireFunctions = firebase.functions();
-const fireMessage  = firebase.messaging();
+// const fireMessage  = firebase.messaging();
 if (firebase.messaging.isSupported()){
 	const fireMessage  = firebase.messaging();
 }
@@ -272,7 +270,6 @@ export default {
 				})
 			})
 	},
-
 	getCommentsById(userId) {
 		const portfolioCommentCollection = firestore.collection(COMMENTS)
 		return portfolioCommentCollection
@@ -288,7 +285,6 @@ export default {
 				})
 			})
 	},
-
 	deleteComment(parentId, classify, commentId){
 		var userId = firebase.auth().currentUser.uid;
 		firestore.collection(USERS).doc(userId).update({
@@ -298,9 +294,13 @@ export default {
 			firestore.collection(POSTS).doc(parentId).update({
 				comments: firebase.firestore.FieldValue.arrayRemove(commentId),
 			});
-		}else{
+		}else if(classify == 'fortfolio'){
 			firestore.collection(PORTFOLIOS).doc(parentId).update({
 				comments: firebase.firestore.FieldValue.arrayRemove(commentId),
+			});
+		}else if(classify == 'recomment'){
+			firestore.collection(COMMENTS).doc(parentId).update({
+				recomments: firebase.firestore.FieldValue.arrayRemove(commentId),
 			});
 		}
 		return firestore.collection(COMMENTS).doc(commentId).delete().then(function() {
@@ -320,6 +320,12 @@ export default {
 			"userImageUrl": comment.userImageUrl,
 			"email": store.state.user.email,
 			"userId":store.state.user.uid,
+		})
+	},
+	// comment의 recomments배열 속성에 recomment ID 추가하는 함수
+	addToReCommentList(parentId, reCommentId){
+		return firestore.collection(COMMENTS).doc(parentId).update({
+			recomments: firebase.firestore.FieldValue.arrayUnion(reCommentId),
 		})
 	},
 

@@ -51,7 +51,6 @@ import PortfolioList from '../components/PortfolioList'
 import Portfolio from '@/components/Portfolio'
 import firebase from "firebase/app"
 import firebaseApp from 'firebase/app'
-import PortfolioComment from '../components/PortfolioComment'
 import Comments from '../components/Comments'
 
 
@@ -80,7 +79,6 @@ export default {
   components: {
     ImgBanner,
     PortfolioList,
-    PortfolioComment,
     Comments,
   },
 
