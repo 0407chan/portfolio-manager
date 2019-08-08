@@ -106,7 +106,8 @@ export default {
             userId,
             created_at: firebase.firestore.FieldValue.serverTimestamp(),
             email: store.state.user.email,
-            name: name
+            name: name,
+            classify: 'post'
         }).then(function (docRef) {
             return docRef.id;
         })
@@ -216,7 +217,8 @@ export default {
             name,
             userId: id,
             created_at: firebase.firestore.FieldValue.serverTimestamp(),
-            email: store.state.user.email
+            email: store.state.user.email,
+            classify: 'portfolio'
         }).then(function (docRef) {
             return docRef.id;
         })
@@ -610,24 +612,79 @@ export default {
         return fireMessage.onMessage(function (payload) {
             // console.log(payload)
                 if (payload.data.messageAbout === "Create") {
-                    Vue.notify({
-                        group: 'foo',
-                        type: 'warn',
-                        title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.title + "&nbsp" + ">",
-                        text: "새글이 등록되었습니다.\n",
-                        duration: 5000,
-                    });
-
+                    if (payload.data.classify === "portfolio" && !payload.data.body) {
+                        Vue.notify({
+                            group: 'foo',
+                            type: 'warn',
+                            title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.title + "&nbsp" + ">",
+                            text: "새로운 포트폴리오가 등록되었습니다.",
+                            duration: 5000,
+                        });
+                    } else if(payload.data.classify === 'post' && !payload.data.body) {
+                        Vue.notify({
+                            group: 'foo',
+                            type: 'warn',
+                            title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.title + "&nbsp" + ">",
+                            text: "새로운 포스트가 등록되었습니다.",
+                            duration: 5000,
+                        });
+                    } else if(payload.data.body) {
+                        if (payload.data.classify === "portfolio") {
+                            Vue.notify({
+                                group: 'foo',
+                                type: 'warn',
+                                title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.body + "&nbsp" + ">",
+                                text: "포트폴리오에 새로운 댓글이 등록되었습니다.",
+                                duration: 5000,
+                            });
+                        } else if(payload.data.classify === 'post') {
+                            Vue.notify({
+                                group: 'foo',
+                                type: 'warn',
+                                title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.body + "&nbsp" + ">",
+                                text: "포스트에 새로운 댓글이 등록되었습니다",
+                                duration: 5000,
+                            });
+                        }
+                    }
                 } else if (payload.data.messageAbout === "Update") {
 
                 } else if (payload.data.messageAbout === "Delete") {
-                    Vue.notify({
-                        group: 'foo',
-                        type: 'error',
-                        title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.title + "&nbsp" + ">",
-                        text: "글이 삭제되었습니다.\n",
-                        duration: 5000,
-                    });
+                    if (payload.data.classify === "portfolio" && !payload.data.body) {
+                        Vue.notify({
+                            group: 'foo',
+                            type: 'error',
+                            title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.title + "&nbsp" + ">",
+                            text: "포트폴리오가 삭제되었습니다.",
+                            duration: 5000,
+                        });
+                    } else if(payload.data.classify === 'post' && !payload.data.body) {
+                        Vue.notify({
+                            group: 'foo',
+                            type: 'error',
+                            title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.title + "&nbsp" + ">",
+                            text: "포스트가 삭제되었습니다.",
+                            duration: 5000,
+                        });
+                    } else if(payload.data.body) {
+                        if (payload.data.classify === "portfolio") {
+                            Vue.notify({
+                                group: 'foo',
+                                type: 'error',
+                                title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.body + "&nbsp" + ">",
+                                text: "포트폴리오 댓글이 삭제되었습니다.",
+                                duration: 5000,
+                            });
+                        } else if(payload.data.classify === 'post') {
+                            Vue.notify({
+                                group: 'foo',
+                                type: 'error',
+                                title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.body + "&nbsp" + ">",
+                                text: "포스트 댓글이 삭제되었습니다",
+                                duration: 5000,
+                            });
+                        }
+                    }
                 }
         });
     },
