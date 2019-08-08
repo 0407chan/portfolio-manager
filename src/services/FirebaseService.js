@@ -37,7 +37,7 @@ firebase.initializeApp(config)
 const firestore = firebase.firestore();
 // const firestorage = firebase.storage();
 const fireFunctions = firebase.functions();
-const fireMessage  = firebase.messaging();
+// const fireMessage  = firebase.messaging();
 if (firebase.messaging.isSupported()){
 	const fireMessage  = firebase.messaging();
 }
@@ -156,6 +156,7 @@ export default {
 					data.title = doc.data().title;
 					data.body = doc.data().body;
 					data.img = doc.data().img;
+					data.created_at = new Date(data.created_at.toDate())
 					data.id = id;
 					return data;
 				} else {
