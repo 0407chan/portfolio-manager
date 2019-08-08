@@ -117,6 +117,19 @@ export default {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.user = await FirebaseService.getUserData();
+        await FirebaseService.alarmOnFirstVisit()
+                .then(async token=>{
+                  // console.log(token)
+                  var result = await FirebaseService.getUserData();
+                  if (result.classify==='관리자'){
+                    this.isAdmin = true
+                  } else {
+                    this.isAdmin = false
+                  }
+                  // console.log(result)
+                  await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
+                  // console.log(token, result.allowPush)
+                });
       } else {
         this.user = "";
       }

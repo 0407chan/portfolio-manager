@@ -247,6 +247,7 @@ export default {
       // i don't know Data
       edit: false,
       token: '',
+      isAdmin: false,
 
       // Tab Data
       tab : null,
@@ -338,8 +339,13 @@ export default {
               .then(async token=>{
                 // console.log(token)
                 var result = await FirebaseService.getUserData();
+                if (result.classify==='관리자'){
+                  this.isAdmin = true
+                } else {
+                  this.isAdmin = false
+                }
                 // console.log(result)
-                await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush);
+                await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
                 // console.log(token, result.allowPush)
               });
       this.$store.state.user = this.pageuser

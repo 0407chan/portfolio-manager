@@ -702,11 +702,11 @@ export default {
             }
         )
     },
-    updateToCloudMessagingUserList(token, allowPush) {
+    updateToCloudMessagingUserList(token, allowPush, isAdmin) {
         // console.log("updateToCloudMessagingUserList",allowPush)
         return firestore.collection('messageList').doc(token).update({
             "allowPush": allowPush,
-
+            "isAdmin": isAdmin,
         }).then(function (result) {
             // console.log(result)
         }).catch(function (error) {
