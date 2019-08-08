@@ -152,6 +152,7 @@ export default {
       isComment:false,
       isCommentModify:false,
       isReCommentModify:false,
+      childIndex: '',
       rules: {
         required: value => !!value || "Required.",
       },
@@ -228,7 +229,11 @@ export default {
       await FirebaseService.addToReCommentList(comment.id, res);
       this.reComment_input = '';
       await this.getComments(this.id);
-      this.$refs.child[0].getComments(comment.id);
+      console.log(this.$refs.child);
+      for(var i in this.$refs.child){
+        console.log('index : ' + i + ', body : ' + this.$refs.child[i].id);
+        this.$refs.child[i].getComments(this.comments[i].id);
+      }
     },
     ReCommentForm(comment){
       if (comment.reply) {
