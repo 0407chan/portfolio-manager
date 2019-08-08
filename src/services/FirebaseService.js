@@ -37,7 +37,7 @@ firebase.initializeApp(config)
 const firestore = firebase.firestore();
 // const firestorage = firebase.storage();
 const fireFunctions = firebase.functions();
-const fireMessage  = firebase.messaging();
+// const fireMessage  = firebase.messaging();
 if (firebase.messaging.isSupported()){
 	const fireMessage  = firebase.messaging();
 }
