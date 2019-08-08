@@ -87,12 +87,12 @@
                 <v-data-table :headers="userHeaders" :items="userSearchList" class="elevation-1">
                   <template v-slot:items="props">
                     <td>
-                      <router-link v-if="props.item.subTitle"  :to="{ name: 'userinfo', params: {id:props.item.id}}">{{ props.item.subTitle }} </router-link>
-                      <router-link v-if="!props.item.subTitle" :to="{ name: 'userinfo', params: {id:props.item.id}}"> {{ props.item.name }} </router-link>
+                      <router-link v-if="props.item.subTitle"  :to="{ name: 'userinfo', params: {id:props.item.id}}"><span v-html="highlight(props.item.subTitle,search)"></span> </router-link>
+                      <router-link v-if="!props.item.subTitle" :to="{ name: 'userinfo', params: {id:props.item.id}}"><span v-html="highlight(props.item.name,search)"></span></router-link>
                     </td>
-                    <td>{{ props.item.email }}</td>
+                    <td><span v-html="highlight(props.item.email,search)"></span></td>
                     <template v-if="props.item.classify=='관리자'">
-                      <td >🔥{{ props.item.classify }}🔥</td>
+                      <td >🔥<span v-html="highlight(props.item.classify,search)"></span>🔥</td>
                     </template>
                     <template v-else>
                       <td>
@@ -127,12 +127,12 @@
                 <v-data-table :headers="portfolioHeaders" :items="portfolioSearchList" class="elevation-1">
                   <template v-slot:items="props">
                     <td>
-                      <router-link v-if="props.item.subTitle"  :to="{ name: 'portfolioview', params: {id:props.item.id}}">{{ props.item.subTitle }} </router-link>
-                      <router-link v-if="!props.item.subTitle" :to="{ name: 'portfolioview', params: {id:props.item.id}}"> {{ props.item.title }} </router-link>
+                      <router-link v-if="props.item.subTitle"  :to="{ name: 'portfolioview', params: {id:props.item.id}}"><span v-html="highlight(props.item.subTitle,search)"></span></router-link>
+                      <router-link v-if="!props.item.subTitle" :to="{ name: 'portfolioview', params: {id:props.item.id}}"><span v-html="highlight(props.item.title,search)"></span></router-link>
                       <template v-if="props.item.comments"> ({{props.item.comments.length}})</template>
                     </td>
-                    <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.email }}</td>
+                    <td><span v-html="highlight(props.item.name,search)"></span></td>
+                    <td><span v-html="highlight(props.item.email,search)"></span></td>
                     <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
                     <td>
                       <v-btn fab flat small color="three" v-on:click="modifyPortfolio(props.item)"><v-icon size="17">create</v-icon></v-btn>
@@ -158,13 +158,16 @@
               <v-flex xs12 text-xs-center>
                 <v-data-table :headers="postHeaders" :items="postSearchList" class="elevation-1">
                   <template v-slot:items="props">
-                    <td> <template v-if="props.item.subTitle"> {{ props.item.subTitle }} </template>
+                    <td>
+                      <template v-if="props.item.subTitle">
+                        <span v-html="highlight(props.item.subTitle,search)"></span>
+                      </template>
                       <template v-else>
-                        {{ props.item.title }} 
+                        <span v-html="highlight(props.item.title,search)"></span>
                       </template>
                     </td>
-                    <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.email }}</td>
+                    <td><span v-html="highlight(props.item.name,search)"></span></td>
+                    <td><span v-html="highlight(props.item.email,search)"></span></td>
                     <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
                     <td>
                       <v-btn fab flat small color="three" v-on:click="modifyPost(props.item)"><v-icon size="17">create</v-icon></v-btn>
@@ -378,14 +381,11 @@ export default {
       }
     },
 
-    highlight(text) {
-      var inputText = document.getElementById("inputText");
-      var innerHTML = inputText.innerHTML;
-      var index = innerHTML.indexOf(text);
-      if (index >= 0) {
-        innerHTML = innerHTML.substring(0, index) + "<span class='highlight'>" + innerHTML.substring(index, index + text.length) + "</span>" + innerHTML.substring(index + text.length);
-        inputText.innerHTML = innerHTML;
-      }
+    highlight(value,search) {
+      var iQuery = new RegExp(search, "ig");
+      return value.toString().replace(iQuery, function(matchedTxt,a,b){
+          return ('<span class=\'highlight\'>' + matchedTxt + '</span>');
+      });
     }
   },
   watch: {
@@ -418,14 +418,10 @@ export default {
         this.portfolioSearchList= [];
         this.postSearchList= [];
 
-        var lenUser = this.users.length;
-        var lenPortfolio = this.portfolios.length;
-        var lenPost = this.posts.length;
-
         var search = this.search;
         search = search.toLowerCase();
 
-        for (var i = 0; i < lenUser; i++) {
+        for (var i = 0; i < this.users.length; i++) {
           var Usera = this.users[i].name.toLowerCase()
           var Userb = this.users[i].email.toLowerCase()
           var Userc = this.users[i].classify.toLowerCase()
@@ -434,7 +430,7 @@ export default {
           }
         }
 
-        for (var i = 0; i < lenPortfolio; i++) {
+        for (var i = 0; i < this.portfolios.length; i++) {
           var portfolioA = this.portfolios[i].title.toLowerCase()
           var portfolioB = this.portfolios[i].name.toLowerCase()
           var portfolioC = this.portfolios[i].email.toLowerCase()
@@ -443,7 +439,7 @@ export default {
           }
         }
 
-        for (var i = 0; i < lenPost; i++) {
+        for (var i = 0; i < this.posts.length; i++) {
           var postA = this.posts[i].title.toLowerCase()
           var postB = this.posts[i].name.toLowerCase()
           var postC = this.posts[i].email.toLowerCase()

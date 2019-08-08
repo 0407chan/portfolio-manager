@@ -3,7 +3,14 @@
     <v-container v-if="user&&user.classify !=='방문자'">
       <v-layout wrap>
         <v-flex xs12 my-5>
-          <v-text-field v-model="title" :rules="[rules.required]" autofocus label="Title"></v-text-field>
+          <v-text-field
+            v-model="title"
+            :rules="[rules.required]"
+            autofocus label="Title"
+            counter="30"
+            maxlength="30"
+            >
+          </v-text-field>
         </v-flex>
         <v-flex xs12>
           <markdown-editor :highlight="true" v-model="body"></markdown-editor>

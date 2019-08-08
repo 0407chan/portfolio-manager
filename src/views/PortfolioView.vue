@@ -39,7 +39,7 @@
     </v-flex>
 
     <v-flex xs12>
-      <Comments :id="portfolio.id" classify="portfolio"></Comments>
+      <Comments  :id="portfolio.id" classify="portfolio"></Comments>
     </v-flex>
   </v-container>
 </div>
@@ -92,7 +92,7 @@ export default {
       await this.getPortfolio(this.id);
       if(this.portfolio.comments){
         for(var i =0; i<this.portfolio.comments.length; i++)
-        FirebaseService.deletePortfolioComment(this.id, this.portfolio.comments[i]);
+        FirebaseService.deleteComment(this.id, 'portfolio',this.portfolio.comments[i]);
       }
       await FirebaseService.deletePortfolio(this.id);
       this.$router.push({

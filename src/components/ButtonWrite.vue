@@ -52,7 +52,7 @@
       mounted(){
         this.init();
         this.getUserData();
-        
+
       },
       methods: {
         init(){
