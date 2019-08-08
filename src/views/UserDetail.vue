@@ -620,6 +620,5 @@ export default {
 .highlight{
   background-color: #fdc23e;
   font-weight: bold;
-  opacity: 0.8;
 }
 </style>
