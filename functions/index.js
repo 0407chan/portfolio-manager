@@ -11,6 +11,7 @@ exports.sendMessageOnCreatePortfolio = functions.firestore
         let payload = {
             data: {}
         };
+        console.log(change)
         if (change.after._fieldsProto !== undefined && change.before._fieldsProto === undefined) {
             payload.data.messageAbout = "Create";
             payload.data.title = change.after._fieldsProto.title.stringValue;
@@ -33,22 +34,22 @@ exports.sendMessageOnCreatePortfolio = functions.firestore
                 docSnapshots.docs.forEach(function (doc) {
                     mauload={
                         data:{
-                            // userID:doc.data().UID,
                             messageAbout: payload.data.messageAbout.toString(),
                             title: payload.data.title.toString(),
                             displayName: payload.data.name.toString(),
                         }
                     };
-                    let registrationToken = doc.data().cloudMessaging;
-                    console.log(registrationToken)
-                    admin.messaging().sendToDevice(registrationToken, mauload, options)
-                        .then(function (response) {
-                            console.log(response)
-                            return response
-                        })
-                        .catch(function (err) {
-                            return err
-                        });
+                    if (doc.data().allowPush === true) {
+                        let registrationToken = doc.data().cloudMessaging;
+                        admin.messaging().sendToDevice(registrationToken, mauload, options)
+                            .then(function (response) {
+                                console.log(response)
+                                return response
+                            })
+                            .catch(function (err) {
+                                return err
+                            });
+                    }
                 });
                 return docSnapshots
             })
@@ -63,6 +64,7 @@ exports.sendMessageOnCreatePost = functions.firestore
         let payload = {
             data: {}
         };
+        console.log(change)
         if (change.after._fieldsProto !== undefined && change.before._fieldsProto === undefined) {
             payload.data.messageAbout = "Create";
             payload.data.title = change.after._fieldsProto.title.stringValue;
@@ -85,22 +87,22 @@ exports.sendMessageOnCreatePost = functions.firestore
                 docSnapshots.docs.forEach(function (doc) {
                     mauload={
                         data:{
-                            // userID:doc.data().UID,
                             messageAbout: payload.data.messageAbout.toString(),
                             title: payload.data.title.toString(),
                             displayName: payload.data.name.toString(),
                         }
                     };
-                    let registrationToken = doc.data().cloudMessaging;
-                    console.log(registrationToken)
-                    admin.messaging().sendToDevice(registrationToken, mauload, options)
-                        .then(function (response) {
-                            console.log(response)
-                            return response
-                        })
-                        .catch(function (err) {
-                            return err
-                        });
+                    if (doc.data().allowPush === true) {
+                        let registrationToken = doc.data().cloudMessaging;
+                        admin.messaging().sendToDevice(registrationToken, mauload, options)
+                            .then(function (response) {
+                                console.log(response)
+                                return response
+                            })
+                            .catch(function (err) {
+                                return err
+                            });
+                    }
                 });
                 return docSnapshots
             })

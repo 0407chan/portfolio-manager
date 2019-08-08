@@ -94,9 +94,13 @@
                         <v-checkbox v-model="pageuser.isCommentOpen" label="Comment" color="three"></v-checkbox>
                       </v-flex>
                     </v-layout>
-
-
                   </v-flex>
+                </v-layout>
+                <v-layout style="justify-content: center" v-if="isOwner">
+                  <div style="display: flex; flex-direction: column;">
+                    <h3 style="color:#696969;">푸시 알림 설정</h3>
+                    <v-checkbox style="margin: 0;" v-model="pageuser.allowPush" label="Push" color="five"></v-checkbox>
+                  </div>
                 </v-layout>
               </v-flex>
             </v-layout>
@@ -242,6 +246,7 @@ export default {
       isOwner:false,
       // i don't know Data
       edit: false,
+      token: '',
 
       // Tab Data
       tab : null,
@@ -329,6 +334,14 @@ export default {
 
       // TODO 내가 이름이 수정되면, 내가 작성한 모든 post, 포폴, 댓글에 들어간 name 수정하기
       await FirebaseService.modifyUser(this.pageuser)
+      FirebaseService.alarmOnFirstVisit()
+              .then(async token=>{
+                // console.log(token)
+                var result = await FirebaseService.getUserData();
+                // console.log(result)
+                await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush);
+                // console.log(token, result.allowPush)
+              });
       this.$store.state.user = this.pageuser
       swal("개인정보 수정이 완료되었습니다.")
       this.$router.push({
