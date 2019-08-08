@@ -86,7 +86,7 @@
 
                 <v-layout align-center v-if="isOwner">
                   <v-flex text-xs-12 text-xs-center>
-                    <h3>프로필 공개 설정</h3>
+                    <h3 style="color:#696969;">프로필 공개 설정</h3>
                     <v-layout align-center style="margin: auto">
                       <v-flex text-xs-4 text-xs-center>
                         <v-checkbox v-model="pageuser.isPortfolioOpen" label="Portfolio" color="two"></v-checkbox>
