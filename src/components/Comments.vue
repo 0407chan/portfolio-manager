@@ -46,7 +46,9 @@
             <template v-else>
               <v-flex xs2 text-xs-center>
                 <template v-if="isCommentModify">
-                  <v-btn fab dark small color="four" @click="modifyComment(comment)" hover > <v-icon size="17"> create</v-icon></v-btn>
+                  <v-btn fab dark small color="four" @click="modifyComment(comment)" >
+                    <v-icon size="17"> create</v-icon>
+                  </v-btn>
                 </template>
                 <template v-else>
                   <v-btn fab small disabled>
@@ -54,7 +56,7 @@
                   </v-btn>
                 </template>
 
-                <v-btn fab dark small color="red"  @click="modifyCommentForm(comment)" hover > <v-icon size="17"> cancel</v-icon></v-btn>
+                <v-btn fab dark small color="red"  @click="modifyCommentForm(comment)" > <v-icon size="17"> cancel</v-icon></v-btn>
               </v-flex>
             </template>
 
@@ -152,6 +154,7 @@ export default {
   },
 
   created() {
+
     firebaseApp.auth().onAuthStateChanged(async user => {
       var username = '';
       var useremail = '';
@@ -176,8 +179,10 @@ export default {
       this.getComments(this.id);
     },
     async modifyComment(comment) {
-      await FirebaseService.modifyComment(comment, this.newComment);
-      this.getComments(this.id);
+      if(this.isCommentModify){
+        await FirebaseService.modifyComment(comment, this.newComment);
+        this.getComments(this.id);
+      }
     },
     async modifyCommentForm(comment) {
       if (comment.isModify) {
@@ -188,7 +193,7 @@ export default {
       this.newComment = comment.body;
     },
     async postComment() {
-      if(!this.btnCheck){
+      if(!this.btnCheck && this.isComment){
         this.btnCheck = true;
         let result = await FirebaseService.getUserData();
         let res = await FirebaseService.postComment(this.id, this.classify, this.comment_input, result.name, result.userImageUrl);
