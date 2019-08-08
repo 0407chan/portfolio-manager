@@ -4,6 +4,7 @@ import 'firebase/auth'
 import store from '../store'
 import 'firebase/functions'
 import 'firebase/messaging'
+import Vue from 'vue'
 
 const POSTS = 'posts'
 const PORTFOLIOS = 'portfolios'
@@ -136,92 +137,93 @@ export default {
   /********************\
  \   Portfolio 함수들   \
 	\********************/
-  deletePortfolio(id) {
-    var userId = firebase.auth().currentUser.uid;
-    firestore.collection(USERS).doc(userId).update({
-      portfolios: firebase.firestore.FieldValue.arrayRemove(id),
-    })
+	deletePortfolio(id){
+		var userId = firebase.auth().currentUser.uid;
+		firestore.collection(USERS).doc(userId).update({
+    		portfolios: firebase.firestore.FieldValue.arrayRemove(id),
+		})
 
-    return firestore.collection(PORTFOLIOS).doc(id).delete().then(function() {
+		return firestore.collection(PORTFOLIOS).doc(id).delete().then(function() {
 
-    }).catch(function(error) {
-      console.error("Error removing document: ", error);
-    });
-  },
-  getPortfolio(id) {
-    var portfolioDoc = firestore.collection(PORTFOLIOS).doc(id);
-    return portfolioDoc.get().then(function(doc) {
-      if (doc.exists) {
-        let data = doc.data();
-        data.title = doc.data().title;
-        data.body = doc.data().body;
-        data.img = doc.data().img;
-        data.id = id;
-        return data;
-      } else {
-        console.log("No such document!");
-      }
-    }).catch(function(error) {
-      console.log("Error getting document:", error);
-    });
-  },
-  getPortfolios() {
-    const portfoliosCollection = firestore.collection(PORTFOLIOS)
-    return portfoliosCollection
-      .orderBy('created_at', 'desc')
-      .get()
-      .then((docSnapshots) => {
-        return docSnapshots.docs.map((doc) => {
-          let data = doc.data();
-          data.id = doc.id;
-          data.created_at = new Date(data.created_at.toDate());
-          return data
-        })
-      })
-  },
-  getPortfoliosById(userId) {
-    const portfoliosCollection = firestore.collection(PORTFOLIOS)
-    return portfoliosCollection
-      .where("userId", "==", userId)
-      .orderBy('created_at', 'desc')
-      .get()
-      .then((docSnapshots) => {
-        return docSnapshots.docs.map((doc) => {
+		}).catch(function(error) {
+				console.error("Error removing document: ", error);
+		});
+	},
+	getPortfolio(id){
+		var portfolioDoc = firestore.collection(PORTFOLIOS).doc(id);
+		return portfolioDoc.get().then(function(doc) {
+				if (doc.exists) {
+					let data = doc.data();
+					data.title = doc.data().title;
+					data.body = doc.data().body;
+					data.img = doc.data().img;
+					data.created_at = new Date(data.created_at.toDate())
+					data.id = id;
+					return data;
+				} else {
+						console.log("No such document!");
+				}
+		}).catch(function(error) {
+				console.log("Error getting document:", error);
+		});
+	},
+	getPortfolios() {
+		const portfoliosCollection = firestore.collection(PORTFOLIOS)
+		return portfoliosCollection
+				.orderBy('created_at', 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
+						let data = doc.data();
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate());
+						return data
+					})
+				})
+	},
+	getPortfoliosById(userId) {
+		const portfoliosCollection = firestore.collection(PORTFOLIOS)
+		return portfoliosCollection
+				.where("userId", "==", userId)
+				.orderBy('created_at', 'desc')
+				.get()
+				.then((docSnapshots) => {
+					return docSnapshots.docs.map((doc) => {
 
-          let data = doc.data();
-          data.id = doc.id;
-          data.created_at = new Date(data.created_at.toDate());
-          return data
-        })
-      })
-  },
+						let data = doc.data();
+						data.id = doc.id;
+						data.created_at = new Date(data.created_at.toDate());
+						return data
+					})
+				})
+	},
 
-  modifyPortfolio(title, body, img, id, name) {
-    return firestore.collection(PORTFOLIOS).doc(id).update({
-      "title": title,
-      "img": img,
-      "body": body,
-      "name": name,
-      "email": store.state.user.email
-    })
-  },
+	modifyPortfolio(title,body,img,id,name){
+		return firestore.collection(PORTFOLIOS).doc(id).update({
+			"title":title,
+			"img":img,
+			"body":body,
+			"name":name,
+			"email":store.state.user.email
+		})
+	},
 
-  postPortfolio(title, body, img, id, name) {
-    return firestore.collection(PORTFOLIOS).add({
-      title,
-      body,
-      img,
-      name,
-      userId: id,
-      created_at: firebase.firestore.FieldValue.serverTimestamp(),
-      email: store.state.user.email
-    }).then(function(docRef) {
-      return docRef.id;
-    })
-  },
+	postPortfolio(title, body, img, id, name) {
+		return firestore.collection(PORTFOLIOS).add({
+			title,
+			body,
+			img,
+			name,
+			userId:id,
+			created_at: firebase.firestore.FieldValue.serverTimestamp(),
+			email:store.state.user.email
+		}).then(function(docRef) {
+    		return docRef.id;
+		})
+	},
 
 
-  /**************************\
+	/**************************\
  \       Comment 함수들       \
 	\**************************/
 
@@ -588,49 +590,56 @@ export default {
   /**************************\
  \ push 함수들   \
 	\**************************/
-  alarmOnFirstVisit() {
-    if (window.Notification) {
-      return fireMessage.requestPermission()
-        .then(function() {
-          return fireMessage.getToken().then(idToken => {
-            return idToken
-          });
-        })
-        .catch(function(err) {
-          console.log(err + 'occured')
-        })
-    }
-  },
-  onMessageResponse() {
-    return fireMessage.onMessage(function(payload) {
-      console.log(payload)
-      if (payload.data.messageAbout === "Create") {
-        var notification = new Notification('EEEAZY Notification', {
-          icon: 'https://i.imgur.com/wxV4WcW.png',
-          body: '새 글이 등록되었습니다.',
-        });
-        notification.onclick = function() {
-          window.open('http://localhost:8080/');
-        };
-      } else if (payload.data.messageAbout === "Update") {
+	alarmOnFirstVisit() {
+		if (window.Notification) {
+        return fireMessage.requestPermission()
+            .then(function () {
+                return fireMessage.getToken().then(idToken=>{
+					return idToken
+                });
+            })
+            .catch(function (err) {
+                console.log(err + 'occured')
+			})
+		}
+    },
+	onMessageResponse() {
+		return fireMessage.onMessage(function (payload) {
+			// console.log(payload)
+			if (payload.data.messageAbout === "Create") {
+				Vue.notify({
+					group: 'foo',
+					type: 'warn',
+					title: payload.data.displayName +"&nbsp"+"-"+"&nbsp"+ payload.data.title,
+					text: "새글이 등록되었습니다.\n",
+					duration: 5000,
+				});
 
-      } else if (payload.data.messageAbout === "Delete") {
-        var notification = new Notification('EEEAZY Notification', {
-          icon: 'https://i.imgur.com/wxV4WcW.png',
-          body: '글이 삭제되었습니다.',
-        });
-        notification.onclick = function() {
-          window.open('http://localhost:8080/');
-        };
-      }
-    });
-  },
-  addToCloudMessagingUserList(token) {
-    const saveObject = firestore.collection('messageList').doc(token);
-    return saveObject.set({
-      cloudMessaging: token,
-    }, {
-      merge: true
-    })
-  },
+			} else if (payload.data.messageAbout === "Update") {
+
+			} else if (payload.data.messageAbout === "Delete") {
+				Vue.notify({
+					group: 'foo',
+					type: 'error',
+					title: "작성자: " + payload.data.displayName +"&nbsp"+ "&nbsp"+ "제목: " + payload.data.title,
+					text: "글이 삭제되었습니다.\n",
+					duration: 5000,
+				});
+			}
+		});
+	},
+
+	addToCloudMessagingUserList(token,isAdmin) {
+        const saveObject = firestore.collection('messageList').doc(token);
+        return saveObject.set({
+                cloudMessaging: token,
+				"userId":store.state.user.uid,
+				isAdmin: isAdmin,
+            },
+            {
+                merge: true
+            }
+        )
+    },
+
 }
