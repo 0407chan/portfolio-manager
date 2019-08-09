@@ -86,7 +86,7 @@ width:16px;height:16px;background:#FCFFFC;}
 
 <template>
   <v-app>
-    <notifications group="foo" position="top center"></notifications>
+    <notifications group="foo" position="top left"></notifications>
     <v-content>
       <div id = "header">
         <mainHeader/>
