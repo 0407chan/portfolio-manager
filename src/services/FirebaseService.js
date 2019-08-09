@@ -262,7 +262,7 @@ export default {
 		const commentCollection = firestore.collection(COMMENTS)
 		return commentCollection
 			.where("parentId", "==", parentId)
-			.orderBy("created_at", 'asc')
+			.orderBy("created_at", 'Asc')
 			.get()
 			.then((docSnapshots) => {
 				return docSnapshots.docs.map((doc) => {
