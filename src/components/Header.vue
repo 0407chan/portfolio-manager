@@ -17,7 +17,7 @@
     <v-btn flat v-if="wait&&!user">
       <LoginModal></LoginModal>
     </v-btn>
-    <v-btn flat v-if="user" v-on:click="signOut">Logout</v-btn>
+<!--    <v-btn flat v-if="user" v-on:click="signOut">Logout</v-btn>-->
 
 
     <!-- 안예뻐서 일시적으로 주석처리 함 -->
@@ -30,17 +30,43 @@
     </v-btn> -->
 
 
-    <v-btn fab small v-if="user" :to="{ name: 'userinfo', params: {id: user.id}}">
-      <v-avatar flat size="40">
-        <img
-        :src="user.userImageUrl"
-        >
-      </v-avatar>
-    </v-btn>
+<!--    <v-btn fab small v-if="user" :to="{ name: 'userinfo', params: {id: user.id}}">-->
+<!--      <v-avatar flat size="40">-->
+<!--        <img-->
+<!--        :src="user.userImageUrl"-->
+<!--        >-->
+<!--      </v-avatar>-->
+<!--    </v-btn>-->
+  </v-toolbar-items>
+
+  <v-toolbar-items v-if="user">
+    <v-menu offset-y>
+      <template v-slot:activator="{ on }">
+        <v-btn fab small v-on="on">
+          <v-avatar flat size="40">
+            <img
+                    :src="user.userImageUrl"
+            >
+          </v-avatar>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-tile>
+          <v-list-tile-title flat>{{user.name}}님</v-list-tile-title>
+        </v-list-tile>
+        <hr style="width: 80%; margin: auto">
+        <v-list-tile :to="{ name: 'userinfo', params: {id: user.id}}">
+          <v-list-tile-title flat>My Page</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-title flat v-on:click="signOut">Logout</v-list-tile-title>
+        </v-list-tile>
+      </v-list>
+    </v-menu>
   </v-toolbar-items>
 
   <v-toolbar-items class="hidden-md-and-up">
-    <v-menu bottom left>
+    <v-menu offset-y>
       <template v-slot:activator="{ on }">
         <v-btn flat icon v-on="on">
           <v-icon>fa-bars</v-icon>
@@ -48,17 +74,11 @@
       </template>
 
       <v-list>
-        <v-list-tile v-if="user" :to="{ name: 'userinfo', params: {id: user.id}}">
-          <v-list-tile-title flat>{{user.name}}님</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile v-for="(item, i) in items" :key="i" :to="{name: item.title}">
+        <v-list-tile v-for="(item, i) in items" :key="i" :to="{name: item.link}">
           <v-list-tile-title flat>{{ item.title }}</v-list-tile-title>
         </v-list-tile>
         <v-list-tile v-if="!user">
           <LoginModal></LoginModal>
-        </v-list-tile>
-        <v-list-tile v-if="user">
-          <v-list-tile-title flat v-on:click="signOut">logout</v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-menu>
@@ -82,9 +102,11 @@ export default {
   data() {
     return {
       items: [{
-        title: "post"
+        title: "Post",
+        link: "post"
       }, {
-        title: "portfolio"
+        title: "Portfolio",
+        link: "portfolio"
       }],
       user: "",
       marked: false,
@@ -117,6 +139,19 @@ export default {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.user = await FirebaseService.getUserData();
+        await FirebaseService.alarmOnFirstVisit()
+                .then(async token=>{
+                  // console.log(token)
+                  var result = await FirebaseService.getUserData();
+                  if (result.classify==='관리자'){
+                    this.isAdmin = true
+                  } else {
+                    this.isAdmin = false
+                  }
+                  // console.log(result)
+                  await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
+                  // console.log(token, result.allowPush)
+                });
       } else {
         this.user = "";
       }

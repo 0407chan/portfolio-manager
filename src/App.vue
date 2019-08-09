@@ -13,72 +13,75 @@ body, head{
 ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment {
 width:16px;height:16px;background:#FCFFFC;}
 
-#headMargin{
-  margin-top: 50px;
-
-  .notifications {
-    display: block !important;
-    position: fixed !important;
-    z-index: 5000 !important;
-  }
-
-  .notification-wrapper {
-    display: block !important;
-    overflow: hidden !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  .notification-title {
-    font-weight: 600 !important;
-  }
-
-  .vue-notification-template {
-    display: block !important;
-    box-sizing: border-box !important;
-    background: white !important;
-    text-align: center !important;
-  }
-
-  .vue-notification {
-    display: block !important;
-    box-sizing: border-box !important;
-    text-align: left !important;
-    font-size: 15px !important;
-    padding: 10px !important;
-    margin: 0 5px !important;
-
-    color: black !important;
-    background: #44A4FC !important;
-    border: 2px solid !important;
-  }
-
-  .vue-notification.warn {
-    background: #FCFFFC !important;
-    border-color: #fdc23e !important;
-  }
-
-  .vue-notification.error {
-    background: #FCFFFC !important;
-    border-color: #ff7761 !important;
-  }
-
-  .vue-notification.success {
-    background: #68CD86 !important;
-    border-left-color: #42A85F !important;
-    opacity: 0.8;
-  }
-
-  .vn-fade-enter-active, .vn-fade-leave-active, .vn-fade-move  {
-    transition: all 1s !important;
-  }
-
-  .vn-fade-enter, .vn-fade-leave-to {
-    opacity: 0.1 !important;
-  }
-
+#headMargin {
+  margin-top: 50px !important;
 }
+
+.notifications {
+  display: block !important;
+  position: fixed !important;
+  z-index: 5000 !important;
+  top: 48px !important;
+}
+
+.notification-wrapper {
+  display: block !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.notification-title {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  margin-bottom: 3px !important;
+}
+
+.vue-notification-template {
+  display: block !important;
+  box-sizing: border-box !important;
+  background: white !important;
+  text-align: center !important;
+}
+
+.vue-notification {
+  display: block !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+  font-size: 12px !important;
+  padding: 10px !important;
+  margin: 0 5px !important;
+
+  color: black !important;
+  background: #44A4FC !important;
+  border: 2px solid !important;
+}
+
+.vue-notification.warn {
+  background: #FCFFFC !important;
+  border-color: #fdc23e !important;
+}
+
+.vue-notification.error {
+  background: #FCFFFC !important;
+  border-color: #ff7761 !important;
+}
+
+.vue-notification.success {
+  background: #68CD86 !important;
+  border-left-color: #42A85F !important;
+  opacity: 0.8;
+}
+
+.vn-fade-enter-active, .vn-fade-leave-active, .vn-fade-move  {
+  transition: all 1s !important;
+}
+
+.vn-fade-enter, .vn-fade-leave-to {
+  opacity: 0.1 !important;
+}
+
 </style>
 
 <template>
@@ -117,7 +120,7 @@ export default {
   store,
   data() {
 	  return{
-	    isAdmin: false
+	    isAdmin: false,
       }
   },
   created() {
@@ -127,10 +130,10 @@ export default {
                     if (result.classify==='관리자'){
                       this.isAdmin = true
                     } else {
-                      this.isAdmin = true
+                      this.isAdmin = false
                     }
-                    FirebaseService.addToCloudMessagingUserList(token, this.isAdmin);
-                    console.log(token, this.isAdmin)
+                    FirebaseService.addToCloudMessagingUserList(token, this.isAdmin, result.allowPush);
+                    // console.log(token, this.isAdmin, result.allowPush)
                 });
             FirebaseService.onMessageResponse();
         }
