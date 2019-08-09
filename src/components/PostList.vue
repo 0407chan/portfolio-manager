@@ -1,6 +1,6 @@
 <template>
 <v-layout row wrap>
-  <v-expansion-panel focusable header-icon="clear" width="100%">
+  <v-expansion-panel v-model="index" expand focusable header-icon="clear" width="100%">
     <v-expansion-panel-content v-for="i in posts.length > limits ? limits : posts.length" expand-icon="arrow_drop_down">
       <template v-slot:header>
         <v-flex sm12 md9>{{posts[i - 1].title}}</v-flex>
@@ -13,7 +13,8 @@
           <Post :id="posts[i-1].id" :date="posts[i - 1].created_at"
                 :title="posts[i - 1].title" :body="posts[i - 1].body"
                 :email="posts[i-1].email" :name="posts[i-1].name"
-                :comments="posts[i-1].comments"></Post>
+                :comments="posts[i-1].comments"
+                ></Post>
         </v-card-text>
       </v-card>
     </v-expansion-panel-content>
@@ -78,13 +79,22 @@ export default {
     return {
       posts: [],
       user: "",
+      index: [],
     }
   },
   components: {
     Post
   },
   mounted() {
-    this.getPosts()
+    this.getPosts(),
+    console.log(this.$el.textContent) // can use $el
+    this.$nextTick(function () {
+      // 모든 화면이 렌더링된 후 실행합니다.
+      inputs = document.getElementsByTagName('input');
+      //inputs[this.$route.params.index].focus();
+      inputs[this.$route.params.index].scrollIntoView();
+      console.log("가즈아",inputs);
+    })
   },
   methods: {
     async getPosts() {
@@ -100,7 +110,22 @@ export default {
     firebase.auth().onAuthStateChanged(user => {
       this.user = user;
     });
-  }
+    if(this.$route.params.index){
+      for(var i = 0; i<this.$route.params.index; i++){
+        this.index.push(false);
+      }
+      this.index.push(true);
+    }
+  },
+  
+  watch:{
+    $route (to, from){
+      inputs = document.getElementsByTagName('input');
+      //inputs[this.$route.params.index].focus();
+      inputs[this.$route.params.index].scrollIntoView();
+      console.log("가즈아",inputs);
+    }
+  },
 }
 </script>
 <style>

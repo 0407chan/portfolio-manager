@@ -34,6 +34,12 @@ export default {
     }
   },
 
+  created(){
+    if(this.$route.params.index){
+      this.index = this.$route.params.index;
+      this.lim += 100;
+    }
+  },
   methods: {
     handleScroll () {
       var limit = document.body.offsetHeight - window.innerHeight;

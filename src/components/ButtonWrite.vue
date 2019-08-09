@@ -46,19 +46,18 @@
 
           user: '',
           writeAuthority: '',
+          currPage:[],
     		}
     	},
 
       mounted(){
         this.init();
         this.getUserData();
-
       },
       methods: {
         init(){
-          var a = window.location.href.substring(8).indexOf('/');
-          this.page = window.location.href.substring(8).substring(a);
-          if(this.page ==='/post' || this.page ==='/portfolio'){
+          this.currPage = window.location.href.split('/')
+          if (this.currPage[3] =='post' || this.currPage[3] =='portfolio' || this.currPage[3] =='postview'){
             this.visible = true;
           }else {
             this.visible = false;
@@ -68,19 +67,13 @@
           this.isActive = window.scrollY > 0;
         },
         currpage(){
-          var a = window.location.href.substring(8).indexOf('/');
-          this.page = window.location.href.substring(8).substring(a);
-
-          if (this.page ==='/post' || this.page ==='/portfolio'){
-            this.visible = true;
-          }else {
-            this.visible = false;
-          }
-
-          if(this.page ==='/post'){
+          this.currPage = window.location.href.split('/')
+          if(this.currPage[3] ==='post'){
             this.$router.push('writepost');
-          }else if(this.page ==='/portfolio'){
+          }else if(this.currPage[3] ==='portfolio'){
             this.$router.push('writeportfolio');
+          }else if(this.currPage[3] ==='postview'){
+            this.$router.push('../writeportfolio');
           }
         },
         async getUserData(){
@@ -102,9 +95,8 @@
 
       watch:{
         $route (to, from){
-          var a = window.location.href.substring(8).indexOf('/');
-          this.page = window.location.href.substring(8).substring(a);
-          if(this.page ==='/post' || this.page ==='/portfolio'){
+          this.currPage = window.location.href.split('/')
+          if (this.currPage[3] =='post' || this.currPage[3] =='portfolio' || this.currPage[3] =='postview'){
             this.visible = true;
           }else {
             this.visible = false;

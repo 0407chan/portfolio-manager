@@ -94,9 +94,8 @@
                         <v-checkbox v-model="pageuser.isCommentOpen" label="Comment" color="three"></v-checkbox>
                       </v-flex>
                     </v-layout>
-
-
                   </v-flex>
+                  <v-btn v-on:click="test"></v-btn>
                 </v-layout>
               </v-flex>
             </v-layout>
@@ -152,11 +151,12 @@
               <v-data-table :headers="postHeaders" :items="postSearchList" class="elevation-1">
                 <template v-slot:items="props">
                   <td>
+
                     <template v-if="props.item.subTitle">
-                      <span v-html="highlight(props.item.subTitle,search)"></span>
+                      <router-link :to="{ name: 'postview', params: {index:props.item.index}}"><span v-html="highlight(props.item.subTitle,search)"></span> </router-link>
                     </template>
                     <template v-else>
-                      <span v-html="highlight(props.item.title,search)"></span>
+                      <router-link :to="{ name: 'postview', params: {index:props.item.index}}"><span v-html="highlight(props.item.title,search)"></span> </router-link>
                     </template>
                     <template v-if="props.item.comments"> ({{props.item.comments.length}})</template>
                   </td>
@@ -283,6 +283,8 @@ export default {
       // Whole
       wholePortfolios:[],
       wholePosts:[],
+
+      totalIndex:-1,
     }
   },
   mounted() {
@@ -308,15 +310,23 @@ export default {
     if(this.id==''){
       this.id=this.user.uid;
     }
-    // this.id = '3uB1Si78L8ZZy4UJuzbcjv06BVs2'
   },
 
   methods: {
-    test(){
-      console.log("user.id",this.user.uid);
-      console.log("pageuser.id",this.pageuser.id);
-      console.log("this.id",this.id);
-      console.log("isOwner",this.isOwner);
+    // 이거 실행할 수 있게 해야합니다. router-link 실행하기 전에 이거 실행해서 index 받아오고 그 index로 router-link 실행해야함 ㅠㅠㅠ 고고
+
+    async getIndex(item){
+      this.wholePosts = await FirebaseService.getPosts();
+      console.log(this.wholePosts)
+      for(var i =0; i<this.wholePosts.length; i++){
+        if(item.id == this.wholePosts[i].id){
+          this.totalIndex = i;
+        }
+      }
+    },
+    async test(){
+      this.wholePosts = await FirebaseService.getPosts();
+      console.log("이게되나?",this.postSearchList);
     },
 
     async modifyUser() {
@@ -391,13 +401,9 @@ export default {
         for(var i =0; i<res.portfolios.length; i++)
         FirebaseService.deletePortfolio(res.portfolios[i]);
       }
-      if(res.postcomments){
-        for(var i =0; i<res.postcomments.length; i++)
-        FirebaseService.deleteComment(res.postcomments[i]);
-      }
-      if(res.portfoliocomments){
-        for(var i =0; i<res.portfoliocomments.length; i++)
-        FirebaseService.deletePortfolioComment(res.portfoliocomments[i]);
+      if(res.comments){
+        for(var i =0; i<res.comments.length; i++)
+        FirebaseService.deleteComment(res.comments[i].parentId, res.comments[i].classify, res.comments.id[i]);
       }
       const result = await FirebaseService.selfDeleteUser();
 
@@ -424,10 +430,16 @@ export default {
 
     async getPosts() {
       this.posts = await FirebaseService.getPostsById(this.id);
+      this.wholePosts = await FirebaseService.getPosts();
       this.postSearchList = [];
       for (var i = 0; i < this.posts.length; i++) {
         if(this.posts[i].title.length >= 15){
           this.posts[i].subTitle = this.posts[i].title.substring(0, 15)+"⋯"
+        }
+        for(var j =0; j<this.wholePosts.length; j++){
+          if(this.posts[i].id == this.wholePosts[j].id){
+            this.posts[i].index = this.wholePosts[j].index;
+          }
         }
         this.postSearchList.push(this.posts[i]);
       }
@@ -444,19 +456,31 @@ export default {
         }
         if(this.comments[i].classify == "portfolio"){
           for(var j =0; j<this.wholePortfolios.length; j++){
-            if(this.comments[i].parentId == this.wholePortfolios[j].id){
-              this.comments[i].parentTitle = this.wholePortfolios[j].title +" ("+this.wholePortfolios[j].comments.length+")";
-            }
+              if(this.comments[i].parentId == this.wholePortfolios[j].id){
+                this.comments[i].parentTitle = this.wholePortfolios[j].title +" ("+this.wholePortfolios[j].comments.length+")";
+
+              }
           }
         }
         else if(this.comments[i].classify == "post"){
           for(var j =0; j<this.wholePosts.length; j++){
             if(this.comments[i].parentId == this.wholePosts[j].id){
               this.comments[i].parentTitle = this.wholePosts[j].title +" ("+this.wholePosts[j].comments.length+")";
+
             }
           }
         }
         this.commentSearchList.push(this.comments[i]);
+
+
+        // 대댓글 만들어지면 그때 다시 도전!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // for(var i =0; i<this.comments.length; i++){
+        //   for(var j =0; j<this.comments.length; j++){
+        //     if(!this.comments[i].parentTitle && this.comments[i].parentId == this.comments[j].id){
+        //       this.comments[i].parentTitle = this.comments[j].parentTitle;
+        //     }
+        //   }
+        // }
       }
     },
 
