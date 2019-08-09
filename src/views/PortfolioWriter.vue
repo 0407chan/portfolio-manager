@@ -38,12 +38,12 @@
         </v-flex>
         <v-flex xs12 text-xs-center round my-5>
           <template v-if="id==null">
-            <v-btn color="two" round dark v-on:click="portfolioWriteAndNotify">
+            <v-btn color="two" round dark v-on:click="writePortfolio">
             <v-icon size="17" class="mr-2">fa-pencil</v-icon>Write
             </v-btn>
           </template>
             <template v-else>
-              <v-btn color="two" round dark v-on:click="portfolioWriteAndNotify">
+              <v-btn color="two" round dark v-on:click="writePortfolio">
               <v-icon size="17" class="mr-2">fa-pencil</v-icon>Modify
               </v-btn>
             </template>
@@ -111,22 +111,6 @@ export default {
     BlockAccess
   },
   methods: {
-    async writePortfolio() {
-      let result = await FirebaseService.getUserData();
-      let res = '';
-      if(this.id==null){
-        res = await FirebaseService.postPortfolio(this.title, this.body, this.imageUrl, result.name);
-        await FirebaseService.addToPortfolioList(res);
-      }else{
-        await FirebaseService.modifyPortfolio(this.title, this.body, this.imageUrl, this.id, result.name);
-      }
-
-
-      this.$router.push({
-        name: "portfolio"
-      });
-    },
-
     async getPortfolio(id) {
 			this.portfolio = await FirebaseService.getPortfolio(id);
       this.title = this.portfolio.title;
@@ -175,32 +159,7 @@ export default {
         this.imageUrl = "";
       }
     },
-    notification () {
-      if (window.Notification) {
-        Notification.requestPermission();
-      }
-      function pushNotification() {
-        setTimeout(function () {
-          notify();
-        }, 1000);
-      }
-      pushNotification();
-      function notify() {
-        if (Notification.permission !== 'granted') {
-          alert('notification is disabled');
-        }
-        else {
-          var notification = new Notification('EEEAZY Notification', {
-            icon: 'https://i.imgur.com/wxV4WcW.png',
-            body: '새 글이 등록되었습니다.',
-          });
-          notification.onclick = function () {
-            window.open('http://localhost:8080/portfolio');
-          };
-        }
-      }
-    },
-    async portfolioWriteAndNotify () {
+    async writePortfolio () {
       if(this.title.length != 0 && this.body.length != 0 && !this.btnCheck){
         this.btnCheck = true;
         let result = await FirebaseService.getUserData();
@@ -217,27 +176,8 @@ export default {
         this.$router.push({
           name: "portfolio"
         });
-        // if (window.Notification) {
-        //   Notification.requestPermission();
-        // }
-        // function pushNotification() {
-        //   setTimeout(function () {
-        //     notify();
-        //   }, 1500);
-        // }
-        // pushNotification();
-        // function notify() {
-        //     var notification = new Notification('EEEAZY Notification', {
-        //       icon: 'https://i.imgur.com/wxV4WcW.png',
-        //       body: '새 글이 등록되었습니다.',
-        //     });
-        //     notification.onclick = function () {
-        //       window.open('http://localhost:8080/portfolio');
-        //     };
-        // }
-
         this.btnCheck = false;
-      }//end if
+      }
     }
   },
 
