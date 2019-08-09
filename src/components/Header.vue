@@ -55,11 +55,14 @@
           <v-list-tile-title flat>{{user.name}}님</v-list-tile-title>
         </v-list-tile>
         <hr style="width: 80%; margin: auto">
+        <v-list-tile v-if="user.classify==='관리자'" :to="{ name: 'admin'}">
+          <v-list-tile-title flat>Admin</v-list-tile-title>
+        </v-list-tile>
         <v-list-tile :to="{ name: 'userinfo', params: {id: user.id}}">
           <v-list-tile-title flat>My Page</v-list-tile-title>
         </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-title flat v-on:click="signOut">Logout</v-list-tile-title>
+        <v-list-tile @click="signOut">
+          <v-list-tile-title flat>Logout</v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-menu>
