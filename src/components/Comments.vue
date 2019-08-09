@@ -4,42 +4,42 @@
     <span class="comment_title">Comment</span>
     <v-divider></v-divider>
   </v-flex>
-  <v-flex xs12 v-for="(comment, index) in comments" :key="comment.id">
-    <v-timeline align-top v-if="index < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
+  <v-flex xs12 v-for="i in comments.length">
+    <v-timeline align-top v-if="i-1 < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
       <v-timeline-item small fill-dot style="padding-bottom:5px;" color="rgba(250, 250, 250, 1)">
         <template v-slot:icon>
           <v-avatar>
-            <img :src="comment.userImageUrl" @click="imageview(comment.userImageUrl)" style="cursor: pointer; margin-top: 30px;">
+            <img :src="comments[comments.length-i].userImageUrl" @click="imageview(comments[comments.length-i].userImageUrl)" style="cursor: pointer; margin-top: 30px;">
           </v-avatar>
         </template>
 
         <v-layout justify-space-between wrap align-center>
             <v-flex xs10>
-              <router-link :to="{ name: 'userinfo', params: {id:comment.userId}}"> {{comment.name}} </router-link>
-              {{comment.created_at.getFullYear()}}.
-              {{comment.created_at.getMonth()+1}}.
-              {{comment.created_at.getDate()}}
-              {{addZeros(comment.created_at.getHours())}}:
-              {{addZeros(comment.created_at.getMinutes())}}
+              <router-link :to="{ name: 'userinfo', params: {id:comments[comments.length-i].userId}}"> {{comments[comments.length-i].name}} </router-link>
+              {{comments[comments.length-i].created_at.getFullYear()}}.
+              {{comments[comments.length-i].created_at.getMonth()+1}}.
+              {{comments[comments.length-i].created_at.getDate()}}
+              {{addZeros(comments[comments.length-i].created_at.getHours())}}:
+              {{addZeros(comments[comments.length-i].created_at.getMinutes())}}
               <template v-if="currUser">
-                <v-btn @click="ReCommentForm(comment)" fab dark class="mr-2 large_comment_btn" hover color="four">
+                <v-btn @click="ReCommentForm(comments[comments.length-i])" fab dark class="mr-2 large_comment_btn" hover color="four">
                   <v-icon size="15">fa-reply</v-icon>
                 </v-btn>
               </template>
-              <template v-if="!comment.isModify">
-                <div style="background-color: #EDEDED; border-radius: 10px">{{comment.body}}</div>
+              <template v-if="!comments[comments.length-i].isModify">
+                <div style="background-color: #EDEDED; border-radius: 10px">{{comments[comments.length-i].body}} / {{comments[comments.length-i].id}}</div>
               </template>
               <template v-else>
-                <v-text-field v-model="newComment" :value='comment.body' @keyup.enter="modifyComment(comment)"></v-text-field>
+                <v-text-field v-model="newComment" :value='comments[comments.length-i].body' @keyup.enter="modifyComment(comments[comments.length-i])"></v-text-field>
               </template>
             </v-flex>
 
-            <template v-if="!comment.isModify">
+            <template v-if="!comments[comments.length-i].isModify">
               <v-flex xs2 text-xs-center>
-                <v-btn fab flat small color="three" v-if="currUser.id === comment.userId" @click="modifyCommentForm(comment)">
+                <v-btn fab flat small color="three" v-if="currUser.id === comments[comments.length-i].userId" @click="modifyCommentForm(comments[comments.length-i])">
                   <v-icon size="17">create</v-icon>
                 </v-btn>
-                <v-btn fab flat small color="two" v-if="currUser.id === comment.userId" @click="deleteComment(comment.id)">
+                <v-btn fab flat small color="two" v-if="currUser.id === comments[comments.length-i].userId" @click="deleteComment(comments[comments.length-i].id)">
                   <v-icon size="17">delete</v-icon>
                 </v-btn>
               </v-flex>
@@ -47,7 +47,7 @@
             <template v-else>
               <v-flex xs2 text-xs-center>
                 <template v-if="isCommentModify">
-                  <v-btn fab dark small color="four" @click="modifyComment(comment)" >
+                  <v-btn fab dark small color="four" @click="modifyComment(comments[comments.length-i])" >
                     <v-icon size="17"> create</v-icon>
                   </v-btn>
                 </template>
@@ -57,33 +57,33 @@
                   </v-btn>
                 </template>
 
-                <v-btn fab dark small color="red"  @click="modifyCommentForm(comment)" > <v-icon size="17"> cancel</v-icon></v-btn>
+                <v-btn fab dark small color="red"  @click="modifyCommentForm(comments[comments.length-i])" > <v-icon size="17"> cancel</v-icon></v-btn>
               </v-flex>
             </template>
 
-            <template v-if="comment.reply">
+            <template v-if="comments[comments.length-i].reply">
               <v-flex xs10>
-                <v-text-field v-model="reComment_input" :value='comment.body' @keyup.enter="postReComment(comment)"></v-text-field>
+                <v-text-field v-model="reComment_input" :value='comments[comments.length-i].body' @keyup.enter="postReComment(comments[comments.length-i])"></v-text-field>
               </v-flex>
               <v-flex xs2 text-xs-center>
                 <template v-if="isReCommentModify">
-                  <v-btn fab dark small hover color="four" @click="postReComment(comment)"><v-icon size="17">create</v-icon></v-btn>
+                  <v-btn fab dark small hover color="four" @click="postReComment(comments[comments.length-i])"><v-icon size="17">create</v-icon></v-btn>
                 </template>
                 <template v-else>
                   <v-btn fab small disabled><v-icon size="17">create</v-icon></v-btn>
                 </template>
-                <v-btn fab dark small hover color="red"  @click="ReCommentForm(comment)"><v-icon size="17">cancel</v-icon></v-btn>
+                <v-btn fab dark small hover color="red"  @click="ReCommentForm(comments[comments.length-i])"><v-icon size="17">cancel</v-icon></v-btn>
               </v-flex>
             </template>
 
             <template>
-              <ReComment :id='comment.id' ref="child"></ReComment>
+              <ReComment :id='comments[comments.length-i].id' ref="child"></ReComment>
             </template>
 
           </v-layout>
       </v-timeline-item>
     </v-timeline>
-    <v-flex xs12 v-if="index === limit_Comment" text-xs-center>
+    <v-flex xs12 v-if="i-1 === limit_Comment" text-xs-center>
       <v-btn fab dark icon flat @click="moreComments(limit_Comment)" class="two large_comment_btn">
         <v-icon size="20">keyboard_arrow_down</v-icon>
       </v-btn>
@@ -201,6 +201,12 @@ export default {
         await this.getComments(this.id);
         this.btnCheck = false;
       }
+      for(var i in this.$refs.child){
+        if(i < this.limit_Comment){
+          var commentId = this.comments[this.comments.length-i-1].id;
+          this.$refs.child[i].getComments(commentId);
+        }
+      }
     },
     async getComments(parentId) {
       this.comments = await FirebaseService.getComments(parentId);
@@ -221,10 +227,11 @@ export default {
       await FirebaseService.addToReCommentList(comment.id, res);
       this.reComment_input = '';
       await this.getComments(this.id);
-      console.log(this.$refs.child);
       for(var i in this.$refs.child){
-        console.log('index : ' + i + ', body : ' + this.$refs.child[i].id);
-        this.$refs.child[i].getComments(this.comments[i].id);
+        if(i < this.limit_Comment){
+          var commentId = this.comments[this.comments.length-i-1].id;
+          this.$refs.child[i].getComments(commentId);
+        }
       }
     },
     ReCommentForm(comment){
