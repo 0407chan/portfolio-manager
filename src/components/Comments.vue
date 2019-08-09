@@ -6,10 +6,10 @@
   </v-flex>
   <v-flex xs12 v-for="(comment, index) in comments" :key="comment.id">
     <v-timeline align-top v-if="index < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
-      <v-timeline-item small style="padding-bottom:5px">
+      <v-timeline-item small fill-dot style="padding-bottom:5px;" color="rgba(250, 250, 250, 1)">
         <template v-slot:icon>
           <v-avatar>
-            <img :src="comment.userImageUrl" @click="imageview(comment.userImageUrl)" style="cursor: pointer">
+            <img :src="comment.userImageUrl" @click="imageview(comment.userImageUrl)" style="cursor: pointer; margin-top: 30px;">
           </v-avatar>
         </template>
 
@@ -63,15 +63,24 @@
 
             <template v-if="comment.reply">
               <v-flex xs10>
-                <v-text-field v-model="reComment" :value='comment.body' @keyup.enter="postReComment(comment)"></v-text-field>
+                <v-text-field v-model="reComment_input" :value='comment.body' @keyup.enter="postReComment(comment)"></v-text-field>
               </v-flex>
               <v-flex xs2 text-xs-center>
-                <v-btn fab dark small hover color="four" @click="postReComment(comment)"><v-icon size="17">create</v-icon></v-btn>
+                <template v-if="isReCommentModify">
+                  <v-btn fab dark small hover color="four" @click="postReComment(comment)"><v-icon size="17">create</v-icon></v-btn>
+                </template>
+                <template v-else>
+                  <v-btn fab small disabled><v-icon size="17">create</v-icon></v-btn>
+                </template>
                 <v-btn fab dark small hover color="red"  @click="ReCommentForm(comment)"><v-icon size="17">cancel</v-icon></v-btn>
               </v-flex>
             </template>
-          </v-layout>
 
+            <template>
+              <ReComment :id='comment.id' ref="child"></ReComment>
+            </template>
+
+          </v-layout>
       </v-timeline-item>
     </v-timeline>
     <v-flex xs12 v-if="index === limit_Comment" text-xs-center>
@@ -119,12 +128,9 @@ export default {
     comment: {
       type: String
     },
-    reComment: {
-      type: String
-    },
     limit_Comment: {
       type: Number,
-      default: 4,
+      default: 3,
     },
     classify: {
       type: String
@@ -140,11 +146,12 @@ export default {
       comments: [],
       users: [],
       newComment: '',
-
       comment_input: '',
+      reComment_input: '',
       isComment:false,
       isCommentModify:false,
-
+      isReCommentModify:false,
+      childIndex: '',
       rules: {
         required: value => !!value || "Required.",
       },
@@ -207,6 +214,19 @@ export default {
         }
       }
     },
+    async postReComment(comment){
+      let result = await FirebaseService.getUserData();
+      let res = await FirebaseService.postComment(comment.id, this.classify, this.reComment_input, result.name, result.userImageUrl);
+      await FirebaseService.addToUserCommentList(res);
+      await FirebaseService.addToReCommentList(comment.id, res);
+      this.reComment_input = '';
+      await this.getComments(this.id);
+      console.log(this.$refs.child);
+      for(var i in this.$refs.child){
+        console.log('index : ' + i + ', body : ' + this.$refs.child[i].id);
+        this.$refs.child[i].getComments(this.comments[i].id);
+      }
+    },
     ReCommentForm(comment){
       if (comment.reply) {
         comment.reply = false;
@@ -249,12 +269,18 @@ export default {
         this.isComment = true;
       }
     },
-
     newComment(){
       if(this.newComment.length ==0){
         this.isCommentModify = false;
       }else {
         this.isCommentModify = true;
+      }
+    },
+    reComment_input(){
+      if(this.reComment_input.length ==0){
+        this.isReCommentModify = false;
+      }else {
+        this.isReCommentModify = true;
       }
     }
   }
