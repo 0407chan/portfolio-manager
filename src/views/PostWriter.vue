@@ -13,7 +13,7 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12>
-          <markdown-editor :highlight="true" v-model="body"></markdown-editor>
+          <markdown-editor v-model="body"></markdown-editor>
         </v-flex>
         <v-flex xs12 text-xs-center round my-5>
           <template v-if="id==null">
