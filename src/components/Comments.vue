@@ -16,11 +16,9 @@
         <v-layout justify-space-between wrap align-center>
             <v-flex xs10>
               <router-link :to="{ name: 'userinfo', params: {id:comments[comments.length-i].userId}}"> {{comments[comments.length-i].name}} </router-link>
-              {{comments[comments.length-i].created_at.getFullYear()}}.
-              {{comments[comments.length-i].created_at.getMonth()+1}}.
-              {{comments[comments.length-i].created_at.getDate()}}
-              {{addZeros(comments[comments.length-i].created_at.getHours())}}:
-              {{addZeros(comments[comments.length-i].created_at.getMinutes())}}
+              <div :title="realtime(comments[comments.length-i].created_at)">
+                {{displayTime(comments[comments.length-i].created_at)}}
+              </div>
               <template v-if="currUser">
                 <v-btn @click="ReCommentForm(comments[comments.length-i])" fab dark class="mr-2 large_comment_btn" hover color="four">
                   <v-icon size="15">fa-reply</v-icon>
@@ -250,6 +248,23 @@ export default {
         }
       }
       return zero + num;
+    },
+    displayTime(bDate){
+      var cDate = new Date();
+      var result = cDate.getTime()-bDate.getTime()+7000;
+      result = result/1000;
+      if(result < 60){
+        return Math.floor(result) + '초';
+      }else if((result/60) < 60){
+        return Math.floor(result/60) + '분';
+      }else if((result/3600) < 24){
+        return Math.floor(result/3600) + '시간';
+      }else{
+        return Math.floor(result/86400) + '일';
+      }
+    },
+    realtime(date){
+      return date.getFullYear()+'.'+(date.getMonth()+1)+'.'+date.getDate()+'.'+addZeros(date.getHours())+'.'+ addZeros(date.getMinutes());
     },
     moreComments(data) {
       this.limit_Comment = data + 2;
