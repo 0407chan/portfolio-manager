@@ -628,7 +628,7 @@ export default {
                             text: "새로운 포스트가 등록되었습니다.",
                             duration: 5000,
                         });
-                    } else if(payload.data.body) {
+                    } else {
                         if (payload.data.classify === "portfolio") {
                             Vue.notify({
                                 group: 'foo',
@@ -666,7 +666,7 @@ export default {
                             text: "포스트가 삭제되었습니다.",
                             duration: 5000,
                         });
-                    } else if(payload.data.body) {
+                    } else {
                         if (payload.data.classify === "portfolio") {
                             Vue.notify({
                                 group: 'foo',
