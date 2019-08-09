@@ -27,7 +27,7 @@
                 </v-btn>
               </template>
               <template v-if="!comments[comments.length-i].isModify">
-                <div style="background-color: #EDEDED; border-radius: 10px">{{comments[comments.length-i].body}} / {{comments[comments.length-i].id}}</div>
+                <div style="background-color: #EDEDED; border-radius: 10px">{{comments[comments.length-i].body}}</div>
               </template>
               <template v-else>
                 <v-text-field v-model="newComment" :value='comments[comments.length-i].body' @keyup.enter="modifyComment(comments[comments.length-i])"></v-text-field>
