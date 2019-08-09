@@ -4,6 +4,7 @@ import 'firebase/auth'
 import store from '../store'
 import 'firebase/functions'
 import 'firebase/messaging'
+import Vue from 'vue'
 
 const POSTS = 'posts'
 const PORTFOLIOS = 'portfolios'
@@ -14,19 +15,19 @@ const COMMENTS = 'comments'
 
 // Setup Firebase
 const config = {
-	projectId: 'todo-vue-3ea4e',
-	authDomain: 'todo-vue-3ea4e.firebaseapp.com',
-	apiKey: 'AIzaSyBSufO4FShHm8XHe6mD9CotDFQfzpkTxUU',
-	databaseURL: 'https://todo-vue-3ea4e.firebaseio.com',
-	storageBucket: 'todo-vue-3ea4e.appspot.com',
-	messagingSenderId: "437302839629",
-	appId: "1:437302839629:web:6c403028be6fe081"
+  projectId: 'todo-vue-3ea4e',
+  authDomain: 'todo-vue-3ea4e.firebaseapp.com',
+  apiKey: 'AIzaSyBSufO4FShHm8XHe6mD9CotDFQfzpkTxUU',
+  databaseURL: 'https://todo-vue-3ea4e.firebaseio.com',
+  storageBucket: 'todo-vue-3ea4e.appspot.com',
+  messagingSenderId: "437302839629",
+  appId: "1:437302839629:web:6c403028be6fe081"
 
-	// projectId: 'elice-ssafy',
-	// authDomain: 'elice-ssafy.firebaseapp.com',
-	// apiKey: 'AIzaSyCax1KLYHHlLEoxNkRIW8efgUBWooyEB2Q',
-	// databaseURL: 'https://elice-ssafy.firebaseio.com',
-	// storageBucket: 'gs://elice-ssafy.appspot.com'
+  // projectId: 'elice-ssafy',
+  // authDomain: 'elice-ssafy.firebaseapp.com',
+  // apiKey: 'AIzaSyCax1KLYHHlLEoxNkRIW8efgUBWooyEB2Q',
+  // databaseURL: 'https://elice-ssafy.firebaseio.com',
+  // storageBucket: 'gs://elice-ssafy.appspot.com'
 
 }
 
@@ -43,95 +44,95 @@ if (firebase.messaging.isSupported()){
 
 export default {
 
-	/********************\
+  /********************\
  \     Post 함수들      \
 	\********************/
-	getPost(id){
-		var postDoc = firestore.collection(POSTS).doc(id);
-		return postDoc.get().then(function(doc) {
-				if (doc.exists) {
-					let data = doc.data();
-					data.title = doc.data().title;
-					data.body = doc.data().body;
-					data.id = id;
-					data.email = doc.data().email;
-					data.name = doc.data().name;
-					return data;
-				} else {
-						console.log("No such document!");
-				}
-		}).catch(function(error) {
-				console.log("Error getting document:", error);
-		});
-	},
-	getPosts() {
-		const postsCollection = firestore.collection(POSTS)
-		return postsCollection
-				.orderBy('created_at', 'desc')
-				.get()
-				.then((docSnapshots) => {
-					return docSnapshots.docs.map((doc) => {
-						let data = doc.data()
-						data.id = doc.id;
-						data.created_at = new Date(data.created_at.toDate())
-						return data
-					})
-				})
-	},
-	getPostsById(userId) {
-		const postsCollection = firestore.collection(POSTS)
-		return postsCollection
-				.where("userId", "==", userId)
-				.orderBy('created_at', 'desc')
-				.get()
-				.then((docSnapshots) => {
-					return docSnapshots.docs.map((doc) => {
+  getPost(id) {
+    var postDoc = firestore.collection(POSTS).doc(id);
+    return postDoc.get().then(function(doc) {
+      if (doc.exists) {
+        let data = doc.data();
+        data.title = doc.data().title;
+        data.body = doc.data().body;
+        data.id = id;
+        data.email = doc.data().email;
+        data.name = doc.data().name;
+        return data;
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    });
+  },
+  getPosts() {
+    const postsCollection = firestore.collection(POSTS)
+    return postsCollection
+      .orderBy('created_at', 'desc')
+      .get()
+      .then((docSnapshots) => {
+        return docSnapshots.docs.map((doc) => {
+          let data = doc.data()
+          data.id = doc.id;
+          data.created_at = new Date(data.created_at.toDate())
+          return data
+        })
+      })
+  },
+  getPostsById(userId) {
+    const postsCollection = firestore.collection(POSTS)
+    return postsCollection
+      .where("userId", "==", userId)
+      .orderBy('created_at', 'desc')
+      .get()
+      .then((docSnapshots) => {
+        return docSnapshots.docs.map((doc) => {
 
-						let data = doc.data();
-						data.id = doc.id;
-						data.created_at = new Date(data.created_at.toDate());
-						return data
-					})
-				})
-	},
-
-
-	postPost(title, body, userId, name) {
-		return firestore.collection(POSTS).add({
-			title,
-			body,
-			userId,
-			created_at: firebase.firestore.FieldValue.serverTimestamp(),
-			email:store.state.user.email,
-			name: name
-		}).then(function(docRef) {
-    		return docRef.id;
-		})
-	},
-
-	modifyPost(title,body,id, name){
-		return firestore.collection(POSTS).doc(id).update({
-			"title":title,
-			"body":body,
-			"name": name,
-			"email":store.state.user.email
-		})
-	},
-	deletePost(id){
-		var userId = firebase.auth().currentUser.uid;
-		firestore.collection(USERS).doc(userId).update({
-    		posts: firebase.firestore.FieldValue.arrayRemove(id),
-		})
-
-		return firestore.collection(POSTS).doc(id).delete().then(function() {
-
-		}).catch(function(error) {
-				console.error("Error removing document: ", error);
-		});
-	},
+          let data = doc.data();
+          data.id = doc.id;
+          data.created_at = new Date(data.created_at.toDate());
+          return data
+        })
+      })
+  },
 
 
-	/********************\
+  postPost(title, body, userId, name) {
+    return firestore.collection(POSTS).add({
+      title,
+      body,
+      userId,
+      created_at: firebase.firestore.FieldValue.serverTimestamp(),
+      email: store.state.user.email,
+      name: name
+    }).then(function(docRef) {
+      return docRef.id;
+    })
+  },
+
+  modifyPost(title, body, id, name) {
+    return firestore.collection(POSTS).doc(id).update({
+      "title": title,
+      "body": body,
+      "name": name,
+      "email": store.state.user.email
+    })
+  },
+  deletePost(id) {
+    var userId = firebase.auth().currentUser.uid;
+    firestore.collection(USERS).doc(userId).update({
+      posts: firebase.firestore.FieldValue.arrayRemove(id),
+    })
+
+    return firestore.collection(POSTS).doc(id).delete().then(function() {
+
+    }).catch(function(error) {
+      console.error("Error removing document: ", error);
+    });
+  },
+
+
+  /********************\
  \   Portfolio 함수들   \
 	\********************/
 	deletePortfolio(id){
@@ -154,6 +155,7 @@ export default {
 					data.title = doc.data().title;
 					data.body = doc.data().body;
 					data.img = doc.data().img;
+					data.created_at = new Date(data.created_at.toDate())
 					data.id = id;
 					return data;
 				} else {
@@ -329,253 +331,253 @@ export default {
 		})
 	},
 
-	/********************\
+  /********************\
  \     User 함수들      \
 	\********************/
-	getUsers(){
-		const usersCollection = firestore.collection(USERS)
-		return usersCollection
-				.orderBy('created_at', 'desc')
-				.get()
-				.then((docSnapshots) => {
-					return docSnapshots.docs.map((doc) => {
-						let data = doc.data();
-						data.id = doc.id;
-						if(data.created_at != ""){
-							data.created_at = new Date(data.created_at.toDate())
-						}
-						if(data.current_at != ""){
-							data.current_at = new Date(data.current_at.toDate())
-						}
-						return data
-					})
-				})
-	},
+  getUsers() {
+    const usersCollection = firestore.collection(USERS)
+    return usersCollection
+      .orderBy('created_at', 'desc')
+      .get()
+      .then((docSnapshots) => {
+        return docSnapshots.docs.map((doc) => {
+          let data = doc.data();
+          data.id = doc.id;
+          if (data.created_at != "") {
+            data.created_at = new Date(data.created_at.toDate())
+          }
+          if (data.current_at != "") {
+            data.current_at = new Date(data.current_at.toDate())
+          }
+          return data
+        })
+      })
+  },
 
-	modifyUser(user){
-		return firestore.collection(USERS).doc(user.id).update({
-			"name": user.name,
-			"classify": user.classify,
-			"email": user.email,
-			"created_at": user.created_at,
-			"current_at": user.current_at,
-			"userImageUrl": user.userImageUrl,
-			"isPortfolioOpen": user.isPortfolioOpen,
-			"isPostOpen": user.isPostOpen,
-			"isCommentOpen": user.isCommentOpen,
-		})
-	},
+  modifyUser(user) {
+    return firestore.collection(USERS).doc(user.id).update({
+      "name": user.name,
+      "classify": user.classify,
+      "email": user.email,
+      "created_at": user.created_at,
+      "current_at": user.current_at,
+      "userImageUrl": user.userImageUrl,
+      "isPortfolioOpen": user.isPortfolioOpen,
+      "isPostOpen": user.isPostOpen,
+      "isCommentOpen": user.isCommentOpen,
+    })
+  },
 
-	modifyUserWithImage(user, image){
-		return firestore.collection(USERS).doc(user.id).set({
-			name: user.name,
-			classify: user.classify,
-			email: user.email,
-			created_at: user.created_at,
-			current_at: user.current_at,
-			userImageUrl: image,
-		})
-	},
+  modifyUserWithImage(user, image) {
+    return firestore.collection(USERS).doc(user.id).set({
+      name: user.name,
+      classify: user.classify,
+      email: user.email,
+      created_at: user.created_at,
+      current_at: user.current_at,
+      userImageUrl: image,
+    })
+  },
 
-	deleteUserbyId(id){
-		//delete user data from firebase
-		// firestore.collection(USERS).doc(id).delete().then(function() {
-		//
-		// }).catch(function(error) {
-		// 		console.error("Error removing document: ", error);
-		// });
+  deleteUserbyId(id) {
+    //delete user data from firebase
+    // firestore.collection(USERS).doc(id).delete().then(function() {
+    //
+    // }).catch(function(error) {
+    // 		console.error("Error removing document: ", error);
+    // });
 
-		//delete user from Athentication
-		var a = firebase.auth().getUser(id);
-		console.log(a);
-		// firebase.auth().deleteUser(id).then(function() {
-		//
-		// }).catch(function(error) {
-		//   console.log("이미 지워졌당ㅋ",error);
-		// });
-	},
+    //delete user from Athentication
+    var a = firebase.auth().getUser(id);
+    console.log(a);
+    // firebase.auth().deleteUser(id).then(function() {
+    //
+    // }).catch(function(error) {
+    //   console.log("이미 지워졌당ㅋ",error);
+    // });
+  },
 
-	addToPortfolioList(id){
-		var userId = firebase.auth().currentUser.uid;
-		return firestore.collection(USERS).doc(userId).update({
-    	portfolios: firebase.firestore.FieldValue.arrayUnion(id),
-		})
-	},
-	addToPostList(id){
-		var userId = firebase.auth().currentUser.uid;
-		return firestore.collection(USERS).doc(userId).update({
-    	posts: firebase.firestore.FieldValue.arrayUnion(id),
-		})
-	},
-	addToPostcommentList(id){
-		var userId = firebase.auth().currentUser.uid;
-		return firestore.collection(USERS).doc(userId).update({
-    	postcomments: firebase.firestore.FieldValue.arrayUnion(id),
-		})
-	},
-	addToPortfoliocommentList(id){
-		var userId = firebase.auth().currentUser.uid;
-		return firestore.collection(USERS).doc(userId).update({
-    	portfoliocomments: firebase.firestore.FieldValue.arrayUnion(id),
-		})
-	},
+  addToPortfolioList(id) {
+    var userId = firebase.auth().currentUser.uid;
+    return firestore.collection(USERS).doc(userId).update({
+      portfolios: firebase.firestore.FieldValue.arrayUnion(id),
+    })
+  },
+  addToPostList(id) {
+    var userId = firebase.auth().currentUser.uid;
+    return firestore.collection(USERS).doc(userId).update({
+      posts: firebase.firestore.FieldValue.arrayUnion(id),
+    })
+  },
+  addToPostcommentList(id) {
+    var userId = firebase.auth().currentUser.uid;
+    return firestore.collection(USERS).doc(userId).update({
+      postcomments: firebase.firestore.FieldValue.arrayUnion(id),
+    })
+  },
+  addToPortfoliocommentList(id) {
+    var userId = firebase.auth().currentUser.uid;
+    return firestore.collection(USERS).doc(userId).update({
+      portfoliocomments: firebase.firestore.FieldValue.arrayUnion(id),
+    })
+  },
 
-	/********************\
+  /********************\
  \    Login 함수들      \
 	\********************/
-	loginWithGoogle() {
-		let provider = new firebase.auth.GoogleAuthProvider()
-		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-		return firebase.auth().signInWithPopup(provider).then(function(result) {
+  loginWithGoogle() {
+    let provider = new firebase.auth.GoogleAuthProvider()
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    return firebase.auth().signInWithPopup(provider).then(function(result) {
 
-			return result
-		}).catch(function(error) {
-			console.error('[Google Login Error]', error)
-		})
-	},
-	loginWithFacebook(){
-		// Sign in using a popup.
-		var provider = new firebase.auth.FacebookAuthProvider();
-		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-		return firebase.auth().signInWithPopup(provider).then(function(result) {
-			return result
-		}).catch(function(error){
-			console.error('[Favebook Loing Error]', error)
-		});
-	},
+      return result
+    }).catch(function(error) {
+      console.error('[Google Login Error]', error)
+    })
+  },
+  loginWithFacebook() {
+    // Sign in using a popup.
+    var provider = new firebase.auth.FacebookAuthProvider();
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    return firebase.auth().signInWithPopup(provider).then(function(result) {
+      return result
+    }).catch(function(error) {
+      console.error('[Favebook Loing Error]', error)
+    });
+  },
 
-	logout() {
-		return firebase.auth().signOut()
-	},
+  logout() {
+    return firebase.auth().signOut()
+  },
 
-	getUser(id){
-		var userDoc = firestore.collection(USERS).doc(id);
-		return userDoc.get().then(function(result) {
-			let data = result.data();
-			data.id = result.id;
-			return data;
-		}).catch(function(error) {
-				console.log("Error getting document:", error);
-		});
-	},
+  getUser(id) {
+    var userDoc = firestore.collection(USERS).doc(id);
+    return userDoc.get().then(function(result) {
+      let data = result.data();
+      data.id = result.id;
+      return data;
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    });
+  },
 
-	getUserData(){
-		var user = firebase.auth().currentUser;
-		if(user != null){
-			var userData = firestore.collection(USERS).doc(user.uid);
-			return userData.get().then(function(result) {
-				var data = result.data();
-				data.id = result.id;
-				return data;
-			}).catch(function(error) {
-				console.log("Error getting cached document:", error);
-			});
-		}else{
-			return "[getUserData] 로그인을 해주세요";
-		}
-	},
+  getUserData() {
+    var user = firebase.auth().currentUser;
+    if (user != null) {
+      var userData = firestore.collection(USERS).doc(user.uid);
+      return userData.get().then(function(result) {
+        var data = result.data();
+        data.id = result.id;
+        return data;
+      }).catch(function(error) {
+        console.log("Error getting cached document:", error);
+      });
+    } else {
+      return "[getUserData] 로그인을 해주세요";
+    }
+  },
 
-	userDataInit(){
-		var userId = firebase.auth().currentUser.uid;
-		return firestore.collection(USERS).doc(userId).set({
-			email:"",
-			classify:"",
-			name:"",
-			created_at:"",
-			current_at:"",
-			userImageUrl:"",
-			isPostOpen:true,
-			isPortfolioOpen:true,
-			isCommentOpen:true,
+  userDataInit() {
+    var userId = firebase.auth().currentUser.uid;
+    return firestore.collection(USERS).doc(userId).set({
+      email: "",
+      classify: "",
+      name: "",
+      created_at: "",
+      current_at: "",
+      userImageUrl: "",
+      isPostOpen: true,
+      isPortfolioOpen: true,
+      isCommentOpen: true,
 
-		}).then(function(result){
+    }).then(function(result) {
 
-		});
-	},
+    });
+  },
 
-	userDataToDB(email,classify,name,created_at,userImageUrl){
-		var userId = firebase.auth().currentUser.uid;
-		return firestore.collection(USERS).doc(userId).update({
-			"email":email,
-			"classify":classify,
-			"name":name,
-			"created_at":created_at,
-			"userImageUrl":userImageUrl,
-			current_at: firebase.firestore.FieldValue.serverTimestamp(),
-		}).then(function(result){
+  userDataToDB(email, classify, name, created_at, userImageUrl) {
+    var userId = firebase.auth().currentUser.uid;
+    return firestore.collection(USERS).doc(userId).update({
+      "email": email,
+      "classify": classify,
+      "name": name,
+      "created_at": created_at,
+      "userImageUrl": userImageUrl,
+      current_at: firebase.firestore.FieldValue.serverTimestamp(),
+    }).then(function(result) {
 
-		});
-	},
+    });
+  },
 
-	//셀프 탈퇴
-	selfDeleteUser(){
-		var user = firebase.auth().currentUser;
-		if(user !== null){
-			firestore.collection(USERS).doc(user.uid).delete().then(function() {
+  //셀프 탈퇴
+  selfDeleteUser() {
+    var user = firebase.auth().currentUser;
+    if (user !== null) {
+      firestore.collection(USERS).doc(user.uid).delete().then(function() {
 
-			}).catch(function(error) {
-					console.error("Error removing document: ", error);
-			});
+      }).catch(function(error) {
+        console.error("Error removing document: ", error);
+      });
 
-			return user.delete().then(function() {
+      return user.delete().then(function() {
 
-			}).catch(function(error) {
-			  console.log("유저 삭제",error);
-			});
-		}else{
-			console.log("유저없음");
-		}
-	},
+      }).catch(function(error) {
+        console.log("유저 삭제", error);
+      });
+    } else {
+      console.log("유저없음");
+    }
+  },
 
-	/********************\
+  /********************\
  \    PageLog 함수들    \
 	\********************/
-	getPageLogs() {
-		const pageLogCollection = firestore.collection(PAGELOGS)
-		return pageLogCollection
-				.orderBy('visitTime', 'desc')
-				.get()
-				.then((docSnapshots) => {
-					return docSnapshots.docs.map((doc) => {
-						let data = doc.data()
-						data.visitTime = new Date(data.visitTime.toDate())
-						return data
-					})
-				})
-	},
-	postPageLog(uID, from, to) {
-		return firestore.collection(PAGELOGS).add({
-			uID,
-			from,
-			to,
-			visitTime: firebase.firestore.FieldValue.serverTimestamp()
-		})
-	},
+  getPageLogs() {
+    const pageLogCollection = firestore.collection(PAGELOGS)
+    return pageLogCollection
+      .orderBy('visitTime', 'desc')
+      .get()
+      .then((docSnapshots) => {
+        return docSnapshots.docs.map((doc) => {
+          let data = doc.data()
+          data.visitTime = new Date(data.visitTime.toDate())
+          return data
+        })
+      })
+  },
+  postPageLog(uID, from, to) {
+    return firestore.collection(PAGELOGS).add({
+      uID,
+      from,
+      to,
+      visitTime: firebase.firestore.FieldValue.serverTimestamp()
+    })
+  },
 
 
-	/********************\
+  /********************\
  \ Page Offline 함수들  \
 	\********************/
 
-	/** 오프라인 지속성 구현 */
-	enablePersistence(){
-      firestore.enablePersistence()
-        .catch(function(err) {
-            if (err.code == 'failed-precondition') {
-                // Multiple tabs open, persistence can only be enabled
-                // in one tab at a a time.
-                // ...
-            } else if (err.code == 'unimplemented') {
-                // The current browser does not support all of the
-                // features required to enable persistence
-                // ...
-            }
-        });
-      // Subsequent queries will use persistence, if it was enabled successfully
-      // [END initialize_persistence]
+  /** 오프라인 지속성 구현 */
+  enablePersistence() {
+    firestore.enablePersistence()
+      .catch(function(err) {
+        if (err.code == 'failed-precondition') {
+          // Multiple tabs open, persistence can only be enabled
+          // in one tab at a a time.
+          // ...
+        } else if (err.code == 'unimplemented') {
+          // The current browser does not support all of the
+          // features required to enable persistence
+          // ...
+        }
+      });
+    // Subsequent queries will use persistence, if it was enabled successfully
+    // [END initialize_persistence]
   },
 
-	// it("should reply with .fromCache fields", () => {
+  // it("should reply with .fromCache fields", () => {
   //     // [START use_from_cache]
   //     db.collection("cities").where("state", "==", "CA")
   //       .onSnapshot({ includeMetadataChanges: true }, function(snapshot) {
@@ -583,7 +585,7 @@ export default {
   //               if (change.type === "added") {
   //                   console.log("New city: ", change.doc.data());
   //               }
-	//
+  //
   //               var source = snapshot.metadata.fromCache ? "local cache" : "server";
   //               console.log("Data came from " + source);
   //           });
@@ -591,7 +593,7 @@ export default {
   //     // [END use_from_cache]
   //   })
 
-	/**************************\
+  /**************************\
  \ push 함수들   \
 	\**************************/
 	alarmOnFirstVisit() {
@@ -607,34 +609,38 @@ export default {
 			})
 		}
     },
-    onMessageResponse() {
-        return fireMessage.onMessage(function (payload) {
-        	console.log(payload)
+	onMessageResponse() {
+		return fireMessage.onMessage(function (payload) {
+			// console.log(payload)
 			if (payload.data.messageAbout === "Create") {
-				var notification = new Notification('EEEAZY Notification', {
-					icon: 'https://i.imgur.com/wxV4WcW.png',
-					body: '새 글이 등록되었습니다.',
+				Vue.notify({
+					group: 'foo',
+					type: 'warn',
+					title: payload.data.displayName +"&nbsp"+"-"+"&nbsp"+ payload.data.title,
+					text: "새글이 등록되었습니다.\n",
+					duration: 5000,
 				});
-				notification.onclick = function () {
-					window.open('http://localhost:8080/');
-				};
+
 			} else if (payload.data.messageAbout === "Update") {
 
 			} else if (payload.data.messageAbout === "Delete") {
-				var notification = new Notification('EEEAZY Notification', {
-					icon: 'https://i.imgur.com/wxV4WcW.png',
-					body: '글이 삭제되었습니다.',
+				Vue.notify({
+					group: 'foo',
+					type: 'error',
+					title: "작성자: " + payload.data.displayName +"&nbsp"+ "&nbsp"+ "제목: " + payload.data.title,
+					text: "글이 삭제되었습니다.\n",
+					duration: 5000,
 				});
-				notification.onclick = function () {
-					window.open('http://localhost:8080/');
-				};
 			}
-        });
-    },
-    addToCloudMessagingUserList(token) {
+		});
+	},
+
+	addToCloudMessagingUserList(token,isAdmin) {
         const saveObject = firestore.collection('messageList').doc(token);
         return saveObject.set({
                 cloudMessaging: token,
+				"userId":store.state.user.uid,
+				isAdmin: isAdmin,
             },
             {
                 merge: true

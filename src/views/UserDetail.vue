@@ -46,45 +46,55 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item :value="'tab-'+1" transition="fade-transition" reverse-transition="fade-transition">
-          <v-card flat>
-            <v-layout wrap align-center justify-center>
-                <v-flex xs4>
-                  <v-progress-circular v-if="loading" indeterminate color="four"></v-progress-circular>
-                  <v-img :src="imageUrl" width="300" height="300" v-if="imageUrl" />
-                  <v-text-field label="Select Image" @click="pickFile" v-model="imageUrl" prepend-icon="attach_file" color="four" v-if="isOwner"></v-text-field>
-                  <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked" />
+          <v-card flat min-height="480px">
+            <v-layout wrap align-center justify-center my-3>
+                <v-flex xs12 md5 align-center>
+                  <v-layout wrap>
+                    <v-flex xs12 text-xs-center>
+                      <v-progress-circular v-if="loading" indeterminate color="four"></v-progress-circular>
+                      <v-img :src="imageUrl" max-width="300" max-height="300" v-if="imageUrl" align-center style="margin: auto"/>
+                    </v-flex>
+                    <v-flex style="margin: auto" xs7 md10>
+                      <v-text-field label="Select Image" @click="pickFile" v-model="imageUrl" prepend-icon="attach_file" color="four" v-if="isOwner"></v-text-field>
+                      <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked" />
+                    </v-flex>
+                  </v-layout>
 
                 </v-flex>
-              <v-flex xs2></v-flex>
-              <v-flex xs4>
+              <v-flex sm1></v-flex>
+              <v-flex xs7 md5>
                 <v-layout align-center>
-
                   <v-flex text-xs-12>
-                    <v-text-field label="Name" v-model="pageuser.name" v-if="isOwner">
-                    </v-text-field>
-                    <v-text-field label="Name" v-model="pageuser.name" readonly v-else-if="!isOwner">
-                    </v-text-field>
+                    <v-text-field label="Name" v-model="pageuser.name" v-if="isOwner">          </v-text-field>
+                    <v-text-field label="Name" v-model="pageuser.name" v-if="!isOwner" readonly></v-text-field>
                   </v-flex>
                 </v-layout>
                 <v-layout align-center>
                   <v-flex text-xs-12>
-                    <v-text-field label="Email" v-model="pageuser.email" readonly>
-                    </v-text-field>
+                    <v-text-field label="Email" v-model="pageuser.email" readonly>  </v-text-field>
                   </v-flex>
                 </v-layout>
                 <v-layout align-center>
                   <v-flex text-xs-12>
-                    <v-text-field label="Classify" v-model="pageuser.classify" readonly>
-                    </v-text-field>
+                    <v-text-field label="Classify" v-model="pageuser.classify" readonly> </v-text-field>
                   </v-flex>
                 </v-layout>
 
                 <v-layout align-center v-if="isOwner">
                   <v-flex text-xs-12 text-xs-center>
-                    <h3>프로필 공개 설정</h3>
-                    <v-switch v-model="pageuser.isPortfolioOpen" label="Portfolio"></v-switch>
-                    <v-switch v-model="pageuser.isPostOpen" label='Post'></v-switch>
-                    <v-switch v-model="pageuser.isCommentOpen" label="Comment"></v-switch>
+                    <h3 style="color:#696969;">프로필 공개 설정</h3>
+                    <v-layout align-center style="margin: auto">
+                      <v-flex text-xs-4 text-xs-center>
+                        <v-checkbox v-model="pageuser.isPortfolioOpen" label="Portfolio" color="two"></v-checkbox>
+                      </v-flex>
+                      <v-flex text-xs-4 text-xs-center>
+                        <v-checkbox v-model="pageuser.isPostOpen" label='Post' color="four"></v-checkbox>
+                      </v-flex>
+                      <v-flex text-xs-4 text-xs-center>
+                        <v-checkbox v-model="pageuser.isCommentOpen" label="Comment" color="three"></v-checkbox>
+                      </v-flex>
+                    </v-layout>
+
 
                   </v-flex>
                 </v-layout>
@@ -93,7 +103,7 @@
 
 
 
-            <v-flex text-xs-center my5 v-if="isOwner">
+            <v-flex text-xs-center mb2 v-if="isOwner">
               <v-btn color="two" round dark v-on:click="modifyUser">
                   <v-icon size="17" class="mr-2">create</v-icon>Modify
               </v-btn>
@@ -117,8 +127,8 @@
                 <template v-slot:items="props">
                   <!-- <td><p class="testbody"> {{ props.item.title }} </p></td> -->
                   <td>
-                      <router-link v-if="props.item.subTitle"  :to="{ name: 'portfolioview', params: {id:props.item.id}}">{{ props.item.subTitle }} </router-link>
-                      <router-link v-if="!props.item.subTitle" :to="{ name: 'portfolioview', params: {id:props.item.id}}"> {{ props.item.title }} </router-link>
+                      <router-link v-if="props.item.subTitle"  :to="{ name: 'portfolioview', params: {id:props.item.id}}"><span v-html="highlight(props.item.subTitle,search)"></span> </router-link>
+                      <router-link v-if="!props.item.subTitle" :to="{ name: 'portfolioview', params: {id:props.item.id}}"><span v-html="highlight(props.item.title,search)"></span> </router-link>
                     <template v-if="props.item.comments"> ({{props.item.comments.length}})</template>
                   </td>
                   <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
@@ -142,8 +152,12 @@
               <v-data-table :headers="postHeaders" :items="postSearchList" class="elevation-1">
                 <template v-slot:items="props">
                   <td>
-                    <template v-if="props.item.subTitle">{{ props.item.subTitle }}</template>
-                    <template v-else>{{ props.item.title }}</template>
+                    <template v-if="props.item.subTitle">
+                      <span v-html="highlight(props.item.subTitle,search)"></span>
+                    </template>
+                    <template v-else>
+                      <span v-html="highlight(props.item.title,search)"></span>
+                    </template>
                     <template v-if="props.item.comments"> ({{props.item.comments.length}})</template>
                   </td>
                   <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
@@ -168,13 +182,16 @@
                 <template v-slot:items="props">
                   <td>
                     <v-flex v-if="!props.item.isModify" >
-                      {{props.item.body}}
+                      <span v-html="highlight(props.item.body,search)"></span>
+                      <template v-if="props.item.recomments"> ({{props.item.recomments.length}})</template>
+                      <div class="parentTitle">{{props.item.parentTitle}}</div>
                     </v-flex>
                     <v-flex v-if="props.item.isModify">
                       <v-text-field v-model="newComment" :value='props.item.body' @keyup.enter="modifyComment(props.item)"></v-text-field>
                     </v-flex>
+
                   </td>
-                  <td>{{ props.item.classify}}</td>
+                  <td><div v-html="highlight(props.item.classify,search)"></div></td>
                   <td>{{ props.item.created_at.getFullYear()}}.{{ props.item.created_at.getMonth()+1}}.{{ props.item.created_at.getDate()}}</td>
                   <td>
                     <template v-if="isOwner">
@@ -262,6 +279,10 @@ export default {
       portfolioSearchList: [],
       postSearchList: [],
       commentSearchList:[],
+
+      // Whole
+      wholePortfolios:[],
+      wholePosts:[],
     }
   },
   mounted() {
@@ -297,6 +318,7 @@ export default {
       console.log("this.id",this.id);
       console.log("isOwner",this.isOwner);
     },
+
     async modifyUser() {
       if (this.imageUrl === '') {
         this.imageUrl = this.pageuser.userImageUrl
@@ -389,7 +411,6 @@ export default {
       });
     },
 
-
     async getPortfolios() {
       this.portfolios = await FirebaseService.getPortfoliosById(this.id);
       this.portfolioSearchList = [];
@@ -414,10 +435,26 @@ export default {
 
     async getComments(){
       this.comments = await FirebaseService.getCommentsById(this.id);
+      this.wholePosts = await FirebaseService.getPosts();
+      this.wholePortfolios = await FirebaseService.getPortfolios();
       this.commentSearchList = [];
       for(var i =0; i<this.comments.length; i++){
         if(this.comments[i].body.length >= 15){
           this.comments[i].subTitle = this.comments[i].body.substring(0, 15)+"⋯"
+        }
+        if(this.comments[i].classify == "portfolio"){
+          for(var j =0; j<this.wholePortfolios.length; j++){
+            if(this.comments[i].parentId == this.wholePortfolios[j].id){
+              this.comments[i].parentTitle = this.wholePortfolios[j].title +" ("+this.wholePortfolios[j].comments.length+")";
+            }
+          }
+        }
+        else if(this.comments[i].classify == "post"){
+          for(var j =0; j<this.wholePosts.length; j++){
+            if(this.comments[i].parentId == this.wholePosts[j].id){
+              this.comments[i].parentTitle = this.wholePosts[j].title +" ("+this.wholePosts[j].comments.length+")";
+            }
+          }
         }
         this.commentSearchList.push(this.comments[i]);
       }
@@ -490,14 +527,11 @@ export default {
       }
     },
 
-    highlight(text) {
-      var inputText = document.getElementById("inputText");
-      var innerHTML = inputText.innerHTML;
-      var index = innerHTML.indexOf(text);
-      if (index >= 0) {
-        innerHTML = innerHTML.substring(0, index) + "<span class='highlight'>" + innerHTML.substring(index, index + text.length) + "</span>" + innerHTML.substring(index + text.length);
-        inputText.innerHTML = innerHTML;
-      }
+    highlight(value,search) {
+      var iQuery = new RegExp(search, "ig");
+      return value.toString().replace(iQuery, function(matchedTxt,a,b){
+          return ('<span class=\'highlight\'>' + matchedTxt + '</span>');
+      });
     }
   },
   watch: {
@@ -550,7 +584,8 @@ export default {
 
         for(var i =0; i<this.comments.length; i++){
           var body = this.comments[i].body.toLowerCase()
-          if (body.includes(search) ) {
+          var classify = this.comments[i].classify.toLowerCase()
+          if (body.includes(search) || classify.includes(search)) {
             this.commentSearchList.push(this.comments[i]);
           }
         }
@@ -577,3 +612,13 @@ export default {
 
 }
 </script>
+
+<style>
+.parentTitle{
+  color: #AAAAAA ;
+}
+.highlight{
+  background-color: #fdc23e;
+  font-weight: bold;
+}
+</style>

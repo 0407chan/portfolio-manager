@@ -21,10 +21,11 @@
               {{comment.created_at.getDate()}}
               {{addZeros(comment.created_at.getHours())}}:
               {{addZeros(comment.created_at.getMinutes())}}
-              <v-btn @click="ReCommentForm(comment)" fab dark class="mr-2 large_comment_btn" hover color="four">
-                <v-icon size="15">fa-reply</v-icon>
-              </v-btn>
-
+              <template v-if="currUser">
+                <v-btn @click="ReCommentForm(comment)" fab dark class="mr-2 large_comment_btn" hover color="four">
+                  <v-icon size="15">fa-reply</v-icon>
+                </v-btn>
+              </template>
               <template v-if="!comment.isModify">
                 <div style="background-color: #EDEDED; border-radius: 10px">{{comment.body}}</div>
               </template>
@@ -35,10 +36,10 @@
 
             <template v-if="!comment.isModify">
               <v-flex xs2 text-xs-center>
-                <v-btn fab flat small color="three" v-if="useremail === comment.email" @click="modifyCommentForm(comment)">
+                <v-btn fab flat small color="three" v-if="currUser.id === comment.userId" @click="modifyCommentForm(comment)">
                   <v-icon size="17">create</v-icon>
                 </v-btn>
-                <v-btn fab flat small color="two" v-if="useremail === comment.email" @click="deleteComment(comment.id)">
+                <v-btn fab flat small color="two" v-if="currUser.id === comment.userId" @click="deleteComment(comment.id)">
                   <v-icon size="17">delete</v-icon>
                 </v-btn>
               </v-flex>
@@ -89,7 +90,7 @@
     </v-flex>
   </v-flex>
   <!-- portfolio comment, need authority -->
-  <template v-if="username">
+  <template v-if="currUser">
     <v-layout justify-space-between wrap align-center>
       <v-flex xs10 text-xs-center>
         <v-text-field v-model="comment_input" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
@@ -140,10 +141,8 @@ export default {
   },
   data() {
     return {
-      username: '',
-      useremail: '',
       portfolioId: '',
-      user: '',
+      currUser: '',
       comments: [],
       users: [],
       newComment: '',
@@ -162,16 +161,9 @@ export default {
 
   created() {
     firebaseApp.auth().onAuthStateChanged(async user => {
-      var username = '';
-      var useremail = '';
-      if (user) {
-        var result = await FirebaseService.getUserData();
-        username = result.name;
-        this.username = username;
-        useremail = result.email;
-        this.useremail = useremail;
-      }
+      if (user) this.currUser = await FirebaseService.getUserData();
     });
+
     if(this.classify == "post"){
       this.getComments(this.id);
     }else{

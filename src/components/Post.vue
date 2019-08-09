@@ -125,7 +125,7 @@ export default {
       this.getPost(this.id);
     }
     if (this.id != null) {
-      this.getPostComments(this.id);
+      this.getComments(this.id);
     }
   },
   created() {
@@ -148,11 +148,11 @@ export default {
   methods: {
     async deleteComment(commentId){
       await FirebaseService.deleteComment(this.id, commentId);
-      this.getPostComments(this.id);
+      this.getComments(this.id);
     },
     async modifyComment(comment){
       await FirebaseService.modifyComment(comment, this.newComment);
-      this.getPostComments(this.id);
+      this.getComments(this.id);
     },
     async modifyCommentForm(comment) {
       if(comment.isModify){
@@ -168,23 +168,29 @@ export default {
 
         this.btnCheck = true;
         let result = await FirebaseService.getUserData();
-        let res = await FirebaseService.postPostComment(this.id, this.comment_input, result.name, result.userImageUrl);
-        await FirebaseService.addToPostcommentList(res);
-        await FirebaseService.postAddToCommentList(this.id,res);
+        let comId = await FirebaseService.postComment(this.id, "post",this.comment_input, result.name, result.userImageUrl);
+        await FirebaseService.addToUserCommentList(comId);
+        await FirebaseService.addToCommentList(this.id,"post",comId);
+
         this.comment_input = '';
-        await this.getPostComments(this.id);
+        await this.getComments(this.id);
         this.btnCheck = false;
       }
     },
     async deletePost() {
       swal('삭제되었습니다.');
+      await this.getPost(this.id);
+      if(this.post.comments){
+        for(var i =0; i<this.post.comments.length; i++)
+        FirebaseService.deleteComment(this.id, 'post',this.post.comments[i]);
+      }
       await FirebaseService.deletePost(this.id);
       location.reload();
     },
     async getPost(id) {
       this.post = await FirebaseService.getPost(id);
     },
-    async getPostComments(postId) {
+    async getComments(postId) {
       //TODO 글 추가 삭제 수정 시 오류가 있어서 일단 보류
       // this.postComments = [];
       // for(var i = 0; i<this.comments.length; i++){
@@ -194,8 +200,7 @@ export default {
       // }
       // console.log(this.postComments);
 
-
-      this.postComments = await FirebaseService.getPostComments(postId);
+      this.postComments = await FirebaseService.getComments(postId);
       // 후후
       this.users = await FirebaseService.getUsers();
       for(var i in this.postComments){

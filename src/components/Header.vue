@@ -11,19 +11,31 @@
 
   <v-toolbar-items class="hidden-sm-and-down">
 
-    <v-btn v-if="username" flat :to="{ name: 'userinfo', params: {id: id}}">{{username}}님</v-btn>
+    <!-- <v-btn v-if="user" flat :to="{ name: 'userinfo', params: {id: user.id}}">{{user.name}}님</v-btn> -->
     <v-btn flat :to="{name:'portfolio'}">Portfolio</v-btn>
     <v-btn flat :to="{name:'post'}">Post</v-btn>
     <v-btn flat v-if="wait&&!user">
       <LoginModal></LoginModal>
     </v-btn>
     <v-btn flat v-if="user" v-on:click="signOut">Logout</v-btn>
-    <v-btn flat icon>
 
+
+    <!-- 안예뻐서 일시적으로 주석처리 함 -->
+
+    <!-- <v-btn flat icon>
       <Translate></Translate>
     </v-btn>
     <v-btn icon v-on:click="favorite()">
       <v-icon>bookmark_border</v-icon>
+    </v-btn> -->
+
+
+    <v-btn fab small v-if="user" :to="{ name: 'userinfo', params: {id: user.id}}">
+      <v-avatar flat size="40">
+        <img
+        :src="user.userImageUrl"
+        >
+      </v-avatar>
     </v-btn>
   </v-toolbar-items>
 
@@ -36,10 +48,10 @@
       </template>
 
       <v-list>
-        <v-list-tile v-if="username" :to="{ name: 'userinfo', params: {id: id}}">
-          <v-list-tile-title flat>{{username}}님</v-list-tile-title>
+        <v-list-tile v-if="user" :to="{ name: 'userinfo', params: {id: user.id}}">
+          <v-list-tile-title flat>{{user.name}}님</v-list-tile-title>
         </v-list-tile>
-        <v-list-tile v-for="(item, i) in items" :key="i" :to="{name:item.title}">
+        <v-list-tile v-for="(item, i) in items" :key="i" :to="{name: item.title}">
           <v-list-tile-title flat>{{ item.title }}</v-list-tile-title>
         </v-list-tile>
         <v-list-tile v-if="!user">
@@ -75,9 +87,6 @@ export default {
         title: "portfolio"
       }],
       user: "",
-      username: "",
-      email: '',
-      id: '',
       marked: false,
       wait: false
     };
@@ -90,10 +99,10 @@ export default {
       FirebaseService.logout().then(function() {
           swal('로그아웃되었습니다')
 
-      }),
-      firebase.auth().signOut().then(function() {
+        }),
+        firebase.auth().signOut().then(function() {
 
-      });
+        });
       this.$router.push({
         name: "home"
       });
@@ -105,21 +114,13 @@ export default {
   },
   created() {
     // 로그인, 로그아웃 을 위한 사용자 감지
-    //   
-    //헤더에 사용자 이름을 표시
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        var result = await FirebaseService.getUserData();
-        this.user = user;
-        this.username = result.name
-        this.email = result.email
-        this.id = user.uid
-        this.wait = true
+        this.user = await FirebaseService.getUserData();
+      } else {
+        this.user = "";
       }
-      else {
-        this.username = ""
-        this.wait = true
-      }
+      this.wait = true
     })
   }
 };

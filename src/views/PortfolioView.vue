@@ -5,7 +5,7 @@
       <v-flex xs12 md5>
         <div class="img_div">
           <div class="img_scale">
-            <img v-bind:src="portfolio.img" width="100%" @click="imageview(portfolio.img)"/>
+            <img v-bind:src="portfolio.img" width="100%" />
           </div>
         </div>
       </v-flex>
@@ -13,12 +13,23 @@
       </v-flex>
       <v-flex xs12 md6>
         <v-flex xs12 text-xs-center>
-          <h2>{{portfolio.title}} </h2>
+          <h2>{{portfolio.title}}</h2>
         </v-flex>
         <v-flex xs12>
           <br>
-          <hr><br>
+          <hr>
         </v-flex>
+        <v-flex xs12 text-xs-right>
+          {{portfolio.created_at.getFullYear()}}.
+          {{portfolio.created_at.getMonth()+1}}.
+          {{portfolio.created_at.getDate()}}
+        </v-flex>
+        <v-flex xs12 text-xs-right>
+          <router-link :to="{ name: 'userinfo', params: {id: portfolio.userId}}">
+            by.{{result.name}}
+          </router-link>
+        </v-flex>
+        <br>
         <v-flex xs12 test-xs-left>
           <vue-markdown :source="portfolio.body"></vue-markdown>
         </v-flex>
@@ -37,7 +48,9 @@
         <v-icon size="17" class="mr-2">fa-undo</v-icon>Back
       </v-btn>
     </v-flex>
-
+    <!-- <v-flex xs12>
+        <div id="disqus_thread"></div>
+      </v-flex> -->
     <v-flex xs12>
       <Comments :id="portfolio.id" classify="portfolio"></Comments>
     </v-flex>
@@ -53,7 +66,6 @@ import firebase from "firebase/app"
 import firebaseApp from 'firebase/app'
 import Comments from '../components/Comments'
 
-
 export default {
   name: 'PortfolioViewPage',
   data() {
@@ -64,16 +76,22 @@ export default {
       img: '',
       index: 0,
       portfolio: '',
-      user: ""
+      user: "",
+      result: "",
     }
   },
   created() {
+    this.id = this.$route.params.id;
+
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.user = await FirebaseService.getUserData();
       }
-    });
-    this.id = this.$route.params.id;
+    })
+  },
+
+  mounted() {
+    this.getPortfolio(this.id);
   },
 
   components: {
@@ -82,34 +100,24 @@ export default {
     Comments,
   },
 
-  mounted() {
-    this.getPortfolio(this.id);
-  },
   methods: {
     async deletePortfolio() {
       await this.getPortfolio(this.id);
-      if(this.portfolio.comments){
-        for(var i =0; i<this.portfolio.comments.length; i++)
-        FirebaseService.deletePortfolioComment(this.id, this.portfolio.comments[i]);
+      if (this.portfolio.comments) {
+        for (var i = 0; i < this.portfolio.comments.length; i++)
+          FirebaseService.deleteComment(this.id, 'portfolio', this.portfolio.comments[i]);
       }
       await FirebaseService.deletePortfolio(this.id);
       this.$router.push({
         name: "portfolio"
       });
+
     },
     async getPortfolio(id) {
       this.portfolio = await FirebaseService.getPortfolio(id);
-    },
-    imageview(url) {
-      var img = new Image();
-      img.onload = function() {
-        var imgW = this.width;
-        var imgH = this.height;
-        if ((imgW != 0) && (imgH != 0)) {
-          window.open(url, 'guide', 'width=' + imgW + ', height=' + imgH + ', scrollbars=no');
-        }
+      if (this.portfolio.userId) {
+        this.result = await FirebaseService.getUser(this.portfolio.userId)
       }
-      img.src = url;
     },
   }
 }
