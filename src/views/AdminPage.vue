@@ -11,8 +11,8 @@
 </style>
 
 <template>
-<v-container v-if="user.classify==='관리자'" mt-5>
-  <v-card class="mx-auto" :flat="flat" :loading="loading" :outlined="outlined" :elevation="elevation" :width="width" :height="height" v-if="isAdmin===false">
+<v-container v-if="user.classify==='관리자'">
+  <v-card class="mx-auto" :flat="flat" :loading="loading" :outlined="outlined" :elevation="elevation" :width="width" :height="height" v-if="isAdmin===false" style="margin-top: 10%">
     <v-img v-if="media" class="white--text" height="200px" src="https://i.imgur.com/Cerxrec.png">
     </v-img>
     <v-card-title v-else>EEEAZY PORTFOLIO</v-card-title>
