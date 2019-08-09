@@ -103,7 +103,8 @@ export default {
       userId,
       created_at: firebase.firestore.FieldValue.serverTimestamp(),
       email: store.state.user.email,
-      name: name
+      name: name,
+      classify: 'post'
     }).then(function(docRef) {
       return docRef.id;
     })
@@ -213,7 +214,8 @@ export default {
 			name,
 			userId:id,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
-			email:store.state.user.email
+			email:store.state.user.email,
+            classify: 'portfolio'
 		}).then(function(docRef) {
     		return docRef.id;
 		})
@@ -331,148 +333,6 @@ export default {
 	},
 
 
-
-  /********************\
- \     User 함수들      \
-	\********************/
-  getUsers() {
-    const usersCollection = firestore.collection(USERS)
-    return usersCollection
-      .orderBy('created_at', 'desc')
-      .get()
-      .then((docSnapshots) => {
-        return docSnapshots.docs.map((doc) => {
-          let data = doc.data();
-          data.id = doc.id;
-          if (data.created_at != "") {
-            data.created_at = new Date(data.created_at.toDate())
-          }
-          if (data.current_at != "") {
-            data.current_at = new Date(data.current_at.toDate())
-          }
-          return data
-        })
-    })
-},
-
-    postPortfolio(title, body, img, id, name) {
-        return firestore.collection(PORTFOLIOS).add({
-            title,
-            body,
-            img,
-            name,
-            userId: id,
-            created_at: firebase.firestore.FieldValue.serverTimestamp(),
-            email: store.state.user.email,
-            classify: 'portfolio'
-        }).then(function (docRef) {
-            return docRef.id;
-        })
-    },
-
-
-    /**************************\
-     \       Comment 함수들       \
-     \**************************/
-
-    postComment(parentId, classify, body, name, userImageUrl) {
-        return firestore.collection(COMMENTS).add({
-            parentId: parentId,
-            classify: classify,
-            body: body,
-            created_at: firebase.firestore.FieldValue.serverTimestamp(),
-            name: name,
-            email: store.state.user.email,
-            isModify: false,
-            reply: false,
-            userImageUrl: userImageUrl,
-            userId: store.state.user.uid,
-        }).then(function (docRef) {
-            return docRef.id;
-        })
-    },
-    addToUserCommentList(postId) {
-        var userId = firebase.auth().currentUser.uid;
-        return firestore.collection(USERS).doc(userId).update({
-            comments: firebase.firestore.FieldValue.arrayUnion(postId),
-        })
-    },
-    addToCommentList(parentId, classify, commentId) {
-        if (classify == 'post') {
-            return firestore.collection(POSTS).doc(parentId).update({
-                comments: firebase.firestore.FieldValue.arrayUnion(commentId),
-            })
-        } else {
-            return firestore.collection(PORTFOLIOS).doc(parentId).update({
-                comments: firebase.firestore.FieldValue.arrayUnion(commentId),
-            })
-        }
-    },
-    getComments(parentId) {
-        const commentCollection = firestore.collection(COMMENTS)
-        return commentCollection
-            .where("parentId", "==", parentId)
-            .orderBy("created_at", 'desc')
-            .get()
-            .then((docSnapshots) => {
-                return docSnapshots.docs.map((doc) => {
-                    let data = doc.data()
-                    data.id = doc.id;
-                    data.created_at = new Date(data.created_at.toDate())
-                    return data
-                })
-            })
-    },
-
-    getCommentsById(userId) {
-        const portfolioCommentCollection = firestore.collection(COMMENTS)
-        return portfolioCommentCollection
-            .where("userId", "==", userId)
-            .orderBy("created_at", 'desc')
-            .get()
-            .then((docSnapshots) => {
-                return docSnapshots.docs.map((doc) => {
-                    let data = doc.data()
-                    data.id = doc.id;
-                    data.created_at = new Date(data.created_at.toDate())
-                    return data
-                })
-            })
-    },
-
-    deleteComment(parentId, classify, commentId) {
-        var userId = firebase.auth().currentUser.uid;
-        firestore.collection(USERS).doc(userId).update({
-            comments: firebase.firestore.FieldValue.arrayRemove(commentId),
-        });
-        if (classify == 'post') {
-            firestore.collection(POSTS).doc(parentId).update({
-                comments: firebase.firestore.FieldValue.arrayRemove(commentId),
-            });
-        } else {
-            firestore.collection(PORTFOLIOS).doc(parentId).update({
-                comments: firebase.firestore.FieldValue.arrayRemove(commentId),
-            });
-        }
-        return firestore.collection(COMMENTS).doc(commentId).delete().then(function () {
-        }).catch(function (error) {
-            console.error("Error removing portfolioComment: ", error);
-        });
-    },
-    modifyComment(comment, newComment) {
-        return firestore.collection(COMMENTS).doc(comment.id).update({
-            "body": newComment,
-            "classify": comment.classify,
-            "created_at": comment.created_at,
-            "isModify": false,
-            "reply": false,
-            "name": comment.name,
-            "portfolioId": comment.parentId,
-            "userImageUrl": comment.userImageUrl,
-            "email": store.state.user.email,
-            "userId": store.state.user.uid,
-        })
-    },
 
     /********************\
      \     User 함수들      \

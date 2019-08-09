@@ -14,13 +14,14 @@ body, head{
 width:16px;height:16px;background:#FCFFFC;}
 
 #headMargin {
-  margin-top: 50px;
+  margin-top: 50px !important;
 }
 
 .notifications {
   display: block !important;
   position: fixed !important;
   z-index: 5000 !important;
+  top: 48px !important;
 }
 
 .notification-wrapper {
