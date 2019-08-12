@@ -20,7 +20,6 @@ import UserDetailTest from './test/UserDetailTest.vue'
 import AdminPageTest from './test/AdminPageTest.vue'
 import LoginTest from './test/LoginTest.vue'
 import InputTest from './test/InputTest.vue'
-import PortfolioTest from './test/portfolioTest.vue'
 
 Vue.use(Router)
 
@@ -90,11 +89,6 @@ export default new Router({
     /********************\
    \     test rounter     \
     \********************/
-    {
-      path: '/test',
-      name: 'porttest',
-      component: PortfolioTest
-    },
     {
       path: '/test4',
       name: 'userdetailtest',
