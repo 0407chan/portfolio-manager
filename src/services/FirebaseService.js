@@ -175,7 +175,7 @@ export default {
 				if (doc.exists) {
 					let data = doc.data();
 					data.created_at = new Date(data.created_at.toDate())
-					data.id = id;
+					data.id = doc.id;
 					return data;
 				} else {
 						console.log("No such document!");
@@ -234,7 +234,7 @@ export default {
 			userId:id,
 			created_at: firebase.firestore.FieldValue.serverTimestamp(),
 			email:store.state.user.email,
-            classify: 'portfolio'
+      classify: 'portfolio'
 		}).then(function(docRef) {
     		return docRef.id;
 		})
