@@ -95,7 +95,6 @@
                       </v-flex>
                     </v-layout>
                   </v-flex>
-                  <v-btn v-on:click="test"></v-btn>
                 </v-layout>
               </v-flex>
             </v-layout>
@@ -153,10 +152,10 @@
                   <td>
 
                     <template v-if="props.item.subTitle">
-                      <router-link :to="{ name: 'postview', params: {index:props.item.index}}"><span v-html="highlight(props.item.subTitle,search)"></span> </router-link>
+                      <span v-html="highlight(props.item.subTitle,search)"></span>
                     </template>
                     <template v-else>
-                      <router-link :to="{ name: 'postview', params: {index:props.item.index}}"><span v-html="highlight(props.item.title,search)"></span> </router-link>
+                      <span v-html="highlight(props.item.title,search)"></span>
                     </template>
                     <template v-if="props.item.comments"> ({{props.item.comments.length}})</template>
                   </td>
