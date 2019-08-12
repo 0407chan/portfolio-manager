@@ -602,6 +602,7 @@ export default {
     async deletePortfolio(portfolio) {
       await FirebaseService.deletePortfolio(portfolio.id);
       this.getPortfolios();
+      this.getComments();
     },
 
     modifyPost(post) {
@@ -609,13 +610,10 @@ export default {
         path: "/modifypost/" + post.id
       });
     },
+
     async deletePost(post) {
-      // let comments = await FirebaseService.getPostComments(post.id)
-      // console.log(comments);
-      // for(var i = 0; i<comments.length; i++){
-      //   FirebaseService.deleteComment(comments[i].id);
-      // }
       await FirebaseService.deletePost(post.id);
+      this.getComments();
       this.getPosts();
     },
 
@@ -633,41 +631,38 @@ export default {
       return value.toString().replace(iQuery, function(matchedTxt, a, b) {
         return ('<span class=\'highlight\'>' + matchedTxt + '</span>');
       });
+    },
+
+    searchInit(list,searchList,title){
+      for (var i = 0; i < list.length; i++) {
+        if(title =='title'){
+          if (list[i].title.length >= 15) {
+            list[i].subTitle = list[i].title.substring(0, 15) + "⋯"
+          }
+        }
+        else if(title =='body'){
+          if (list[i].body.length >= 15) {
+            list[i].subTitle = list[i].body.substring(0, 15) + "⋯"
+          }
+        }
+        searchList.push(list[i]);
+      }
     }
   },
   watch: {
     search() {
-      if (this.search.length == 0) {
-        this.portfolioSearchList = [];
-        this.postSearchList = [];
-        this.commentSearchList = [];
+      this.portfolioSearchList = [];
+      this.postSearchList = [];
+      this.commentSearchList = [];
 
-        for (var i = 0; i < this.portfolios.length; i++) {
-          if (this.portfolios[i].title.length >= 15) {
-            this.portfolios[i].subTitle = this.portfolios[i].title.substring(0, 15) + "⋯"
-          }
-          this.portfolioSearchList.push(this.portfolios[i]);
-        }
-        for (var i = 0; i < this.posts.length; i++) {
-          if (this.posts[i].title.length >= 15) {
-            this.posts[i].subTitle = this.posts[i].title.substring(0, 15) + "⋯"
-          }
-          this.postSearchList.push(this.posts[i]);
-        }
-        for (var i = 0; i < this.comments.length; i++) {
-          if (this.comments[i].body.length >= 15) {
-            this.comments[i].subTitle = this.comments[i].body.substring(0, 15) + "⋯"
-          }
-          this.commentSearchList.push(this.comments[i]);
-        }
+      if (this.search.length == 0) {
+        
+        this.searchInit(this.portfolios,this.portfolioSearchList, 'title');
+        this.searchInit(this.posts,this.postSearchList, 'title');
+        this.searchInit(this.comments,this.commentSearchList, 'body');
 
       } else {
-        this.portfolioSearchList = [];
-        this.postSearchList = [];
-        this.commentSearchList = [];
-
-        var search = this.search;
-        search = search.toLowerCase();
+        var search = this.search.toLowerCase();
 
         for (var i = 0; i < this.portfolios.length; i++) {
           var portfolioA = this.portfolios[i].title.toLowerCase()

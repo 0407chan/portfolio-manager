@@ -13,7 +13,6 @@
 
 <script>
 import PortfolioList from '../components/PortfolioList'
-import FirebaseService from '../services/FirebaseService'
 
 export default {
 	name: 'PortfolioPage',
@@ -21,9 +20,6 @@ export default {
     return{
       lim: 0,
     }
-  },
-  created(){
-    FirebaseService.firebaseChangeDetect();
   },
 
 	components: {
