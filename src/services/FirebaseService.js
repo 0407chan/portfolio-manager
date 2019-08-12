@@ -601,8 +601,8 @@ export default {
     //   })
 
     /**************************\
-     \ push 함수들   \
-     \**************************/
+   \      push 알람 함수들       \
+    \**************************/
     alarmOnFirstVisit() {
         if (window.Notification) {
             return fireMessage.requestPermission()
@@ -720,5 +720,45 @@ export default {
         }).catch(function (error) {
             console.log("Error getting cached document:", error);
         });
+    },
+
+    firebaseChangeDetect() {
+      return fireMessage.onMessage(function(payload) {
+        console.log(payload)
+        if (payload.data.messageAbout === "Create") {
+          if (payload.data.classify === "portfolio" && !payload.data.body) {
+            // text: "새로운 포트폴리오가 등록되었습니다.",
+
+          } else if (payload.data.classify === 'post' && !payload.data.body) {
+            //text: "새로운 포스트가 등록되었습니다.",
+
+          } else {
+            if (payload.data.classify === "portfolio") {
+              //  text: "포트폴리오에 새로운 댓글이 등록되었습니다.",
+
+            } else if (payload.data.classify === 'post') {
+              //text: "포스트에 새로운 댓글이 등록되었습니다",
+            }
+          }
+        } else if (payload.data.messageAbout === "Update") {
+
+        } else if (payload.data.messageAbout === "Delete") {
+          if (payload.data.classify === "portfolio" && !payload.data.body) {
+            //text: "포트폴리오가 삭제되었습니다.",
+
+          } else if (payload.data.classify === 'post' && !payload.data.body) {
+            //text: "포스트가 삭제되었습니다.",
+
+          } else {
+            if (payload.data.classify === "portfolio") {
+              //text: "포트폴리오 댓글이 삭제되었습니다.",
+
+            } else if (payload.data.classify === 'post') {
+              //text: "포스트 댓글이 삭제되었습니다",
+
+            }
+          }
+        }
+      });
     }
 }

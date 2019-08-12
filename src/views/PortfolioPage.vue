@@ -13,12 +13,17 @@
 
 <script>
 import PortfolioList from '../components/PortfolioList'
+import FirebaseService from '../services/FirebaseService'
+
 export default {
 	name: 'PortfolioPage',
   data(){
     return{
       lim: 0,
     }
+  },
+  created(){
+    FirebaseService.firebaseChangeDetect();
   },
 
 	components: {
