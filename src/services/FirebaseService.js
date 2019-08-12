@@ -51,11 +51,8 @@ export default {
     return postDoc.get().then(function(doc) {
       if (doc.exists) {
         let data = doc.data();
-        data.title = doc.data().title;
-        data.body = doc.data().body;
         data.id = id;
-        data.email = doc.data().email;
-        data.name = doc.data().name;
+        data.created_at = new Date(data.created_at.toDate())
         return data;
       } else {
         console.log("No such document!");
@@ -154,9 +151,6 @@ export default {
 		return portfolioDoc.get().then(function(doc) {
 				if (doc.exists) {
 					let data = doc.data();
-					data.title = doc.data().title;
-					data.body = doc.data().body;
-					data.img = doc.data().img;
 					data.created_at = new Date(data.created_at.toDate())
 					data.id = id;
 					return data;
@@ -371,6 +365,8 @@ export default {
             "isPostOpen": user.isPostOpen,
             "isCommentOpen": user.isCommentOpen,
             "allowPush": user.allowPush,
+            "portfolios": user.portfolios,
+            "posts": user.posts,
         })
     },
 
