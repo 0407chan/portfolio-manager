@@ -4,8 +4,8 @@
     <template v-slot:activator="{ on }">
       <v-list-tile-title flat v-on="on" style="cursor: pointer">login</v-list-tile-title>
     </template>
-    <v-tabs fixed-tabs>
-      <v-tab @click="resetSignin">Sign in</v-tab>
+    <v-tabs fixed-tabs internal-activator v-if="loginpw">
+      <v-tab @click="resetSignin" internal-activator>Sign in</v-tab>
       <v-tab @click="resetSignup">Register</v-tab>
       <v-flex text-xs-right>
         <v-btn icon @click="closeDialog">
@@ -33,6 +33,8 @@
             <v-flex xs12 text-xs-center>
               <v-text-field label="Password*" type="password" v-model="password" :rules="[rules.required]" @keyup.esc="dialog=false" @keyup.self="message=''" @keyup.enter="SignIn"></v-text-field>
             </v-flex>
+            <v-flex><v-btn flat color="#919191" @click="loginpwch">비밀번호를 잊어버리셨습니까?</v-btn></v-flex>
+<!--            <v-flex><v-btn flat color="#919191" @click="activateForgetPassword">비밀번호를 잊어버리셨습니까?</v-btn></v-flex>-->
             <v-flex>
               <v-btn round color="transparent" class="loginModal_btn" v-on:click="SignIn">log in</v-btn>
               <v-btn round color="transparent" class="loginModal_btn" v-on:click="loginWithGoogle">
@@ -77,7 +79,29 @@
             </v-flex>
           </v-flex>
         </v-layout>
-
+      </v-tab-item>
+    </v-tabs>
+    <v-tabs fixed-tabs internal-activator v-else>
+      <v-tab @click="resetFindPassword">Find Password</v-tab>
+      <v-flex text-xs-right>
+        <v-btn icon @click="closeDialog">
+          <v-icon>highlight_off</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-tab-item>
+        <v-layout align-center justify-center row fill-height elevation-5 style="min-height:400px;" white pa-4>
+          <v-flex xs12 text-xs-center>
+            <v-flex xs12 text-xs-center>
+              <v-text-field label="Email*" v-model="resetPassword" autofocus @keyup.esc="dialog=false" @keyup.enter="FindPassword"></v-text-field>
+            </v-flex>
+            <v-flex>
+              <v-btn round color="transparent" v-on:click="FindPassword">Find Password</v-btn>
+            </v-flex>
+            <v-flex>
+              <v-btn round color="transparent" v-on:click="loginpwSwitch">Go Back To Sign in</v-btn>
+            </v-flex>
+          </v-flex>
+        </v-layout>
       </v-tab-item>
     </v-tabs>
   </v-dialog>
@@ -119,7 +143,10 @@ export default {
       }
     },
     message: "",
-    message2: ""
+    message2: "",
+    resetPassword: "",
+    forgetPassword: false,
+    loginpw: true,
   }),
   computed: {
 
@@ -128,6 +155,12 @@ export default {
 
   },
   methods: {
+    loginpwch () {
+      this.loginpw = false;
+    },
+    loginpwSwitch() {
+      this.loginpw = true;
+    },
     async loginWithGoogle() {
       const result = await FirebaseService.loginWithGoogle();
       this.$store.state.accessToken = result.credential.accessToken;
@@ -276,12 +309,30 @@ export default {
       this.ps2 = ""
       this.message2 = ""
     },
+    resetFindPassword() {
+      this.resetPassword = ""
+    },
+    FindPassword () {
+      var auth = firebase.auth();
+      // console.log(this.resetPassword);
+      auth.sendPasswordResetEmail(this.resetPassword).then(function() {
+        swal('입력하신 이메일로 메일이 전송되었습니다.')
+      }).catch(function(error) {
+        // An error happened.
+        swal('누구냐 넌....')
+        // console.log(error)
+      });
+    },
+
 
     closeDialog(){
       this.resetSignin();
       this.resetSignup();
+      this.resetFindPassword();
+      this.loginpwSwitch();
+      this.forgetPassword = false;
       this.dialog = false;
-    }
+    },
   },
   mounted() {
     // console.log(this.$store.state);
