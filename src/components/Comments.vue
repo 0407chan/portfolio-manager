@@ -6,7 +6,7 @@
   </v-flex>
   <v-flex xs12 v-for="i in comments.length">
     <v-timeline align-top v-if="i-1 < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
-      <v-timeline-item small fill-dot style="padding-bottom:5px;" color="rgba(250, 250, 250, 1)">
+      <v-timeline-item small fill-dot style="padding-bottom:20px;" color="rgba(250, 250, 250, 1)">
         <template v-slot:icon>
           <v-avatar>
             <img :src="comments[comments.length-i].userImageUrl" @click="imageview(comments[comments.length-i].userImageUrl)" style="cursor: pointer; margin-top: 30px;">
@@ -16,14 +16,12 @@
         <v-layout justify-space-between wrap align-center>
             <v-flex xs10>
               <router-link :to="{ name: 'userinfo', params: {id:comments[comments.length-i].userId}}"> {{comments[comments.length-i].name}} </router-link>
-              {{comments[comments.length-i].created_at.getFullYear()}}.
-              {{comments[comments.length-i].created_at.getMonth()+1}}.
-              {{comments[comments.length-i].created_at.getDate()}}
-              {{addZeros(comments[comments.length-i].created_at.getHours())}}:
-              {{addZeros(comments[comments.length-i].created_at.getMinutes())}}
+              <span :title="realtime(comments[comments.length-i].created_at)">
+                {{displayTime(comments[comments.length-i].created_at)}}
+              </span>
               <template v-if="currUser">
-                <v-btn @click="ReCommentForm(comments[comments.length-i])" fab dark class="mr-2 large_comment_btn" hover color="four">
-                  <v-icon size="15">fa-reply</v-icon>
+                <v-btn fab flat small color="two"  @click="ReCommentForm(comments[comments.length-i])">
+                  <v-icon size="17">fa-reply</v-icon>
                 </v-btn>
               </template>
               <template v-if="!comments[comments.length-i].isModify">
@@ -250,6 +248,23 @@ export default {
         }
       }
       return zero + num;
+    },
+    displayTime(bDate){
+      var cDate = new Date();
+      var result = cDate.getTime()-bDate.getTime()+7000;
+      result = result/1000;
+      if(result < 60){
+        return Math.floor(result) + '초';
+      }else if((result/60) < 60){
+        return Math.floor(result/60) + '분';
+      }else if((result/3600) < 24){
+        return Math.floor(result/3600) + '시간';
+      }else{
+        return Math.floor(result/86400) + '일';
+      }
+    },
+    realtime(date){
+      return date.getFullYear()+'년 '+(date.getMonth()+1)+'월 '+date.getDate()+'일 '+ this.addZeros(date.getHours())+'시 '+ this.addZeros(date.getMinutes()) +'분';
     },
     moreComments(data) {
       this.limit_Comment = data + 2;

@@ -12,12 +12,9 @@
           <v-layout justify-space-between wrap align-center>
               <v-flex xs10>
                 <router-link :to="{ name: 'userinfo', params: {id:recomment.userId}}"> {{recomment.name}} </router-link>
-                {{recomment.created_at.getFullYear()}}.
-                {{recomment.created_at.getMonth()+1}}.
-                {{recomment.created_at.getDate()}}
-                {{addZeros(recomment.created_at.getHours())}}:
-                {{addZeros(recomment.created_at.getMinutes())}}
-
+                <span :title="realtime(recomment.created_at)">
+                  {{displayTime(recomment.created_at)}}
+                </span>
                 <template v-if="!recomment.isModify">
                   <div style="background-color: #EDEDED; border-radius: 10px">{{recomment.body}}</div>
                 </template>
@@ -148,6 +145,23 @@ export default {
         }
       }
       return zero + num;
+    },
+    displayTime(bDate){
+      var cDate = new Date();
+      var result = cDate.getTime()-bDate.getTime()+7000;
+      result = result/1000;
+      if(result < 60){
+        return Math.floor(result) + '초';
+      }else if((result/60) < 60){
+        return Math.floor(result/60) + '분';
+      }else if((result/3600) < 24){
+        return Math.floor(result/3600) + '시간';
+      }else{
+        return Math.floor(result/86400) + '일';
+      }
+    },
+    realtime(date){
+      return date.getFullYear()+'년 '+(date.getMonth()+1)+'월 '+date.getDate()+'일 '+ this.addZeros(date.getHours())+'시 '+ this.addZeros(date.getMinutes()) +'분';
     },
     moreComments(data) {
       this.limit_recomment = data + 2;
