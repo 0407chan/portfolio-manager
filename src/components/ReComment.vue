@@ -39,7 +39,7 @@
                 </v-flex>
               </template>
               <template v-else>
-                <v-flex xs2 text-xs-center>
+                <v-flex xs5 sm4 md3 text-xs-center>
                   <template v-if="isCommentModify">
                     <v-btn fab dark small color="four" @click="modifyComment(recomment)" >
                       <v-icon size="17"> create</v-icon>
