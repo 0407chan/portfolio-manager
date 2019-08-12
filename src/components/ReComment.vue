@@ -10,21 +10,26 @@
           </template>
 
           <v-layout justify-space-between wrap align-center>
-              <v-flex xs10>
+              <v-flex xs6 sm8 md9>
                 <router-link :to="{ name: 'userinfo', params: {id:recomment.userId}}"> {{recomment.name}} </router-link>
                 <span :title="realtime(recomment.created_at)">
                   {{displayTime(recomment.created_at)}}
                 </span>
+                <template>
+                  <v-btn fab flat small color="two" style="visibility:hidden;" @click="ReCommentForm(comments[comments.length-i])">
+                    <v-icon size="15">fa-reply</v-icon>
+                  </v-btn>
+                </template>
                 <template v-if="!recomment.isModify">
-                  <div style="background-color: #EDEDED; border-radius: 10px">{{recomment.body}}</div>
+                  <div style="background-color: #EDEDED; border-radius: 10px; margin-top:-10px">{{recomment.body}}</div>
                 </template>
                 <template v-else>
-                  <v-text-field v-model="newReComment" :value='recomment.body' @keyup.enter="modifyComment(recomment)"></v-text-field>
+                  <v-text-field counter="90" maxlength="90" v-model="newReComment" :value='recomment.body' @keyup.enter="modifyComment(recomment)"></v-text-field>
                 </template>
               </v-flex>
 
               <template v-if="!recomment.isModify">
-                <v-flex xs2 text-xs-center>
+                <v-flex xs6 sm4 md3 text-xs-center>
                   <v-btn fab flat small color="three" v-if="useremail === recomment.email" @click="modifyCommentForm(recomment)">
                     <v-icon size="17">create</v-icon>
                   </v-btn>

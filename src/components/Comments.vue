@@ -5,80 +5,92 @@
     <v-divider></v-divider>
   </v-flex>
   <v-flex xs12 v-for="i in comments.length">
-    <v-timeline align-top v-if="i-1 < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
+    <v-timeline align-top v-if="i-1 < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px; margin-top:-10px">
       <v-timeline-item small fill-dot style="padding-bottom:10px;" color="rgba(250, 250, 250, 1)">
         <template v-slot:icon>
           <v-avatar>
             <img :src="comments[comments.length-i].userImageUrl" @click="imageview(comments[comments.length-i].userImageUrl)" style="cursor: pointer; margin-top: 30px;">
           </v-avatar>
         </template>
-
         <v-layout justify-space-between wrap align-center>
-            <v-flex xs10>
-              <router-link :to="{ name: 'userinfo', params: {id:comments[comments.length-i].userId}}"> {{comments[comments.length-i].name}} </router-link>
-              <span :title="realtime(comments[comments.length-i].created_at)">
-                {{displayTime(comments[comments.length-i].created_at)}}
-              </span>
-              <template v-if="currUser">
-                <v-btn fab flat small color="two"  @click="ReCommentForm(comments[comments.length-i])">
-                  <v-icon size="15">fa-reply</v-icon>
-                </v-btn>
-              </template>
-              <template v-if="!comments[comments.length-i].isModify">
-                <div style="background-color: #EDEDED; border-radius: 10px; margin-top:-10px">{{comments[comments.length-i].body}}</div>
-              </template>
-              <template v-else>
-                <v-text-field v-model="newComment" :value='comments[comments.length-i].body' @keyup.enter="modifyComment(comments[comments.length-i])"></v-text-field>
-              </template>
-            </v-flex>
-
+          <v-flex xs7 sm8 md9>
+            <router-link :to="{ name: 'userinfo', params: {id:comments[comments.length-i].userId}}"> {{comments[comments.length-i].name}} </router-link>
+            <span :title="realtime(comments[comments.length-i].created_at)">
+              {{displayTime(comments[comments.length-i].created_at)}}
+            </span>
+            <template v-if="currUser">
+              <v-btn fab flat small color="two" @click="ReCommentForm(comments[comments.length-i])">
+                <v-icon size="15">fa-reply</v-icon>
+              </v-btn>
+            </template>
+            <template v-else="currUser">
+              <v-btn fab flat small color="two" style="visibility:hidden;" @click="ReCommentForm(comments[comments.length-i])">
+                <v-icon size="15">fa-reply</v-icon>
+              </v-btn>
+            </template>
             <template v-if="!comments[comments.length-i].isModify">
-              <v-flex xs2 text-xs-center>
-                <v-btn fab flat small color="three" v-if="currUser.id === comments[comments.length-i].userId" @click="modifyCommentForm(comments[comments.length-i])">
-                  <v-icon size="17">create</v-icon>
-                </v-btn>
-                <v-btn fab flat small color="two" v-if="currUser.id === comments[comments.length-i].userId" @click="deleteComment(comments[comments.length-i].id)">
-                  <v-icon size="17">delete</v-icon>
-                </v-btn>
-              </v-flex>
+              <div style="background-color: #EDEDED; border-radius: 10px; margin-top:-10px">{{comments[comments.length-i].body}}</div>
             </template>
             <template v-else>
-              <v-flex xs2 text-xs-center>
-                <template v-if="isCommentModify">
-                  <v-btn fab dark small color="four" @click="modifyComment(comments[comments.length-i])" >
-                    <v-icon size="17"> create</v-icon>
-                  </v-btn>
-                </template>
-                <template v-else>
-                  <v-btn fab small disabled>
-                    <v-icon size="17">create</v-icon>
-                  </v-btn>
-                </template>
-
-                <v-btn fab dark small color="red"  @click="modifyCommentForm(comments[comments.length-i])" > <v-icon size="17"> cancel</v-icon></v-btn>
-              </v-flex>
+              <v-text-field counter="90" maxlength="90" v-model="newComment" :value='comments[comments.length-i].body' @keyup.enter="modifyComment(comments[comments.length-i])"></v-text-field>
             </template>
+          </v-flex>
 
-            <template v-if="comments[comments.length-i].reply">
-              <v-flex xs10>
-                <v-text-field v-model="reComment_input" :value='comments[comments.length-i].body' @keyup.enter="postReComment(comments[comments.length-i])"></v-text-field>
-              </v-flex>
-              <v-flex xs2 text-xs-center>
-                <template v-if="isReCommentModify">
-                  <v-btn fab dark small hover color="four" @click="postReComment(comments[comments.length-i])"><v-icon size="17">create</v-icon></v-btn>
-                </template>
-                <template v-else>
-                  <v-btn fab small disabled><v-icon size="17">create</v-icon></v-btn>
-                </template>
-                <v-btn fab dark small hover color="red"  @click="ReCommentForm(comments[comments.length-i])"><v-icon size="17">cancel</v-icon></v-btn>
-              </v-flex>
-            </template>
+          <template v-if="!comments[comments.length-i].isModify">
+            <v-flex xs5 sm4 md3 text-xs-center>
+              <v-btn fab flat small color="three" v-if="currUser.id === comments[comments.length-i].userId" @click="modifyCommentForm(comments[comments.length-i])">
+                <v-icon size="17">create</v-icon>
+              </v-btn>
+              <v-btn fab flat small color="two" v-if="currUser.id === comments[comments.length-i].userId" @click="deleteComment(comments[comments.length-i].id)">
+                <v-icon size="17">delete</v-icon>
+              </v-btn>
+            </v-flex>
+          </template>
+          <template v-else>
+            <v-flex xs2 text-xs-center>
+              <template v-if="isCommentModify">
+                <v-btn fab dark small color="four" @click="modifyComment(comments[comments.length-i])">
+                  <v-icon size="17"> create</v-icon>
+                </v-btn>
+              </template>
+              <template v-else>
+                <v-btn fab small disabled>
+                  <v-icon size="17">create</v-icon>
+                </v-btn>
+              </template>
 
-            <template>
-              <ReComment :id='comments[comments.length-i].id' ref="child"></ReComment>
-            </template>
+              <v-btn fab dark small color="red" @click="modifyCommentForm(comments[comments.length-i])">
+                <v-icon size="17"> cancel</v-icon>
+              </v-btn>
+            </v-flex>
+          </template>
 
-          </v-layout>
+          <template v-if="comments[comments.length-i].reply">
+            <v-flex xs10>
+              <v-text-field counter="90" maxlength="90" v-model="reComment_input" :value='comments[comments.length-i].body' @keyup.enter="postReComment(comments[comments.length-i])"></v-text-field>
+            </v-flex>
+            <v-flex xs2 text-xs-center>
+              <template v-if="isReCommentModify">
+                <v-btn fab dark small hover color="four" @click="postReComment(comments[comments.length-i])">
+                  <v-icon size="17">create</v-icon>
+                </v-btn>
+              </template>
+              <template v-else>
+                <v-btn fab small disabled>
+                  <v-icon size="17">create</v-icon>
+                </v-btn>
+              </template>
+              <v-btn fab dark small hover color="red" @click="ReCommentForm(comments[comments.length-i])">
+                <v-icon size="17">cancel</v-icon>
+              </v-btn>
+            </v-flex>
+          </template>
+
+          <template>
+            <ReComment :id='comments[comments.length-i].id' ref="child"></ReComment>
+          </template>
+
+        </v-layout>
       </v-timeline-item>
     </v-timeline>
     <v-flex xs12 v-if="i-1 === limit_Comment" text-xs-center>
@@ -91,7 +103,7 @@
   <template v-if="currUser">
     <v-layout justify-space-between wrap align-center>
       <v-flex xs10 text-xs-center>
-        <v-text-field v-model="comment_input" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
+        <v-text-field counter="90" maxlength="90" v-model="comment_input" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
       </v-flex>
       <v-flex xs2 text-xs-center>
         <template v-if="isComment">
@@ -146,9 +158,9 @@ export default {
       newComment: '',
       comment_input: '',
       reComment_input: '',
-      isComment:false,
-      isCommentModify:false,
-      isReCommentModify:false,
+      isComment: false,
+      isCommentModify: false,
+      isReCommentModify: false,
       childIndex: '',
       rules: {
         required: value => !!value || "Required.",
@@ -162,20 +174,20 @@ export default {
       if (user) this.currUser = await FirebaseService.getUserData();
     });
 
-    if(this.classify == "post"){
+    if (this.classify == "post") {
       this.getComments(this.id);
-    }else{
+    } else {
       var parentId = this.$route.params.id;
       this.getComments(parentId);
     }
   },
   methods: {
-    async deleteComment(commentId){
+    async deleteComment(commentId) {
       await FirebaseService.deleteComment(this.id, this.classify, commentId);
       this.getComments(this.id);
     },
     async modifyComment(comment) {
-      if(this.isCommentModify){
+      if (this.isCommentModify) {
         await FirebaseService.modifyComment(comment, this.newComment);
         this.getComments(this.id);
       }
@@ -189,7 +201,7 @@ export default {
       this.newComment = comment.body;
     },
     async postComment() {
-      if(!this.btnCheck && this.isComment){
+      if (!this.btnCheck && this.isComment) {
         this.btnCheck = true;
         let result = await FirebaseService.getUserData();
         let res = await FirebaseService.postComment(this.id, this.classify, this.comment_input, result.name, result.userImageUrl);
@@ -199,9 +211,9 @@ export default {
         await this.getComments(this.id);
         this.btnCheck = false;
       }
-      for(var i in this.$refs.child){
-        if(i < this.limit_Comment){
-          var commentId = this.comments[this.comments.length-i-1].id;
+      for (var i in this.$refs.child) {
+        if (i < this.limit_Comment) {
+          var commentId = this.comments[this.comments.length - i - 1].id;
           this.$refs.child[i].getComments(commentId);
         }
       }
@@ -218,21 +230,21 @@ export default {
         }
       }
     },
-    async postReComment(comment){
+    async postReComment(comment) {
       let result = await FirebaseService.getUserData();
       let res = await FirebaseService.postComment(comment.id, this.classify, this.reComment_input, result.name, result.userImageUrl);
       await FirebaseService.addToUserCommentList(res);
       await FirebaseService.addToReCommentList(comment.id, res);
       this.reComment_input = '';
       await this.getComments(this.id);
-      for(var i in this.$refs.child){
-        if(i < this.limit_Comment){
-          var commentId = this.comments[this.comments.length-i-1].id;
+      for (var i in this.$refs.child) {
+        if (i < this.limit_Comment) {
+          var commentId = this.comments[this.comments.length - i - 1].id;
           this.$refs.child[i].getComments(commentId);
         }
       }
     },
-    ReCommentForm(comment){
+    ReCommentForm(comment) {
       if (comment.reply) {
         comment.reply = false;
       } else {
@@ -249,22 +261,22 @@ export default {
       }
       return zero + num;
     },
-    displayTime(bDate){
+    displayTime(bDate) {
       var cDate = new Date();
-      var result = cDate.getTime()-bDate.getTime();
-      result = result/1000;
-      if(result < 60){
+      var result = cDate.getTime() - bDate.getTime();
+      result = result / 1000;
+      if (result < 60) {
         return '1분';
-      }else if((result/60) < 60){
-        return Math.floor(result/60) + '분';
-      }else if((result/3600) < 24){
-        return Math.floor(result/3600) + '시간';
-      }else{
-        return Math.floor(result/86400) + '일';
+      } else if ((result / 60) < 60) {
+        return Math.floor(result / 60) + '분';
+      } else if ((result / 3600) < 24) {
+        return Math.floor(result / 3600) + '시간';
+      } else {
+        return Math.floor(result / 86400) + '일';
       }
     },
-    realtime(date){
-      return date.getFullYear()+'년 '+(date.getMonth()+1)+'월 '+date.getDate()+'일 '+ this.addZeros(date.getHours())+'시 '+ this.addZeros(date.getMinutes()) +'분';
+    realtime(date) {
+      return date.getFullYear() + '년' + (date.getMonth() + 1) + '월' + date.getDate() + '일 ' + this.addZeros(date.getHours()) + '시' + this.addZeros(date.getMinutes()) + '분';
     },
     moreComments(data) {
       this.limit_Comment = data + 2;
@@ -283,25 +295,25 @@ export default {
   },
 
 
-  watch:{
-    comment_input(){
-      if(this.comment_input.length == 0){
+  watch: {
+    comment_input() {
+      if (this.comment_input.length == 0) {
         this.isComment = false;
-      }else {
+      } else {
         this.isComment = true;
       }
     },
-    newComment(){
-      if(this.newComment.length ==0){
+    newComment() {
+      if (this.newComment.length == 0) {
         this.isCommentModify = false;
-      }else {
+      } else {
         this.isCommentModify = true;
       }
     },
-    reComment_input(){
-      if(this.reComment_input.length ==0){
+    reComment_input() {
+      if (this.reComment_input.length == 0) {
         this.isReCommentModify = false;
-      }else {
+      } else {
         this.isReCommentModify = true;
       }
     }
