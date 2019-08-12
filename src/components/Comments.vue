@@ -6,7 +6,7 @@
   </v-flex>
   <v-flex xs12 v-for="i in comments.length">
     <v-timeline align-top v-if="i-1 < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
-      <v-timeline-item small fill-dot style="padding-bottom:20px;" color="rgba(250, 250, 250, 1)">
+      <v-timeline-item small fill-dot style="padding-bottom:10px;" color="rgba(250, 250, 250, 1)">
         <template v-slot:icon>
           <v-avatar>
             <img :src="comments[comments.length-i].userImageUrl" @click="imageview(comments[comments.length-i].userImageUrl)" style="cursor: pointer; margin-top: 30px;">
@@ -21,11 +21,11 @@
               </span>
               <template v-if="currUser">
                 <v-btn fab flat small color="two"  @click="ReCommentForm(comments[comments.length-i])">
-                  <v-icon size="17">fa-reply</v-icon>
+                  <v-icon size="15">fa-reply</v-icon>
                 </v-btn>
               </template>
               <template v-if="!comments[comments.length-i].isModify">
-                <div style="background-color: #EDEDED; border-radius: 10px">{{comments[comments.length-i].body}}</div>
+                <div style="background-color: #EDEDED; border-radius: 10px; margin-top:-10px">{{comments[comments.length-i].body}}</div>
               </template>
               <template v-else>
                 <v-text-field v-model="newComment" :value='comments[comments.length-i].body' @keyup.enter="modifyComment(comments[comments.length-i])"></v-text-field>
@@ -251,10 +251,10 @@ export default {
     },
     displayTime(bDate){
       var cDate = new Date();
-      var result = cDate.getTime()-bDate.getTime()+7000;
+      var result = cDate.getTime()-bDate.getTime();
       result = result/1000;
       if(result < 60){
-        return Math.floor(result) + '초';
+        return '1분';
       }else if((result/60) < 60){
         return Math.floor(result/60) + '분';
       }else if((result/3600) < 24){

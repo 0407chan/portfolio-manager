@@ -148,10 +148,10 @@ export default {
     },
     displayTime(bDate){
       var cDate = new Date();
-      var result = cDate.getTime()-bDate.getTime()+7000;
+      var result = cDate.getTime()-bDate.getTime();
       result = result/1000;
       if(result < 60){
-        return Math.floor(result) + '초';
+        return '1분';
       }else if((result/60) < 60){
         return Math.floor(result/60) + '분';
       }else if((result/3600) < 24){
