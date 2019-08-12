@@ -403,6 +403,8 @@ export default {
             "isPostOpen": user.isPostOpen,
             "isCommentOpen": user.isCommentOpen,
             "allowPush": user.allowPush,
+            "portfolios": user.portfolios,
+            "posts": user.posts,
         })
     },
 

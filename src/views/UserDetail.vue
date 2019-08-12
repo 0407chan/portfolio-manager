@@ -656,7 +656,7 @@ export default {
       this.commentSearchList = [];
 
       if (this.search.length == 0) {
-        
+
         this.searchInit(this.portfolios,this.portfolioSearchList, 'title');
         this.searchInit(this.posts,this.postSearchList, 'title');
         this.searchInit(this.comments,this.commentSearchList, 'body');

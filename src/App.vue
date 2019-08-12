@@ -70,7 +70,7 @@ head {
   text-align: center !important;
   font-size: 12px !important;
   padding: 10px !important;
-  margin: 0 5px !important;
+  margin: 0 0 !important;
 
   color: black !important;
   background: #44A4FC !important;
