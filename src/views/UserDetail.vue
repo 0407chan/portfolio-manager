@@ -47,7 +47,7 @@
               <v-layout wrap>
                 <v-flex xs12 text-xs-center>
                   <v-progress-circular v-if="loading" indeterminate color="four"></v-progress-circular>
-                  <v-img :src="imageUrl" max-width="300" max-height="300" v-if="imageUrl" align-center style="margin: auto" />
+                  <v-img :src="imageUrl" max-width="300" max-height="300" align-center style="margin: auto" />
                 </v-flex>
                 <v-flex style="margin: auto" xs7 md10>
                   <v-text-field label="Select Image" @click="pickFile" v-model="imageUrl" prepend-icon="attach_file" color="four" v-if="isOwner"></v-text-field>
@@ -358,18 +358,23 @@ export default {
     this.getComments();
   },
   created() {
-    this.id = this.$route.params.id;
+    this.id= this.$route.params.id;
     firebase.auth().onAuthStateChanged(async user => {
+      this.pageuser = await FirebaseService.getUser(this.id);
+      console.log(this.pageuser)
       if (user) {
         var currentUser = firebase.auth().currentUser;
         this.user = currentUser;
-        this.pageuser = await FirebaseService.getUser(this.id);
         this.imageUrl = this.pageuser.userImageUrl;
-        if (this.user.uid == this.pageuser.id) {
+        if(this.user.uid == this.pageuser.id){
           this.isOwner = true;
-        } else {
+        }else {
           this.isOwner = false;
         }
+      } else {
+        console.log(this.pageuser)
+        this.imageUrl = this.pageuser.userImageUrl;
+        this.isOwner = false
       }
     })
     if (this.id == '') {

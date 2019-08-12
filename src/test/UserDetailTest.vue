@@ -317,19 +317,23 @@ export default {
   created() {
     this.id= this.$route.params.id;
     firebase.auth().onAuthStateChanged(async user => {
+      this.pageuser = await FirebaseService.getUser(this.id);
+      console.log(this.pageuser)
       if (user) {
         var currentUser = firebase.auth().currentUser;
         this.user = currentUser;
-        this.pageuser = await FirebaseService.getUser(this.id);
         this.imageUrl = this.pageuser.userImageUrl;
         if(this.user.uid == this.pageuser.id){
           this.isOwner = true;
         }else {
           this.isOwner = false;
         }
+      } else {
+        console.log(this.pageuser)
+        this.isOwner = false
       }
     })
-    if(this.id==''){
+    if(this.id===''){
       this.id=this.user.uid;
     }
     // this.id = '3uB1Si78L8ZZy4UJuzbcjv06BVs2'
