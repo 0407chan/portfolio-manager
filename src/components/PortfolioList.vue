@@ -1,6 +1,6 @@
 <template>
 <v-layout mt-5 wrap>
-  <template v-if="portfolios != undefined">
+  <template v-if="portfolios.length!=0 && portfolios != undefined ">
     <v-flex xs12 text-xs-center>
       <v-text-field label="Search" v-model="search"></v-text-field>
     </v-flex>
@@ -61,12 +61,13 @@ export default {
   },
   mounted() {
     this.getPortfolios();
+
     // this.getPortfoliosRealtime();
   },
   methods: {
     async getPortfolios() {
       this.portfolios = await FirebaseService.getPortfolios();
-      // this.portfolios = await this.getPortfoliosRealtime();
+       this.portfolios = await this.getPortfoliosRealtime();
       // console.log("왜안돼",this.portfolios);
       this.errorInit = true;
       this.searchList = [];
@@ -82,6 +83,7 @@ export default {
 
       console.log("이거는?",a);
     },
+
     loadMorePortfolios() {
       this.limit += 3;
     },
