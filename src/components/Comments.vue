@@ -6,7 +6,7 @@
   </v-flex>
   <v-flex xs12 v-for="i in comments.length">
     <v-timeline align-top v-if="i-1 < limit_Comment" dense clipped style="margin-left: 5px; padding-top:5px">
-      <v-timeline-item small fill-dot style="padding-bottom:5px;" color="rgba(250, 250, 250, 1)">
+      <v-timeline-item small fill-dot style="padding-bottom:20px;" color="rgba(250, 250, 250, 1)">
         <template v-slot:icon>
           <v-avatar>
             <img :src="comments[comments.length-i].userImageUrl" @click="imageview(comments[comments.length-i].userImageUrl)" style="cursor: pointer; margin-top: 30px;">
@@ -16,12 +16,12 @@
         <v-layout justify-space-between wrap align-center>
             <v-flex xs10>
               <router-link :to="{ name: 'userinfo', params: {id:comments[comments.length-i].userId}}"> {{comments[comments.length-i].name}} </router-link>
-              <div :title="realtime(comments[comments.length-i].created_at)">
+              <span :title="realtime(comments[comments.length-i].created_at)">
                 {{displayTime(comments[comments.length-i].created_at)}}
-              </div>
+              </span>
               <template v-if="currUser">
-                <v-btn @click="ReCommentForm(comments[comments.length-i])" fab dark class="mr-2 large_comment_btn" hover color="four">
-                  <v-icon size="15">fa-reply</v-icon>
+                <v-btn fab flat small color="two"  @click="ReCommentForm(comments[comments.length-i])">
+                  <v-icon size="17">fa-reply</v-icon>
                 </v-btn>
               </template>
               <template v-if="!comments[comments.length-i].isModify">
@@ -264,7 +264,7 @@ export default {
       }
     },
     realtime(date){
-      return date.getFullYear()+'.'+(date.getMonth()+1)+'.'+date.getDate()+'.'+addZeros(date.getHours())+'.'+ addZeros(date.getMinutes());
+      return date.getFullYear()+'년 '+(date.getMonth()+1)+'월 '+date.getDate()+'일 '+ this.addZeros(date.getHours())+'시 '+ this.addZeros(date.getMinutes()) +'분';
     },
     moreComments(data) {
       this.limit_Comment = data + 2;
