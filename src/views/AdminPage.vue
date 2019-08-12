@@ -306,7 +306,7 @@ export default {
       this.userSearchList = [];
       for (var i = 0; i < this.users.length; i++) {
         if(this.users[i].name.length >= 15){
-          this.users[i].subTitle = this.users[i].title.substring(0, 15)+"⋯"
+          this.users[i].subTitle = this.users[i].name.substring(0, 15)+"⋯"
         }
         this.userSearchList.push(this.users[i]);
       }
