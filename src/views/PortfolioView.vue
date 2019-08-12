@@ -20,13 +20,11 @@
           <hr>
         </v-flex>
         <v-flex xs12 text-xs-right>
-          {{portfolio.created_at.getFullYear()}}.
-          {{portfolio.created_at.getMonth()+1}}.
-          {{portfolio.created_at.getDate()}}
+          {{realtime(portfolio.created_at)}}
         </v-flex>
         <v-flex xs12 text-xs-right>
           <router-link :to="{ name: 'userinfo', params: {id: portfolio.userId}}">
-            by.{{result.name}}
+            by.{{portfolioWriter.name}}
           </router-link>
         </v-flex>
         <br>
@@ -77,21 +75,22 @@ export default {
       index: 0,
       portfolio: '',
       user: "",
-      result: "",
+      portfolioWriter: "",
     }
   },
   created() {
     this.id = this.$route.params.id;
-
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.user = await FirebaseService.getUserData();
       }
     })
+
+    this.getPortfolio(this.id);
   },
 
   mounted() {
-    this.getPortfolio(this.id);
+    //this.getPortfolio(this.id);
   },
 
   components: {
@@ -115,9 +114,20 @@ export default {
     },
     async getPortfolio(id) {
       this.portfolio = await FirebaseService.getPortfolio(id);
-      if (this.portfolio.userId) {
-        this.result = await FirebaseService.getUser(this.portfolio.userId)
+      this.portfolioWriter = await FirebaseService.getUser(this.portfolio.userId)
+    },
+    realtime(date){
+      return date.getFullYear()+'년 '+(date.getMonth()+1)+'월 '+date.getDate()+'일 '+ this.addZeros(date.getHours())+'시 '+ this.addZeros(date.getMinutes()) +'분';
+    },
+    addZeros(num) {
+      var zero = '';
+      num = num.toString();
+      if (num.length < 2) {
+        for (var i = 0; i < 2 - num.length; i++) {
+          zero += '0';
+        }
       }
+      return zero + num;
     },
   }
 }
