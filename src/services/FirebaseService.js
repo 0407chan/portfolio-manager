@@ -51,7 +51,7 @@ export default {
     return postDoc.get().then(function(doc) {
       if (doc.exists) {
         let data = doc.data();
-        data.id = id;
+        data.id = doc.id;
         data.created_at = new Date(data.created_at.toDate())
         return data;
       } else {
@@ -62,7 +62,6 @@ export default {
     });
   },
   getPosts() {
-    var ind = 0;
     const postsCollection = firestore.collection(POSTS)
     return postsCollection
       .orderBy('created_at', 'desc')
@@ -72,7 +71,6 @@ export default {
           let data = doc.data()
           data.id = doc.id;
           data.created_at = new Date(data.created_at.toDate())
-          data.index = ind++;
           return data
         })
       })
@@ -117,13 +115,27 @@ export default {
       "email": store.state.user.email
     })
   },
-  deletePost(id) {
+  async deletePost(id) {
     var userId = firebase.auth().currentUser.uid;
+    var post = await this.getPost(id);
+
+    // User 목록에 있는 post 삭제
     firestore.collection(USERS).doc(userId).update({
       posts: firebase.firestore.FieldValue.arrayRemove(id),
     })
 
-    return firestore.collection(POSTS).doc(id).delete().then(function() {
+    // Comment 삭제
+    if(post.comments){
+      post.comments.forEach(v =>
+        firestore.collection(COMMENTS).doc(v).delete().then(function() {
+        }).catch(function(error) {
+          console.error("Error removing document: ", error);
+        })
+      );
+    }
+
+    // Post에서 해당 post 삭제
+    firestore.collection(POSTS).doc(id).delete().then(function() {
 
     }).catch(function(error) {
       console.error("Error removing document: ", error);
@@ -134,11 +146,22 @@ export default {
   /********************\
  \   Portfolio 함수들   \
 	\********************/
-	deletePortfolio(id){
+	async deletePortfolio(id){
+    var portfolio = await this.getPortfolio(id);
 		var userId = firebase.auth().currentUser.uid;
 		firestore.collection(USERS).doc(userId).update({
     		portfolios: firebase.firestore.FieldValue.arrayRemove(id),
 		})
+
+    // Comment 삭제
+    if(portfolio.comments){
+      portfolio.comments.forEach(v =>
+        firestore.collection(COMMENTS).doc(v).delete().then(function() {
+        }).catch(function(error) {
+          console.error("Error removing document: ", error);
+        })
+      );
+    }
 
 		return firestore.collection(PORTFOLIOS).doc(id).delete().then(function() {
 
@@ -216,6 +239,21 @@ export default {
     		return docRef.id;
 		})
 	},
+  getPortfoliosRealtime(){
+		return firestore.collection(PORTFOLIOS)
+    .orderBy('created_at', 'desc')
+    .onSnapshot(function(snapshot) {
+      return snapshot.docs.map((doc) => {
+        let data = doc.data();
+        data.id = doc.id;
+        data.created_at = new Date(data.created_at.toDate());
+        return data
+      })
+    }, function(error) {
+        console.log(error);
+    });
+
+  },
 
 
 	/**************************\
@@ -293,7 +331,7 @@ export default {
 			firestore.collection(POSTS).doc(parentId).update({
 				comments: firebase.firestore.FieldValue.arrayRemove(commentId),
 			});
-		}else if(classify == 'fortfolio'){
+		}else if(classify == 'portfolio'){
 			firestore.collection(PORTFOLIOS).doc(parentId).update({
 				comments: firebase.firestore.FieldValue.arrayRemove(commentId),
 			});
@@ -492,7 +530,6 @@ export default {
             isPortfolioOpen: true,
             isCommentOpen: true,
             allowPush: true,
-
         }).then(function (result) {
 
         });
@@ -597,8 +634,8 @@ export default {
     //   })
 
     /**************************\
-     \ push 함수들   \
-     \**************************/
+   \      push 알람 함수들       \
+    \**************************/
     alarmOnFirstVisit() {
         if (window.Notification) {
             return fireMessage.requestPermission()
@@ -716,5 +753,5 @@ export default {
         }).catch(function (error) {
             console.log("Error getting cached document:", error);
         });
-    }
+    },
 }

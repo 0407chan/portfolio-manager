@@ -1,17 +1,36 @@
 <style>
 * {
-    font-family: 'Nanum Gothic', sans-serif;
+  font-family: 'Nanum Gothic', sans-serif;
 }
-body, head{
+
+body,
+head {
   height: 100%;
   width: 100%;
 }
-::-webkit-scrollbar{width: 16px;}
-::-webkit-scrollbar-track {background-color:#FCFFFC;}
-::-webkit-scrollbar-thumb {background-color:#FCFFFC;}
-::-webkit-scrollbar-thumb:hover {background: #555;}
-::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment {
-width:16px;height:16px;background:#FCFFFC;}
+
+::-webkit-scrollbar {
+  width: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #FCFFFC;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #FCFFFC;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+  width: 16px;
+  height: 16px;
+  background: #FCFFFC;
+}
 
 #headMargin {
   margin-top: 50px !important;
@@ -74,31 +93,33 @@ width:16px;height:16px;background:#FCFFFC;}
   opacity: 0.8;
 }
 
-.vn-fade-enter-active, .vn-fade-leave-active, .vn-fade-move  {
+.vn-fade-enter-active,
+.vn-fade-leave-active,
+.vn-fade-move {
   transition: all 1s !important;
 }
 
-.vn-fade-enter, .vn-fade-leave-to {
+.vn-fade-enter,
+.vn-fade-leave-to {
   opacity: 0.1 !important;
 }
-
 </style>
 
 <template>
-  <v-app>
-    <notifications group="foo" position="top left"></notifications>
-    <v-content>
-      <div id = "header">
-        <mainHeader/>
-      </div>
-      <buttonTop/>
-      <buttonWrite/>
-      <router-view/>
-    </v-content>
+<v-app>
+  <notifications group="foo" position="top left"></notifications>
+  <v-content>
+    <div id="header">
+      <mainHeader />
+    </div>
+    <buttonTop />
+    <buttonWrite />
+    <router-view />
+  </v-content>
 
-    <mainFooter/>
+  <mainFooter />
 
-  </v-app>
+</v-app>
 </template>
 
 
@@ -111,36 +132,37 @@ import buttonWrite from './components/ButtonWrite.vue'
 import FirebaseService from './services/FirebaseService'
 
 export default {
-	name: 'App',
-  components: {'mainHeader':mainHeader,
-  'mainFooter':mainFooter,
-  'buttonWrite':buttonWrite,
-  'buttonTop':buttonTop
+  name: 'App',
+  components: {
+    'mainHeader': mainHeader,
+    'mainFooter': mainFooter,
+    'buttonWrite': buttonWrite,
+    'buttonTop': buttonTop
   },
   store,
   data() {
-	  return{
-	    isAdmin: false,
-      }
+    return {
+      isAdmin: false,
+    }
   },
   created() {
-            FirebaseService.alarmOnFirstVisit()
-                .then(async token=>{
-                    var result = await FirebaseService.getUserData();
-                    if (result.classify==='관리자'){
-                      this.isAdmin = true
-                    } else {
-                      this.isAdmin = false
-                    }
-                    FirebaseService.addToCloudMessagingUserList(token, this.isAdmin, result.allowPush);
-                    // console.log(token, this.isAdmin, result.allowPush)
-                });
-            FirebaseService.onMessageResponse();
+    FirebaseService.alarmOnFirstVisit()
+      .then(async token => {
+        var result = await FirebaseService.getUserData();
+        if (result.classify === '관리자') {
+          this.isAdmin = true
+        } else {
+          this.isAdmin = false
         }
+        FirebaseService.addToCloudMessagingUserList(token, this.isAdmin, result.allowPush);
+        // console.log(token, this.isAdmin, result.allowPush)
+      });
+    FirebaseService.onMessageResponse();
+  }
 }
 </script>
 <style>
-.top_btn{
+.top_btn {
   margin-right: 5px;
   margin-bottom: 20px;
 }

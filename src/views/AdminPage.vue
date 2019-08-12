@@ -386,64 +386,66 @@ export default {
       return value.toString().replace(iQuery, function(matchedTxt,a,b){
           return ('<span class=\'highlight\'>' + matchedTxt + '</span>');
       });
+    },
+
+    searchInit(list,searchList,title){
+      for (var i = 0; i < list.length; i++) {
+        if(title=='name'){
+          if (list[i].name.length >= 15) {
+            list[i].subTitle = list[i].name.substring(0, 15) + "⋯"
+          }
+          searchList.push(list[i]);
+        }
+        else if(title=='title'){
+          if (list[i].title.length >= 15) {
+            list[i].subTitle = list[i].title.substring(0, 15) + "⋯"
+          }
+          searchList.push(list[i]);
+        }
+      }
     }
+
   },
   watch: {
     search() {
+      this.userSearchList = [];
+      this.portfolioSearchList= [];
+      this.postSearchList= [];
       if (this.search.length == 0) {
-        this.userSearchList = [];
-        this.portfolioSearchList= [];
-        this.postSearchList= [];
 
-        for (var i = 0; i < this.users.length; i++) {
-          if(this.users[i].name.length >= 15){
-            this.users[i].subTitle = this.users[i].title.substring(0, 15)+"⋯"
-          }
-          this.userSearchList.push(this.users[i]);
-        }
-        for (var i = 0; i < this.portfolios.length; i++) {
-          if(this.portfolios[i].title.length >= 15){
-            this.portfolios[i].subTitle = this.portfolios[i].title.substring(0, 15)+"⋯"
-          }
-          this.portfolioSearchList.push(this.portfolios[i]);
-        }
-        for (var i = 0; i < this.posts.length; i++) {
-          if(this.posts[i].title.length >= 15){
-            this.posts[i].subTitle = this.posts[i].title.substring(0, 15)+"⋯"
-          }
-          this.postSearchList.push(this.posts[i]);
-        }
+        this.searchInit(this.users, this.userSearchList,'name');
+        this.searchInit(this.portfolios, this.portfolioSearchList,'title');
+        this.searchInit(this.posts, this.postSearchList,'title');
+
       } else {
-        this.userSearchList = [];
-        this.portfolioSearchList= [];
-        this.postSearchList= [];
-
-        var search = this.search;
-        search = search.toLowerCase();
+        var search = this.search.toLowerCase();
+        var a = '';
+        var b = '';
+        var c = '';
 
         for (var i = 0; i < this.users.length; i++) {
-          var Usera = this.users[i].name.toLowerCase()
-          var Userb = this.users[i].email.toLowerCase()
-          var Userc = this.users[i].classify.toLowerCase()
-          if (Usera.includes(search) || Userb.includes(search) || Userc.includes(search)) {
+          a = this.users[i].name.toLowerCase()
+          b = this.users[i].email.toLowerCase()
+          c = this.users[i].classify.toLowerCase()
+          if (a.includes(search) || b.includes(search) || c.includes(search)) {
             this.userSearchList.push(this.users[i]);
           }
         }
 
         for (var i = 0; i < this.portfolios.length; i++) {
-          var portfolioA = this.portfolios[i].title.toLowerCase()
-          var portfolioB = this.portfolios[i].name.toLowerCase()
-          var portfolioC = this.portfolios[i].email.toLowerCase()
-          if (portfolioA.includes(search) || portfolioB.includes(search) ||portfolioC.includes(search)) {
+          a = this.portfolios[i].title.toLowerCase()
+          b = this.portfolios[i].name.toLowerCase()
+          c = this.portfolios[i].email.toLowerCase()
+          if (a.includes(search) || b.includes(search) || c.includes(search)) {
             this.portfolioSearchList.push(this.portfolios[i]);
           }
         }
 
         for (var i = 0; i < this.posts.length; i++) {
-          var postA = this.posts[i].title.toLowerCase()
-          var postB = this.posts[i].name.toLowerCase()
-          var postC = this.posts[i].email.toLowerCase()
-          if (postA.includes(search) || postB.includes(search) || postC.includes(search)) {
+          a = this.posts[i].title.toLowerCase()
+          b = this.posts[i].name.toLowerCase()
+          c = this.posts[i].email.toLowerCase()
+          if (a.includes(search) || b.includes(search) || c.includes(search)) {
             this.postSearchList.push(this.posts[i]);
           }
         }
