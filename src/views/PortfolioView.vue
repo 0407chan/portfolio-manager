@@ -26,7 +26,7 @@
         </v-flex>
         <v-flex xs12 text-xs-right>
           <router-link :to="{ name: 'userinfo', params: {id: portfolio.userId}}">
-            by.{{result.name}}
+            by.{{portfolioWriter.name}}
           </router-link>
         </v-flex>
         <br>
@@ -77,12 +77,11 @@ export default {
       index: 0,
       portfolio: '',
       user: "",
-      result: "",
+      portfolioWriter: "",
     }
   },
   created() {
     this.id = this.$route.params.id;
-
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.user = await FirebaseService.getUserData();
@@ -115,9 +114,7 @@ export default {
     },
     async getPortfolio(id) {
       this.portfolio = await FirebaseService.getPortfolio(id);
-      if (this.portfolio.userId) {
-        this.result = await FirebaseService.getUser(this.portfolio.userId)
-      }
+      this.portfolioWriter = await FirebaseService.getUser(this.portfolio.userId)
     },
   }
 }

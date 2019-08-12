@@ -31,7 +31,7 @@ a {  text-decoration: none;}
     </v-img>
     <v-card-title primary-title>
       <v-flex>
-        <div id="title1">{{title}}</div>
+        <div id="title1"><span v-html="highlight(title,search)"></span></div>
       </v-flex>
     </v-card-title>
   </v-card>
@@ -45,12 +45,21 @@ export default {
 		title: {type: String},
 		body: {type: String},
 		imgSrc: {type: String},
-    id:{type: String}
+    id:{type: String},
+    search:{type:String},
 	},
 	data() {
 		return {
 			//
 		}
-	}
+	},
+  methods:{
+    highlight(value,search) {
+      var iQuery = new RegExp(search, "ig");
+      return value.toString().replace(iQuery, function(matchedTxt,a,b){
+          return ('<span class=\'highlight\'>' + matchedTxt + '</span>');
+      });
+    }
+  }
 }
 </script>

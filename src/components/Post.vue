@@ -36,7 +36,8 @@
     </p>
   </v-flex>
   <v-flex xs12 row>
-    <vue-markdown>{{body}}</vue-markdown>
+    <vue-markdown>{{body}}
+     </vue-markdown>
   </v-flex>
 
   <v-flex xs12 text-xs-right round class="comment_title_margin_top">
@@ -47,6 +48,7 @@
       <v-icon size="17" class="mr-2">delete</v-icon>Delete
     </v-btn>
   </v-flex>
+
 
   <v-flex xs12>
     <Comments :id="id" classify="post"></Comments>
@@ -98,7 +100,7 @@ export default {
       comment_input: '',
       heightt: 0,
       img: '',
-      index: 0,
+
       posts: [],
       post: '',
       username: '',

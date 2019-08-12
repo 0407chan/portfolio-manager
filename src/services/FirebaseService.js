@@ -65,6 +65,7 @@ export default {
     });
   },
   getPosts() {
+    var ind = 0;
     const postsCollection = firestore.collection(POSTS)
     return postsCollection
       .orderBy('created_at', 'desc')
@@ -74,6 +75,7 @@ export default {
           let data = doc.data()
           data.id = doc.id;
           data.created_at = new Date(data.created_at.toDate())
+          data.index = ind++;
           return data
         })
       })
