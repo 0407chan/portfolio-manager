@@ -22,19 +22,71 @@
 }
 
 a {  text-decoration: none;}
+.v-card.portfoliolist {
+  transition: opacity .4s ease-in-out;
+}
+
+.v-card.portfoliolist:not(.on-hover) {
+  opacity: 0.6;
+}
+
+.show-btns.portfoliolist {
+  color: rgba(255, 255, 255, 1) !important;
+}
 
 </style>
 
 <template>
-  <v-card hover>
-    <v-img :src="imgSrc" height="250px">
-    </v-img>
-    <v-card-title primary-title>
-      <v-flex>
-        <div id="title1"><span v-html="highlight(title,search)"></span></div>
-      </v-flex>
-    </v-card-title>
-  </v-card>
+
+    <v-layout align-center justify-center wrap fill-height>
+      <template>
+          <v-hover v-slot:default="{ hover }">
+            <v-card
+                    :elevation="hover ? 24 : 2"
+                    :class="{ 'on-hover': hover }"
+                    :close-delay="80"
+                    class="portfoliolist"
+            >
+              <v-img :src="imgSrc" min-height="250px" min-width="250px">
+                <v-card-title class="title white--text fill-height">
+                  <v-layout
+                          fill-height
+                          column
+                          justify-space-between
+                  >
+                    <p class="mt-4 .display-1 font-weight-bold font-italic text-left"><span v-html="highlight(title,search)"></span></p>
+<!--                    <div id="title1"><span v-html="highlight(title,search)"></span></div>-->
+
+                    <div>
+                      <p class="my-2 body-1 font-weight-bold font-italic text-left">
+                        {{ name }}
+                      </p>
+                      <p class="caption font-weight-medium font-italic text-left">
+                        {{ date }}
+                      </p>
+                    </div>
+
+                  </v-layout>
+                </v-card-title>
+              </v-img>
+            </v-card>
+          </v-hover>
+      </template>
+    </v-layout>
+
+
+
+
+
+<!--  <v-card hover>-->
+<!--    <v-img :src="imgSrc" height="250px">-->
+<!--    </v-img>-->
+<!--    <v-card-title primary-title>-->
+<!--      <v-flex>-->
+<!--&lt;!&ndash;        <div id="title1"><span v-html="highlight(title,search)"></span></div>&ndash;&gt;-->
+<!--      </v-flex>-->
+<!--    </v-card-title>-->
+<!--  </v-card>-->
 </template>
 
 <script>
@@ -45,6 +97,8 @@ export default {
 		title: {type: String},
 		body: {type: String},
 		imgSrc: {type: String},
+        name: {type: String},
+        date: {type: String},
     id:{type: String},
     search:{type:String},
 	},

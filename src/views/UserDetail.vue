@@ -411,27 +411,28 @@ export default {
 
 
       await FirebaseService.modifyUser(this.pageuser)
-      FirebaseService.alarmOnFirstVisit()
+      await FirebaseService.alarmOnFirstVisit()
         .then(async token => {
           // console.log(token)
           var result = await FirebaseService.getUserData();
           if (result.classify === '관리자') {
-            this.isAdmin = true
+            this.isAdmin = true;
+            if (result.posts) {
+              for (var i in result.posts) {
+                var post = await FirebaseService.getPost(result.posts[i])
+                await FirebaseService.modifyPost(post.title,post.body,post.id,this.pageuser.name)
+              }
+            }
+            if (result.portfolios) {
+              for (var i in result.portfolios) {
+                var portfolio = await FirebaseService.getPortfolio(result.portfolios[i])
+                await FirebaseService.modifyPortfolio(portfolio.title, portfolio.body, portfolio.img, portfolio.id, this.pageuser.name)
+              }
+            }
           } else {
             this.isAdmin = false
           }
-          if (result.posts) {
-              for (var i in result.posts) {
-              var post = await FirebaseService.getPost(result.posts[i])
-              await FirebaseService.modifyPost(post.title,post.body,post.id,this.pageuser.name)
-            }
-          }
-          if (result.portfolios) {
-              for (var i in result.portfolios) {
-              var portfolio = await FirebaseService.getPortfolio(result.portfolios[i])
-              await FirebaseService.modifyPortfolio(portfolio.title, portfolio.body, portfolio.img, portfolio.id, this.pageuser.name)
-            }
-          }
+
           await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
           // console.log(token, result.allowPush)
         });
@@ -607,10 +608,10 @@ export default {
       });
     },
 
-    async deleteUser(user) {
-      await FirebaseService.deleteUserbyId(user.id);
-      this.getUsers();
-    },
+    // async deleteUser(user) {
+    //   await FirebaseService.deleteUserbyId(user.id);
+    //   this.getUsers();
+    // },
 
     modifyPortfolio(portfolio) {
       this.$router.push({
