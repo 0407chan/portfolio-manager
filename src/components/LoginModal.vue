@@ -97,9 +97,10 @@
             <v-flex>
               <v-btn round color="transparent" v-on:click="FindPassword">Find Password</v-btn>
             </v-flex>
-            <v-flex>
-              <v-btn round color="transparent" v-on:click="loginpwSwitch">Go Back To Sign in</v-btn>
-            </v-flex>
+              <v-flex>
+                <v-btn flat color="#919191" @click="loginpwSwitch">로그인하러 가기</v-btn>
+              </v-flex>
+<!--              <v-btn round color="transparent" v-on:click="loginpwSwitch">Go Back To Sign in</v-btn>-->
           </v-flex>
         </v-layout>
       </v-tab-item>
@@ -293,8 +294,8 @@ export default {
     },
 
     async Register() {
-      let runRegister =  await this.register();
-      this.userDataUpload();
+      await this.register();
+      await this.userDataUpload();
     },
 
 
