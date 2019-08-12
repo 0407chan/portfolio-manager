@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from './views/HomePage.vue'
 import PostPage from './views/PostPage.vue'
-import PostViewPage from './views/PostView.vue'
+// import PostViewPage from './views/PostView.vue'
+import PostViewPage from './views/PostPage.vue'
 import PostWriterPage from './views/PostWriter.vue'
 import PortfolioPage from './views/PortfolioPage.vue'
 import PortfolioViewPage from './views/PortfolioView.vue'
@@ -42,7 +43,7 @@ export default new Router({
 			component: PostWriterPage
 		},
     {
-			path: '/postview/:id',
+			path: '/postview/:index',
 			name: 'postview',
 			component: PostViewPage
 		},
@@ -89,7 +90,7 @@ export default new Router({
    \     test rounter     \
     \********************/
     {
-      path: '/test',
+      path: '/test4',
       name: 'userdetailtest',
       component: UserDetailTest
     },
