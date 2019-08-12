@@ -37,6 +37,7 @@ import Portfolio from '@/components/Portfolio'
 import FirebaseService from '@/services/FirebaseService'
 import firebase from 'firebase/app'
 
+
 export default {
   name: 'PortfoliosList',
   props: {
@@ -60,10 +61,13 @@ export default {
   },
   mounted() {
     this.getPortfolios();
+    // this.getPortfoliosRealtime();
   },
   methods: {
     async getPortfolios() {
       this.portfolios = await FirebaseService.getPortfolios();
+      // this.portfolios = await this.getPortfoliosRealtime();
+      // console.log("왜안돼",this.portfolios);
       this.errorInit = true;
       this.searchList = [];
       for (var i = 0; i < this.portfolios.length; i++) {
@@ -71,14 +75,21 @@ export default {
       }
       this.isSearchEmpty = false;
     },
+
+    async getPortfoliosRealtime(){
+      console.log("이거는?");
+      let a = await FirebaseService.getPortfoliosRealtime();
+
+      console.log("이거는?",a);
+    },
     loadMorePortfolios() {
       this.limit += 3;
     },
     writeportfolio(){
       this.$router.push('writeportfolio');
     }
-
   },
+
   watch: {
     search() {
       if (this.search.length == 0) {

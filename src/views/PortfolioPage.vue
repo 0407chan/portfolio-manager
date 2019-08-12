@@ -13,6 +13,7 @@
 
 <script>
 import PortfolioList from '../components/PortfolioList'
+
 export default {
 	name: 'PortfolioPage',
   data(){
