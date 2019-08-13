@@ -418,20 +418,20 @@ export default {
             if (result.posts) {
               for (var i in result.posts) {
                 var post = await FirebaseService.getPost(result.posts[i])
-                await FirebaseService.modifyPost(post.title,post.body,post.id,this.pageuser.name)
+                FirebaseService.modifyPost(post.title,post.body,post.id,this.pageuser.name)
               }
             }
             if (result.portfolios) {
               for (var i in result.portfolios) {
                 var portfolio = await FirebaseService.getPortfolio(result.portfolios[i])
-                await FirebaseService.modifyPortfolio(portfolio.title, portfolio.body, portfolio.img, portfolio.id, this.pageuser.name)
+                FirebaseService.modifyPortfolio(portfolio.title, portfolio.body, portfolio.img, portfolio.id, this.pageuser.name)
               }
             }
           } else {
             this.isAdmin = false
           }
 
-          await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
+          FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
           // console.log(token, result.allowPush)
         });
       this.$store.state.user = this.pageuser
