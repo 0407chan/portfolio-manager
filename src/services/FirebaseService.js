@@ -749,7 +749,7 @@ export default {
         });
     },
 
-    addToCloudMessagingUserList(token, isAdmin, allowPush) {
+    addToCloudMessagingUserList(token, allowPush, isAdmin) {
         const saveObject = firestore.collection('messageList').doc(token);
         return saveObject.set({
                 cloudMessaging: token,
