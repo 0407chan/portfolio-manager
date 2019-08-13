@@ -1,6 +1,6 @@
 
 <template>
-<v-container mt-2>
+<v-container mt-4>
   <v-flex xs12 text-xs-center>
     <v-text-field label="Search" v-model="search"></v-text-field>
   </v-flex>
@@ -60,7 +60,7 @@
             <v-flex xs7 md5>
               <v-layout align-center>
                 <v-flex text-xs-12>
-                  <v-text-field label="Name" v-model="pageuser.name" v-if="isOwner"> </v-text-field>
+                  <v-text-field label="Name" v-model="pageuser.name" v-if="isOwner" counter="10" maxlength="10"> </v-text-field>
                   <v-text-field label="Name" v-model="pageuser.name" v-if="!isOwner" readonly></v-text-field>
                 </v-flex>
               </v-layout>
@@ -437,10 +437,8 @@ export default {
           // console.log(token, result.allowPush)
         });
       this.$store.state.user = this.pageuser
-      swal("개인정보 수정이 완료되었습니다.")
-      this.$router.push({
-        name: "home"
-      });
+      swal('정보 수정이 완료되었습니다.')
+      location.reload()
     },
 
     pickFile() {

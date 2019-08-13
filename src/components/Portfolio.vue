@@ -58,7 +58,7 @@ a {  text-decoration: none;}
                           column
                           justify-space-between
                   >
-                    <p class="mt-4 .display-1 font-weight-bold font-italic text-left portfoliolist"><span v-html="highlight(title,search)"></span></p>
+                    <p class="mt-4 headline font-weight-bold font-italic text-left portfoliolist"><span v-html="highlight(title,search)"></span></p>
 <!--                    <div id="title1"><span v-html="highlight(title,search)"></span></div>-->
 
                     <div>
