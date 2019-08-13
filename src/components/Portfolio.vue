@@ -51,7 +51,7 @@ a {  text-decoration: none;}
                     :close-delay="80"
                     class="portfoliolist"
             >
-              <v-img :src="imgSrc" min-height="250px" min-width="350px">
+              <v-img :src="imgSrc" height="250px" min-width="350px">
                 <v-card-title class="title white--text fill-height">
                   <v-layout
                           fill-height

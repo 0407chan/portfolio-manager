@@ -5,7 +5,7 @@
       <v-flex xs12 md5>
         <div class="img_div">
           <div class="img_scale">
-            <img v-bind:src="portfolio.img" width="100%" />
+            <img v-bind:src="portfolio.img" width="100%" style="max-height:400px;" />
           </div>
         </div>
       </v-flex>
