@@ -111,7 +111,7 @@ export default {
     },
 
     getWeather() {
-      const BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?lat=' + this.latitude + '&lon=' + this.longitude + '&APPID=53c4a4fe7f928deabafec1cf80cf8e3a'
+      const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather?lat=' + this.latitude + '&lon=' + this.longitude + '&APPID=53c4a4fe7f928deabafec1cf80cf8e3a'
       this.$http.get(`${BASE_URL}`)
         .then((response) => {
           this.dataObj = response.data;
@@ -129,7 +129,7 @@ export default {
     },
 
     getWeatherOffline() {
-      const BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?q=seoul&APPID=53c4a4fe7f928deabafec1cf80cf8e3a'
+      const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather?q=seoul&APPID=53c4a4fe7f928deabafec1cf80cf8e3a'
       this.$http.get(`${BASE_URL}`)
         .then((response) => {
           this.dataObj = response.data;
