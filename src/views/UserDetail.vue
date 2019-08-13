@@ -418,13 +418,17 @@ export default {
             if (result.posts) {
               for (var i in result.posts) {
                 var post = await FirebaseService.getPost(result.posts[i])
-                FirebaseService.modifyPost(post.title,post.body,post.id,this.pageuser.name)
+                if(post != "No such document!"){
+                  FirebaseService.modifyPost(post.title,post.body,post.id,this.pageuser.name)
+                }
               }
             }
             if (result.portfolios) {
               for (var i in result.portfolios) {
                 var portfolio = await FirebaseService.getPortfolio(result.portfolios[i])
-                FirebaseService.modifyPortfolio(portfolio.title, portfolio.body, portfolio.img, portfolio.id, this.pageuser.name)
+                if(portfolio != "No such document!"){
+                  FirebaseService.modifyPortfolio(portfolio.title, portfolio.body, portfolio.img, portfolio.id, this.pageuser.name);
+                }
               }
             }
           } else {

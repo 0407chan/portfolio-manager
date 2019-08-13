@@ -55,6 +55,7 @@ export default {
         data.created_at = new Date(data.created_at.toDate())
         return data;
       } else {
+        return "No such document!";
         console.log("No such document!");
       }
     }).catch(function(error) {
@@ -178,7 +179,8 @@ export default {
 					data.id = doc.id;
 					return data;
 				} else {
-						console.log("No such document!");
+          return "No such document!";
+					console.log("No such document!");
 				}
 		}).catch(function(error) {
 				console.log("Error getting document:", error);
