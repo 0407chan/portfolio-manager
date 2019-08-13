@@ -414,7 +414,7 @@ export default {
           // console.log(token)
           var result = await FirebaseService.getUserData();
 
-          await FirebaseService.addToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
+          await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
           // console.log(result.allowPush)
           if (result.classify !== '방문자') {
             this.isAdmin = true;
