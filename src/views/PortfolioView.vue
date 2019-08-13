@@ -117,7 +117,9 @@ export default {
       this.portfolioWriter = await FirebaseService.getUser(this.portfolio.userId)
     },
     realtime(date){
-      return date.getFullYear()+'년 '+(date.getMonth()+1)+'월 '+date.getDate()+'일 '+ this.addZeros(date.getHours())+'시 '+ this.addZeros(date.getMinutes()) +'분';
+      if (date) {
+        return date.getFullYear()+'년 '+(date.getMonth()+1)+'월 '+date.getDate()+'일 '+ this.addZeros(date.getHours())+'시 '+ this.addZeros(date.getMinutes()) +'분';
+      }
     },
     addZeros(num) {
       var zero = '';

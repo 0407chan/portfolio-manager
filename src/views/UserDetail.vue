@@ -407,16 +407,15 @@ export default {
 
       // TODO 내가 이름이 수정되면, 내가 작성한 모든 post, 포폴, 댓글에 들어간 name 수정하기
 
-console.log('check')
-      console.log(this.pageuser)
+      // console.log(this.pageuser)
       await FirebaseService.modifyUser(this.pageuser)
       await FirebaseService.alarmOnFirstVisit()
         .then(async token => {
-          console.log(token)
+          // console.log(token)
           var result = await FirebaseService.getUserData();
 
           await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
-          console.log(result.allowPush)
+          // console.log(result.allowPush)
           if (result.classify !== '방문자') {
             this.isAdmin = true;
             if (result.posts) {
@@ -438,11 +437,11 @@ console.log('check')
           } else {
             this.isAdmin = false
           }
-          console.log(token, result.allowPush)
+          // console.log(token, result.allowPush)
         });
       this.$store.state.user = this.pageuser
       swal('정보 수정이 완료되었습니다.')
-      // location.reload()
+      location.reload()
     },
 
     pickFile() {
