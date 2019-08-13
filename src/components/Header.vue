@@ -146,14 +146,12 @@ export default {
             .then(async token=>{
               // console.log(token)
               var result = await FirebaseService.getUserData();
+              await FirebaseService.addToCloudList(token)
               if (result.classify==='관리자'){
                 this.isAdmin = true
               } else {
                 this.isAdmin = false
               }
-              // console.log(result)
-              await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
-              // console.log(token, result.allowPush)
             });
       } else {
         this.user = "";

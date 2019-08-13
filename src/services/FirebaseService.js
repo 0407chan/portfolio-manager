@@ -11,6 +11,7 @@ const PORTFOLIOS = 'portfolios'
 const PAGELOGS = 'pagelogs'
 const USERS = 'users'
 const COMMENTS = 'comments'
+const MESSAGELIST = 'messageList'
 
 // Setup Firebase
 const config = {
@@ -474,6 +475,12 @@ export default {
         var userId = firebase.auth().currentUser.uid;
         return firestore.collection(USERS).doc(userId).update({
             portfoliocomments: firebase.firestore.FieldValue.arrayUnion(id),
+        })
+    },
+    addToCloudList(id) {
+        var userId = firebase.auth().currentUser.uid;
+        return firestore.collection(USERS).doc(userId).update({
+            token: firebase.firestore.FieldValue.arrayUnion(id),
         })
     },
 

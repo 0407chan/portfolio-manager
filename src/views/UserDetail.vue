@@ -409,15 +409,20 @@ export default {
 
       // console.log(this.pageuser)
       await FirebaseService.modifyUser(this.pageuser)
-      await FirebaseService.alarmOnFirstVisit()
-        .then(async token => {
+      // await FirebaseService.alarmOnFirstVisit()
+      //   .then(async token => {
           // console.log(token)
           var result = await FirebaseService.getUserData();
-
-          await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
+          // await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
           // console.log(result.allowPush)
           if (result.classify !== '방문자') {
             this.isAdmin = true;
+            if (result.token.length!==0) {
+              for (var i in result.token) {
+                var usertoken  = result.token[i];
+                await FirebaseService.updateToCloudMessagingUserList(usertoken, result.allowPush, this.isAdmin);
+              }
+            }
             if (result.posts) {
               for (var i in result.posts) {
                 var post = await FirebaseService.getPost(result.posts[i])
@@ -438,7 +443,7 @@ export default {
             this.isAdmin = false
           }
           // console.log(token, result.allowPush)
-        });
+        // });
       this.$store.state.user = this.pageuser
       swal('정보 수정이 완료되었습니다.')
       location.reload()
