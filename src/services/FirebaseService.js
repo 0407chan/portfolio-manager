@@ -530,8 +530,8 @@ export default {
             isPortfolioOpen: true,
             isCommentOpen: true,
             allowPush: true,
-            portfolios: "",
-            posts: "",
+            portfolios: [],
+            posts: [],
         }).then(function (result) {
 
         });
