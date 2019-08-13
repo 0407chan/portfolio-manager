@@ -4,7 +4,7 @@
     <v-flex xs12 text-xs-center>
       <v-text-field label="Search" v-model="search"></v-text-field>
     </v-flex>
-    <v-flex v-for="i in searchList.length > limit ? limit : searchList.length" xs12 sm6 lg4>
+    <v-flex v-for="i in searchList.length > limit ? limit : searchList.length" xs12 sm12 md6 lg4>
       <router-link :to="{ name: 'portfolioview', params: {id: searchList[i-1].id} }">
         <Portfolio class="ma-3" :date="searchList[i-1].created_at.toString()" :title="searchList[i-1].title" :body="searchList[i-1].body" :imgSrc="searchList[i-1].img" :search="search" :name="searchList[i-1].name"></Portfolio>
       </router-link>

@@ -33,7 +33,11 @@ a {  text-decoration: none;}
 .show-btns.portfoliolist {
   color: rgba(255, 255, 255, 1) !important;
 }
-
+.highlight.portfoliolist {
+  background-color: #fdc23e;
+  font-weight: bold;
+  color: black;
+}
 </style>
 
 <template>
@@ -47,14 +51,14 @@ a {  text-decoration: none;}
                     :close-delay="80"
                     class="portfoliolist"
             >
-              <v-img :src="imgSrc" min-height="250px" min-width="250px">
+              <v-img :src="imgSrc" min-height="250px" min-width="350px">
                 <v-card-title class="title white--text fill-height">
                   <v-layout
                           fill-height
                           column
                           justify-space-between
                   >
-                    <p class="mt-4 .display-1 font-weight-bold font-italic text-left"><span v-html="highlight(title,search)"></span></p>
+                    <p class="mt-4 .display-1 font-weight-bold font-italic text-left portfoliolist"><span v-html="highlight(title,search)"></span></p>
 <!--                    <div id="title1"><span v-html="highlight(title,search)"></span></div>-->
 
                     <div>
@@ -62,7 +66,7 @@ a {  text-decoration: none;}
                         {{ name }}
                       </p>
                       <p class="caption font-weight-medium font-italic text-left">
-                        {{ date }}
+                        {{ date.toString().substring(0,24) }}
                       </p>
                     </div>
 
