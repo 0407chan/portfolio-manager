@@ -142,17 +142,23 @@ export default {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.user = await FirebaseService.getUserData();
-        await FirebaseService.alarmOnFirstVisit()
-            .then(async token=>{
+        // await FirebaseService.alarmOnFirstVisit()
+            // .then(async token=>{
               // console.log(token)
               var result = await FirebaseService.getUserData();
-              await FirebaseService.addToCloudList(token)
+              // await FirebaseService.addToCloudList(token)
               if (result.classify==='관리자'){
                 this.isAdmin = true
               } else {
                 this.isAdmin = false
               }
-            });
+        if (result.token.length!==0) {
+          for (var i in result.token) {
+            var usertoken  = result.token[i];
+            await FirebaseService.updateToCloudMessagingUserList(usertoken, result.allowPush, this.isAdmin);
+          }
+        }
+            // });
       } else {
         this.user = "";
       }
