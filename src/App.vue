@@ -53,43 +53,43 @@ head {
 
 .notification-title {
   font-weight: 600 !important;
-  font-size: 14px !important;
-  margin-bottom: 3px !important;
+  font-size: 17px !important;
+  margin: 7px 0 !important;
 }
-
+.notification-content {
+  font-weight: 300 !important;
+  font-size: 16px !important;
+}
 .vue-notification-template {
   display: block !important;
-  box-sizing: border-box !important;
+  /*box-sizing: border-box !important;*/
   background: white !important;
-  text-align: center !important;
+  text-align: left !important;
 }
 
 .vue-notification {
   display: block !important;
-  box-sizing: border-box !important;
-  text-align: center !important;
-  font-size: 12px !important;
-  padding: 10px !important;
-  margin: 0 0 !important;
-
+  /*box-sizing: border-box !important;*/
+  text-align: left !important;
+  font-size: 20px !important;
+  margin: 2px 0 !important;
   color: black !important;
   background: #44A4FC !important;
-  border: 2px solid !important;
+  border-left: 0px none !important;
 }
 
 .vue-notification.warn {
-  background: #FCFFFC !important;
-  border-color: #fdc23e !important;
+  background: #fdc23e !important;
+  opacity: 0.8 !important;
 }
 
 .vue-notification.error {
-  background: #FCFFFC !important;
-  border-color: #ff7761 !important;
+  background: #ff7761 !important;
+  opacity: 0.8 !important;
 }
 
 .vue-notification.success {
-  background: #68CD86 !important;
-  border-left-color: #42A85F !important;
+  background: #FCFFFC !important;
   opacity: 0.8;
 }
 

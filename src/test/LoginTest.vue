@@ -16,6 +16,24 @@
     <v-flex xs12>
       <v-text-field v-model="classify" autofocus></v-text-field>
     </v-flex>
+    <v-flex xs12>
+      <v-text-field
+        v-model="val"
+         label="Password"
+         loading
+       >
+         <template v-slot:progress>
+           <v-progress-linear
+             v-if="custom"
+             :value="progress"
+             :color="color"
+             absolute
+             height="3"
+           ></v-progress-linear>
+         </template>
+       </v-text-field>
+
+     </v-flex>
     <v-flex text-xs-center>
       <v-btn round color="one" v-on:click="LogIn">Login</v-btn>
     </v-flex>
@@ -33,6 +51,9 @@
     </v-flex>
     <v-flex text-xs-center>
       <v-btn round color="two"  v-on:click="getUserData">getUserData</v-btn>
+    </v-flex>
+    <v-flex text-xs-center>
+      <v-btn round color="three"  v-on:click="test3">test</v-btn>
     </v-flex>
   </v-flex>
 </v-layout>
@@ -53,8 +74,19 @@ export default {
     classify: "방문자",
     pw: "123123",
     message2:"",
+    val:'',
+    custom:true,
   }),
   store,
+
+  computed: {
+    progress () {
+      return Math.min(100, this.val.length * 100/6)
+    },
+    color () {
+      return ['error', 'warning', 'success'][Math.floor(this.progress / 50)]
+    },
+  },
   methods: {
     async test() {
       const result = await FirebaseService.getUserData();
@@ -67,6 +99,11 @@ export default {
     test2() {
       console.log(this.$store.state.user.displayName);
     },
+    test3(){
+      console.log(this.progress, this.color);
+    },
+
+
 
     login() {
       return firebase.auth()

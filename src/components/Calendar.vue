@@ -124,7 +124,7 @@
         var colors = ['two', 'three', 'four','five']
         for (var i = 0; i <this.posts.length; i ++) {
             let idx = i % 4;
-            let postWriter = this.posts[i].writer;
+            let postWriter = this.posts[i].email;
             let title = this.posts[i].title;
             let body = this.posts[i].body;
             let created_at = this.posts[i].created_at;

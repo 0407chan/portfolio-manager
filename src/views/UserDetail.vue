@@ -1,6 +1,6 @@
 
 <template>
-<v-container mt-2>
+<v-container mt-4>
   <v-flex xs12 text-xs-center>
     <v-text-field label="Search" v-model="search"></v-text-field>
   </v-flex>
@@ -60,7 +60,7 @@
             <v-flex xs7 md5>
               <v-layout align-center>
                 <v-flex text-xs-12>
-                  <v-text-field label="Name" v-model="pageuser.name" v-if="isOwner"> </v-text-field>
+                  <v-text-field label="Name" v-model="pageuser.name" v-if="isOwner" counter="10" maxlength="10"> </v-text-field>
                   <v-text-field label="Name" v-model="pageuser.name" v-if="!isOwner" readonly></v-text-field>
                 </v-flex>
               </v-layout>
@@ -361,7 +361,6 @@ export default {
     this.id= this.$route.params.id;
     firebase.auth().onAuthStateChanged(async user => {
       this.pageuser = await FirebaseService.getUser(this.id);
-      console.log(this.pageuser)
       if (user) {
         var currentUser = firebase.auth().currentUser;
         this.user = currentUser;
@@ -372,7 +371,6 @@ export default {
           this.isOwner = false;
         }
       } else {
-        console.log(this.pageuser)
         this.imageUrl = this.pageuser.userImageUrl;
         this.isOwner = false
       }
@@ -411,35 +409,34 @@ export default {
 
 
       await FirebaseService.modifyUser(this.pageuser)
-      FirebaseService.alarmOnFirstVisit()
+      await FirebaseService.alarmOnFirstVisit()
         .then(async token => {
           // console.log(token)
           var result = await FirebaseService.getUserData();
           if (result.classify === '관리자') {
-            this.isAdmin = true
+            this.isAdmin = true;
+            if (result.posts) {
+              for (var i in result.posts) {
+                var post = await FirebaseService.getPost(result.posts[i])
+                FirebaseService.modifyPost(post.title,post.body,post.id,this.pageuser.name)
+              }
+            }
+            if (result.portfolios) {
+              for (var i in result.portfolios) {
+                var portfolio = await FirebaseService.getPortfolio(result.portfolios[i])
+                FirebaseService.modifyPortfolio(portfolio.title, portfolio.body, portfolio.img, portfolio.id, this.pageuser.name)
+              }
+            }
           } else {
             this.isAdmin = false
           }
-          if (result.posts) {
-              for (var i in result.posts) {
-              var post = await FirebaseService.getPost(result.posts[i])
-              await FirebaseService.modifyPost(post.title,post.body,post.id,this.pageuser.name)
-            }
-          }
-          if (result.portfolios) {
-              for (var i in result.portfolios) {
-              var portfolio = await FirebaseService.getPortfolio(result.portfolios[i])
-              await FirebaseService.modifyPortfolio(portfolio.title, portfolio.body, portfolio.img, portfolio.id, this.pageuser.name)
-            }
-          }
-          await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
+
+          FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
           // console.log(token, result.allowPush)
         });
       this.$store.state.user = this.pageuser
-      swal("개인정보 수정이 완료되었습니다.")
-      this.$router.push({
-        name: "home"
-      });
+      swal('정보 수정이 완료되었습니다.')
+      location.reload()
     },
 
     pickFile() {
@@ -607,10 +604,10 @@ export default {
       });
     },
 
-    async deleteUser(user) {
-      await FirebaseService.deleteUserbyId(user.id);
-      this.getUsers();
-    },
+    // async deleteUser(user) {
+    //   await FirebaseService.deleteUserbyId(user.id);
+    //   this.getUsers();
+    // },
 
     modifyPortfolio(portfolio) {
       this.$router.push({
@@ -735,5 +732,6 @@ export default {
 .highlight {
   background-color: #fdc23e;
   font-weight: bold;
+  color: #000000;
 }
 </style>

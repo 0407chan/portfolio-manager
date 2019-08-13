@@ -1,16 +1,16 @@
 <template>
 <v-layout mt-5 wrap>
-  <template v-if="portfolios.length!=0 && portfolios != undefined ">
+  <template v-if="portfolios.length!==0 && wait">
     <v-flex xs12 text-xs-center>
       <v-text-field label="Search" v-model="search"></v-text-field>
     </v-flex>
-    <v-flex v-for="i in searchList.length > limit ? limit : searchList.length" xs12 sm6 lg4>
+    <v-flex v-for="i in searchList.length > limit ? limit : searchList.length" xs12 sm12` md6 lg4>
       <router-link :to="{ name: 'portfolioview', params: {id: searchList[i-1].id} }">
-        <Portfolio class="ma-3" :date="searchList[i-1].created_at.toString()" :title="searchList[i-1].title" :body="searchList[i-1].body" :imgSrc="searchList[i-1].img" :search="search"></Portfolio>
+        <Portfolio class="ma-3" :date="searchList[i-1].created_at.toString()" :title="searchList[i-1].title" :body="searchList[i-1].body" :imgSrc="searchList[i-1].img" :search="search" :name="searchList[i-1].name"></Portfolio>
       </router-link>
     </v-flex>
     <v-alert v-if="errorInit" :value="searchList.length == 0" color="error" icon="warning" outline transition="scale-transition">
-      "{{this.search}}" is not in Portfolis
+      "{{this.search}}" is not in Portfolios
     </v-alert>
     <v-flex xs12 text-xs-center round my-5>
       <v-btn flat v-if="searchList.length > limit" color="black" dark v-on:click="loadMorePortfolios">
@@ -18,10 +18,10 @@
       </v-btn>
     </v-flex>
   </template>
-  <template v-else>
+  <template v-else-if="portfolios.length === 0 && wait">
     <v-layout align-center justify-center style="min-height:400px;" >
       <v-flex xs8 text-xs-center >
-        <v-alert :value="portfolios.length == 0" color="error" icon="warning" outline transition="scale-transition">
+        <v-alert :value="portfolios.length === 0" color="error" icon="warning" outline transition="scale-transition">
           등록된 포트폴리오가 없습니다.
         </v-alert>
         <v-btn color="two" round dark v-on:click="writeportfolio">
@@ -54,6 +54,7 @@ export default {
       searchList: [],
       errorInit: false,
       isSearchEmpty: true,
+      wait: false,
     }
   },
   components: {
@@ -67,7 +68,7 @@ export default {
   methods: {
     async getPortfolios() {
       this.portfolios = await FirebaseService.getPortfolios();
-       this.portfolios = await this.getPortfoliosRealtime();
+       // this.portfolios = await this.getPortfoliosRealtime();
       // console.log("왜안돼",this.portfolios);
       this.errorInit = true;
       this.searchList = [];
@@ -75,6 +76,7 @@ export default {
         this.searchList.push(this.portfolios[i]);
       }
       this.isSearchEmpty = false;
+      this.wait = true
     },
 
     async getPortfoliosRealtime(){
@@ -103,11 +105,12 @@ export default {
       } else {
         this.searchList = [];
         var len = this.portfolios.length;
-        var search = this.search;
-        search = search.toLowerCase();
+        var search = this.search.toLowerCase();
         for (var i = 0; i < len; i++) {
           var a = this.portfolios[i].title.toLowerCase()
-          if (a.includes(search)) {
+          var b = this.portfolios[i].name.toLowerCase()
+          var c = this.portfolios[i].created_at.toString().toLowerCase()
+          if (a.includes(search) || b.includes(search) ||c.includes(search)) {
             this.searchList.push(this.portfolios[i]);
           }
         }

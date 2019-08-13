@@ -498,19 +498,21 @@ export default {
             return data;
         }).catch(function (error) {
             console.log("Error getting document:", error);
+
         });
     },
 
     getUserData() {
         var user = firebase.auth().currentUser;
-        if (user != null) {
+        if (user) {
             var userData = firestore.collection(USERS).doc(user.uid);
             return userData.get().then(function (result) {
                 var data = result.data();
                 data.id = result.id;
                 return data;
             }).catch(function (error) {
-                console.log("Error getting cached document:", error);
+              return "TypeError: Cannot set property 'id' of undefined";
+              console.log("Error getting cached document:", error);
             });
         } else {
             return "[getUserData] 로그인을 해주세요";
@@ -530,6 +532,8 @@ export default {
             isPortfolioOpen: true,
             isCommentOpen: true,
             allowPush: true,
+            portfolios: [],
+            posts: [],
         }).then(function (result) {
 
         });
@@ -562,7 +566,7 @@ export default {
             return user.delete().then(function () {
 
             }).catch(function (error) {
-                console.log("유저 삭제", error);
+
             });
         } else {
             console.log("유저없음");
@@ -657,16 +661,16 @@ export default {
                         Vue.notify({
                             group: 'foo',
                             type: 'warn',
-                            title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.title + "&nbsp" + ">",
-                            text: "새로운 포트폴리오가 등록되었습니다.",
+                            text: ["작성자 : " + payload.data.displayName, "제목 : " + payload.data.title].join('<br>'),
+                            title: "새로운 포트폴리오가 등록되었습니다.",
                             duration: 5000,
                         });
                     } else if(payload.data.classify === 'post' && !payload.data.body) {
                         Vue.notify({
                             group: 'foo',
                             type: 'warn',
-                            title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.title + "&nbsp" + ">",
-                            text: "새로운 포스트가 등록되었습니다.",
+                            text: ["작성자 : " + payload.data.displayName, "제목 : " + payload.data.title].join('<br>'),
+                            title: "새로운 포스트가 등록되었습니다.",
                             duration: 5000,
                         });
                     } else {
@@ -674,16 +678,16 @@ export default {
                             Vue.notify({
                                 group: 'foo',
                                 type: 'warn',
-                                title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.body + "&nbsp" + ">",
-                                text: "포트폴리오에 새로운 댓글이 등록되었습니다.",
+                                text: ["작성자 : " + payload.data.displayName, "제목 : " + payload.data.body].join('<br>'),
+                                title: "포트폴리오에 새로운 댓글이 등록되었습니다.",
                                 duration: 5000,
                             });
                         } else if(payload.data.classify === 'post') {
                             Vue.notify({
                                 group: 'foo',
                                 type: 'warn',
-                                title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.body + "&nbsp" + ">",
-                                text: "포스트에 새로운 댓글이 등록되었습니다",
+                                text: ["작성자 : " + payload.data.displayName, "제목 : " + payload.data.body].join('<br>'),
+                                title: "포스트에 새로운 댓글이 등록되었습니다",
                                 duration: 5000,
                             });
                         }
@@ -695,16 +699,16 @@ export default {
                         Vue.notify({
                             group: 'foo',
                             type: 'error',
-                            title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.title + "&nbsp" + ">",
-                            text: "포트폴리오가 삭제되었습니다.",
+                            text: ["작성자 : " + payload.data.displayName, "제목 : " + payload.data.title].join('<br>'),
+                            title: "포트폴리오가 삭제되었습니다.",
                             duration: 5000,
                         });
                     } else if(payload.data.classify === 'post' && !payload.data.body) {
                         Vue.notify({
                             group: 'foo',
                             type: 'error',
-                            title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.title + "&nbsp" + ">",
-                            text: "포스트가 삭제되었습니다.",
+                            text: ["작성자 : " + payload.data.displayName, "제목 : " + payload.data.title].join('<br>'),
+                            title: "포스트가 삭제되었습니다.",
                             duration: 5000,
                         });
                     } else {
@@ -712,16 +716,16 @@ export default {
                             Vue.notify({
                                 group: 'foo',
                                 type: 'error',
-                                title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.body + "&nbsp" + ">",
-                                text: "포트폴리오 댓글이 삭제되었습니다.",
+                                text: ["작성자 : " + payload.data.displayName, "제목 : " + payload.data.body].join('<br>'),
+                                title: "포트폴리오 댓글이 삭제되었습니다.",
                                 duration: 5000,
                             });
                         } else if(payload.data.classify === 'post') {
                             Vue.notify({
                                 group: 'foo',
                                 type: 'error',
-                                title: payload.data.displayName + "&nbsp" + "&nbsp" + "<" + "&nbsp" + payload.data.body + "&nbsp" + ">",
-                                text: "포스트 댓글이 삭제되었습니다",
+                                text: ["작성자 : " + payload.data.displayName, "제목 : " + payload.data.body].join('<br>'),
+                                title: "포스트 댓글이 삭제되었습니다",
                                 duration: 5000,
                             });
                         }
