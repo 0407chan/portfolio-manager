@@ -498,6 +498,7 @@ export default {
             return data;
         }).catch(function (error) {
             console.log("Error getting document:", error);
+
         });
     },
 
@@ -510,7 +511,8 @@ export default {
                 data.id = result.id;
                 return data;
             }).catch(function (error) {
-                console.log("Error getting cached document:", error);
+              return "TypeError: Cannot set property 'id' of undefined";
+              console.log("Error getting cached document:", error);
             });
         } else {
             return "[getUserData] 로그인을 해주세요";
@@ -564,7 +566,7 @@ export default {
             return user.delete().then(function () {
 
             }).catch(function (error) {
-                
+
             });
         } else {
             console.log("유저없음");

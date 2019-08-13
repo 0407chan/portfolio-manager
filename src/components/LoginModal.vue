@@ -339,10 +339,9 @@ export default {
       }
     },
 
-
     async userDataUpload() {
       let result = await FirebaseService.getUserData();
-      if (result === undefined) {
+      if (result === undefined || result == "TypeError: Cannot set property 'id' of undefined") {
         const init = await FirebaseService.userDataInit();
         var name = this.$store.state.user.displayName;
         if (name == null) {
