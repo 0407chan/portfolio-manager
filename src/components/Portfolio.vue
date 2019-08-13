@@ -43,10 +43,10 @@ a {
   <template>
     <v-hover v-slot:default="{ hover }">
       <v-card :elevation="hover ? 24 : 2" :class="{ 'on-hover': hover }" :close-delay="80" class="portfoliolist">
-        <v-img :src="imgSrc" min-height="250px" min-width="350px">
+        <v-img :src="imgSrc" height="250px" min-width="350px">
           <v-card-title class="title white--text fill-height">
             <v-layout fill-height column justify-space-between>
-              <p class="mt-4 .display-1 font-weight-bold font-italic text-left"><span v-html="highlight(title,search)"></span></p>
+              <p class="mt-4 headline font-weight-bold font-italic text-left"><span v-html="highlight(title,search)"></span></p>
               <!--   <div id="title1"><span v-html="highlight(title,search)"></span></div>-->
 
               <div>

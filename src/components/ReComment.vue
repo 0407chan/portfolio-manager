@@ -12,7 +12,7 @@
           <v-layout justify-space-between wrap align-center>
               <v-flex xs6 sm8 md9>
                 <router-link :to="{ name: 'userinfo', params: {id:recomment.userId}}"> {{recomment.name}} </router-link>
-                <span :title="realtime(recomment.created_at)">
+                <span :title="realtime(recomment.created_at)" style="color:#919191">
                   {{displayTime(recomment.created_at)}}
                 </span>
                 <template>
