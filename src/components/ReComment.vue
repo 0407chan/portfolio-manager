@@ -96,6 +96,8 @@ export default {
     }
   },
   created() {
+    FirebaseService.getReCommentsRealtime();
+
     firebaseApp.auth().onAuthStateChanged(async user => {
       var username = '';
       var useremail = '';
@@ -183,7 +185,19 @@ export default {
       img.src = url;
     },
   },
+
+  computed:{
+    recommentChange(){
+      return this.$store.state.recommentChange;
+    }
+  },
+
   watch: {
+    recommentChange(val){
+      console.log("됨?", val)
+      this.getComments(this.id);
+      this.$store.state.recommentChange= false;
+    },
     newReComment(){
       if(this.newReComment.length ==0){
         this.isCommentModify = false;

@@ -239,22 +239,35 @@ export default {
     		return docRef.id;
 		})
 	},
+
   getPortfoliosRealtime(){
 		return firestore.collection(PORTFOLIOS)
     .orderBy('created_at', 'desc')
     .onSnapshot(function(snapshot) {
-      return snapshot.docs.map((doc) => {
-        let data = doc.data();
-        data.id = doc.id;
-        data.created_at = new Date(data.created_at.toDate());
-        return data
-      })
-    }, function(error) {
-        console.log(error);
+      store.state.portfolioChange = true;
     });
-
   },
-
+  getCommentsRealtime(){
+    return firestore.collection(COMMENTS)
+    .orderBy('created_at', 'desc')
+    .onSnapshot(function(snapshot) {
+      store.state.commentChange = true;
+    });
+  },
+  getReCommentsRealtime(){
+    return firestore.collection(COMMENTS)
+    .orderBy('created_at', 'desc')
+    .onSnapshot(function(snapshot) {
+      store.state.recommentChange = true;
+    });
+  },
+  getPostsRealtime(){
+    return firestore.collection(POSTS)
+    .orderBy('created_at', 'desc')
+    .onSnapshot(function(snapshot) {
+      store.state.postChange = true;
+    });
+  },
 
 	/**************************\
  \       Comment 함수들       \

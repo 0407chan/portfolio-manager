@@ -173,6 +173,8 @@ export default {
   },
 
   created() {
+    FirebaseService.getCommentsRealtime();
+    
     firebaseApp.auth().onAuthStateChanged(async user => {
       if (user) this.currUser = await FirebaseService.getUserData();
     });
@@ -297,8 +299,22 @@ export default {
     },
   },
 
+  computed:{
+    commentChange(){
+      return this.$store.state.commentChange;
+    }
+  },
 
   watch: {
+    commentChange(val){
+      if (this.classify == "post") {
+        this.getComments(this.id);
+      } else {
+        var parentId = this.$route.params.id;
+        this.getComments(parentId);
+      }
+      this.$store.state.commentChange= false;
+    },
     comment_input() {
       if (this.comment_input.length == 0) {
         this.isComment = false;

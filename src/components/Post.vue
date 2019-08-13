@@ -120,13 +120,11 @@ export default {
   computed: {
     formatedDate() {
       return `${this.date.getFullYear()}년 ${this.date.getMonth()+1}월 ${this.date.getDate()}일`
-    }
+    },
   },
   mounted() {
     if (this.id != null) {
       this.getPost(this.id);
-    }
-    if (this.id != null) {
       this.getComments(this.id);
     }
   },

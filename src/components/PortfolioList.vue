@@ -62,8 +62,7 @@ export default {
   },
   mounted() {
     this.getPortfolios();
-
-    // this.getPortfoliosRealtime();
+    FirebaseService.getPortfoliosRealtime();
   },
   methods: {
     async getPortfolios() {
@@ -93,8 +92,18 @@ export default {
       this.$router.push('writeportfolio');
     }
   },
+  computed:{
+    portfolioChange(){
+      return this.$store.state.portfolioChange;
+    }
+  },
 
   watch: {
+    portfolioChange(val){
+      this.getPortfolios();
+      this.$store.state.portfolioChange= false;
+    },
+
     search() {
       if (this.search.length == 0) {
         var len = this.portfolios.length;

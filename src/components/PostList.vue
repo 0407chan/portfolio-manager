@@ -88,9 +88,21 @@ export default {
   mounted() {
     this.getPosts();
   },
+  computed:{
+    postChange(){
+      return this.$store.state.postChange;
+    }
+  },
+  watch: {
+    postChange(val){
+
+      this.getPosts();
+      this.$store.state.postChange= false;
+    },
+  },
   methods: {
     async getPosts() {
-      this.posts = await FirebaseService.getPosts()
+      this.posts = await FirebaseService.getPosts();
     },
     loadMorePosts() {
       this.limits += 4
@@ -98,6 +110,7 @@ export default {
 
   },
   created() {
+    FirebaseService.getPostsRealtime();
     this.getPosts();
     firebase.auth().onAuthStateChanged(user => {
       this.user = user;
