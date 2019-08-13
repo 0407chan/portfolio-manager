@@ -734,5 +734,6 @@ export default {
 .highlight {
   background-color: #fdc23e;
   font-weight: bold;
+  color: #000000;
 }
 </style>
