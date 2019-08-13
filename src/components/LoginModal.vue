@@ -234,13 +234,14 @@ export default {
 
     async userDataUpload(){
       let result = await FirebaseService.getUserData();
+      //console.log("userDataUpload, result=",result);
       if(result === undefined){
         const init = await FirebaseService.userDataInit();
         var name = this.$store.state.user.displayName;
         if(name == null){
           name = this.name;
         }
-        console.log(name);
+        //console.log(name);
         const re = await FirebaseService.userDataToDB(this.$store.state.user.email,"방문자",name,firebase.firestore.FieldValue.serverTimestamp(),"https://i.imgur.com/OpxiyFt.png");
       }else{
         if(result.userImageUrl === undefined || result.userImageUrl == "" || result.userImageUrl=="https://i.imgur.com/OpxiyFt.png"){
@@ -278,7 +279,7 @@ export default {
           .createUserWithEmailAndPassword(this.email2, this.ps1)
           .then(
             function(user) {
-
+              //console.log("로그인 완료됐습니다.",user)
             },
             (err) => {
               if(err.message === "The email address is already in use by another account."){
@@ -293,9 +294,10 @@ export default {
       this.progress= false
     },
 
-    async Register() {
-      await this.register();
-      await this.userDataUpload();
+    Register() {
+      this.register();
+      //console.log("완");
+      this.userDataUpload();
     },
 
 

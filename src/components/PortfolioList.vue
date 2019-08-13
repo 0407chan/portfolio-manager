@@ -105,11 +105,12 @@ export default {
       } else {
         this.searchList = [];
         var len = this.portfolios.length;
-        var search = this.search;
-        search = search.toLowerCase();
+        var search = this.search.toLowerCase();
         for (var i = 0; i < len; i++) {
           var a = this.portfolios[i].title.toLowerCase()
-          if (a.includes(search)) {
+          var b = this.portfolios[i].name.toLowerCase()
+          var c = this.portfolios[i].created_at.toString().toLowerCase()
+          if (a.includes(search) || b.includes(search) ||c.includes(search)) {
             this.searchList.push(this.portfolios[i]);
           }
         }
