@@ -89,7 +89,7 @@ head {
 }
 
 .vue-notification.success {
-  background: #68CD86 !important;
+  background: #FCFFFC !important;
   opacity: 0.8;
 }
 
