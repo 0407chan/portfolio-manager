@@ -66,10 +66,10 @@
           </template>
 
           <template v-if="comments[comments.length-i].reply">
-            <v-flex xs10>
+            <v-flex xs7 md8 lg10>
               <v-text-field counter="90" maxlength="90" v-model="reComment_input" :value='comments[comments.length-i].body' @keyup.enter="postReComment(comments[comments.length-i])"></v-text-field>
             </v-flex>
-            <v-flex xs2 text-xs-center>
+            <v-flex xs5 md4 lg2 text-xs-center>
               <template v-if="isReCommentModify">
                 <v-btn fab dark small hover color="four" @click="postReComment(comments[comments.length-i])">
                   <v-icon size="17">create</v-icon>
@@ -102,10 +102,10 @@
   <!-- portfolio comment, need authority -->
   <template v-if="currUser">
     <v-layout justify-space-between wrap align-center>
-      <v-flex xs10 text-xs-center>
+      <v-flex xs8 md9 lg10 text-xs-center>
         <v-text-field counter="90" maxlength="90" v-model="comment_input" autofocus label="Comment" @keyup.enter="postComment"></v-text-field>
       </v-flex>
-      <v-flex xs2 text-xs-center>
+      <v-flex xs4 md3 lg2 text-xs-center>
         <template v-if="isComment">
           <v-btn round color="four" dark @click="postComment">
             <v-icon size="17" class="mr-2">create</v-icon>Write
