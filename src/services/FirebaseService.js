@@ -503,7 +503,7 @@ export default {
 
     getUserData() {
         var user = firebase.auth().currentUser;
-        if (user != null) {
+        if (user) {
             var userData = firestore.collection(USERS).doc(user.uid);
             return userData.get().then(function (result) {
                 var data = result.data();
@@ -564,7 +564,7 @@ export default {
             return user.delete().then(function () {
 
             }).catch(function (error) {
-                console.log("유저 삭제", error);
+                
             });
         } else {
             console.log("유저없음");

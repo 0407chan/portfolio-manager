@@ -361,7 +361,6 @@ export default {
     this.id= this.$route.params.id;
     firebase.auth().onAuthStateChanged(async user => {
       this.pageuser = await FirebaseService.getUser(this.id);
-      console.log(this.pageuser)
       if (user) {
         var currentUser = firebase.auth().currentUser;
         this.user = currentUser;
