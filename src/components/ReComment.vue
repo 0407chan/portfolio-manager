@@ -194,7 +194,7 @@ export default {
 
   watch: {
     recommentChange(val){
-      console.log("됨?", val)
+      // console.log("됨?", val)
       this.getComments(this.id);
       this.$store.state.recommentChange= false;
     },
