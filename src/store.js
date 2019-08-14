@@ -8,12 +8,15 @@ export default new Vuex.Store({
 		accessToken: '',
     user: '',
     userInfo:'',
-    check: false
+    portfolioChange:'',
+    postChange:'',
+    commentChange:'',
+    recommentChange:'',
+    check: false,
   },
-
   getters : {
     USERINFO : state => {
       return state.userInfo;
-    }
+    },
   },
 })

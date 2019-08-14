@@ -11,6 +11,7 @@ const PORTFOLIOS = 'portfolios'
 const PAGELOGS = 'pagelogs'
 const USERS = 'users'
 const COMMENTS = 'comments'
+const MESSAGELIST = 'messageList'
 
 // Setup Firebase
 const config = {
@@ -55,6 +56,7 @@ export default {
         data.created_at = new Date(data.created_at.toDate())
         return data;
       } else {
+        return "No such document!";
         console.log("No such document!");
       }
     }).catch(function(error) {
@@ -178,7 +180,8 @@ export default {
 					data.id = doc.id;
 					return data;
 				} else {
-						console.log("No such document!");
+          return "No such document!";
+					console.log("No such document!");
 				}
 		}).catch(function(error) {
 				console.log("Error getting document:", error);
@@ -239,22 +242,35 @@ export default {
     		return docRef.id;
 		})
 	},
+
   getPortfoliosRealtime(){
 		return firestore.collection(PORTFOLIOS)
     .orderBy('created_at', 'desc')
     .onSnapshot(function(snapshot) {
-      return snapshot.docs.map((doc) => {
-        let data = doc.data();
-        data.id = doc.id;
-        data.created_at = new Date(data.created_at.toDate());
-        return data
-      })
-    }, function(error) {
-        console.log(error);
+      store.state.portfolioChange = true;
     });
-
   },
-
+  getCommentsRealtime(){
+    return firestore.collection(COMMENTS)
+    .orderBy('created_at', 'desc')
+    .onSnapshot(function(snapshot) {
+      store.state.commentChange = true;
+    });
+  },
+  getReCommentsRealtime(){
+    return firestore.collection(COMMENTS)
+    .orderBy('created_at', 'desc')
+    .onSnapshot(function(snapshot) {
+      store.state.recommentChange = true;
+    });
+  },
+  getPostsRealtime(){
+    return firestore.collection(POSTS)
+    .orderBy('created_at', 'desc')
+    .onSnapshot(function(snapshot) {
+      store.state.postChange = true;
+    });
+  },
 
 	/**************************\
  \       Comment 함수들       \
@@ -459,6 +475,12 @@ export default {
         var userId = firebase.auth().currentUser.uid;
         return firestore.collection(USERS).doc(userId).update({
             portfoliocomments: firebase.firestore.FieldValue.arrayUnion(id),
+        })
+    },
+    addToCloudList(id) {
+        var userId = firebase.auth().currentUser.uid;
+        return firestore.collection(USERS).doc(userId).update({
+            token: firebase.firestore.FieldValue.arrayUnion(id),
         })
     },
 
@@ -734,7 +756,7 @@ export default {
         });
     },
 
-    addToCloudMessagingUserList(token, isAdmin, allowPush) {
+    addToCloudMessagingUserList(token, allowPush, isAdmin) {
         const saveObject = firestore.collection('messageList').doc(token);
         return saveObject.set({
                 cloudMessaging: token,

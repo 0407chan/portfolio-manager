@@ -407,33 +407,43 @@ export default {
 
       // TODO 내가 이름이 수정되면, 내가 작성한 모든 post, 포폴, 댓글에 들어간 name 수정하기
 
-
+      // console.log(this.pageuser)
       await FirebaseService.modifyUser(this.pageuser)
-      await FirebaseService.alarmOnFirstVisit()
-        .then(async token => {
+      // await FirebaseService.alarmOnFirstVisit()
+      //   .then(async token => {
           // console.log(token)
           var result = await FirebaseService.getUserData();
-          if (result.classify === '관리자') {
+          // await FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
+          // console.log(result.allowPush)
+          if (result.classify !== '방문자') {
             this.isAdmin = true;
             if (result.posts) {
               for (var i in result.posts) {
                 var post = await FirebaseService.getPost(result.posts[i])
-                FirebaseService.modifyPost(post.title,post.body,post.id,this.pageuser.name)
+                if(post != "No such document!"){
+                  FirebaseService.modifyPost(post.title,post.body,post.id,this.pageuser.name)
+                }
               }
             }
             if (result.portfolios) {
               for (var i in result.portfolios) {
                 var portfolio = await FirebaseService.getPortfolio(result.portfolios[i])
-                FirebaseService.modifyPortfolio(portfolio.title, portfolio.body, portfolio.img, portfolio.id, this.pageuser.name)
+                if(portfolio != "No such document!"){
+                  FirebaseService.modifyPortfolio(portfolio.title, portfolio.body, portfolio.img, portfolio.id, this.pageuser.name);
+                }
               }
             }
           } else {
             this.isAdmin = false
           }
-
-          FirebaseService.updateToCloudMessagingUserList(token, result.allowPush, this.isAdmin);
+          if (result.token.length!==0) {
+            for (var i in result.token) {
+              var usertoken  = result.token[i];
+              await FirebaseService.updateToCloudMessagingUserList(usertoken, result.allowPush, this.isAdmin);
+            }
+          }
           // console.log(token, result.allowPush)
-        });
+        // });
       this.$store.state.user = this.pageuser
       swal('정보 수정이 완료되었습니다.')
       location.reload()

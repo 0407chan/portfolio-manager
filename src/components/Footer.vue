@@ -2,7 +2,7 @@
 <template>
 <v-footer dark height="auto" >
   <v-card flat tile class="five darken-2 white--text text-xs-center footer-shadow flex">
-    <FooterWeather></FooterWeather>
+     <FooterWeather></FooterWeather>
     <v-card-text style="padding: 0 0 10px 0">
       <v-layout>
         <v-flex md6 sm12 text-xs-center text-md-right>

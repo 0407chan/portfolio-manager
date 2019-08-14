@@ -130,6 +130,7 @@ import mainFooter from './components/Footer.vue'
 import buttonTop from './components/ButtonTop.vue'
 import buttonWrite from './components/ButtonWrite.vue'
 import FirebaseService from './services/FirebaseService'
+import firebase from "firebase/app";
 
 export default {
   name: 'App',
@@ -146,18 +147,23 @@ export default {
     }
   },
   created() {
-    FirebaseService.alarmOnFirstVisit()
-      .then(async token => {
-        var result = await FirebaseService.getUserData();
-        if (result.classify === '관리자') {
-          this.isAdmin = true
-        } else {
-          this.isAdmin = false
-        }
-        FirebaseService.addToCloudMessagingUserList(token, this.isAdmin, result.allowPush);
-        // console.log(token, this.isAdmin, result.allowPush)
-      });
-    FirebaseService.onMessageResponse();
+    firebase.auth().onAuthStateChanged(async user => {
+      if (user) {
+        FirebaseService.alarmOnFirstVisit()
+                .then(async token => {
+                  var result = await FirebaseService.getUserData();
+                  if (result.classify === '관리자') {
+                    this.isAdmin = true
+                  } else {
+                    this.isAdmin = false
+                  }
+                  FirebaseService.addToCloudMessagingUserList(token, this.isAdmin, result.allowPush);
+                  await FirebaseService.addToCloudList(token)
+                  // console.log(token, this.isAdmin, result.allowPush)
+                });
+        FirebaseService.onMessageResponse();
+      }
+    })
   }
 }
 </script>
