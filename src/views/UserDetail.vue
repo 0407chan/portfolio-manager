@@ -495,20 +495,8 @@ export default {
 
 
     async deleteUser() {
+
       const res = await FirebaseService.getUserData();
-      if (res.posts) {
-        for (var i = 0; i < res.posts.length; i++)
-          FirebaseService.deletePost(res.posts[i]);
-      }
-      if (res.portfolios) {
-        for (var i = 0; i < res.portfolios.length; i++)
-          FirebaseService.deletePortfolio(res.portfolios[i]);
-      }
-      if (res.comments) {
-        for (var i = 0; i < res.comments.length; i++)
-          FirebaseService.deleteComment(res.comments[i].parentId, res.comments[i].classify, res.comments.id[i]);
-      }
-      const result = await FirebaseService.selfDeleteUser();
 
       FirebaseService.logout();
       firebase.auth().signOut().then(function() {
@@ -518,6 +506,11 @@ export default {
       this.$router.push({
         name: "home"
       });
+
+      FirebaseService.deleteAllPosts(res.id);
+      FirebaseService.deleteAllPortfolios(res.id);
+      FirebaseService.deleteAllComments(res.id);
+      const result = await FirebaseService.selfDeleteUser();
     },
 
     async getPortfolios() {

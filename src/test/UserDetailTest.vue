@@ -417,13 +417,9 @@ export default {
         for(var i =0; i<res.portfolios.length; i++)
         FirebaseService.deletePortfolio(res.portfolios[i]);
       }
-      if(res.postcomments){
-        for(var i =0; i<res.postcomments.length; i++)
-        FirebaseService.deleteComment(res.postcomments[i]);
-      }
-      if(res.portfoliocomments){
-        for(var i =0; i<res.portfoliocomments.length; i++)
-        FirebaseService.deletePortfolioComment(res.portfoliocomments[i]);
+      if(res.comments){
+        for(var i =0; i<res.comments.length; i++)
+        FirebaseService.deleteComment(res.comments[i].parentId, res.comments[i].classify, res.comments[i].id);
       }
       const result = await FirebaseService.selfDeleteUser();
 
@@ -507,23 +503,17 @@ export default {
       //await FirebaseService.canModify(comment);
     },
     async deleteComment(comment){
-      await FirebaseService.deleteComment(comment.postId, comment.id);
+      await FirebaseService.deleteComment(comment.parentId, comment.classify,comment.id);
       this.commentSearchList = this.arrayRemove(this.commentSearchList,comment);
       this.postComments = this.arrayRemove(this.postComments,comment);
     },
 
-    async deletePortfolioComment(comment){
-      await FirebaseService.deletePortfolioComment(comment.portfolioId, comment.id);
-      this.commentSearchList = this.arrayRemove(this.commentSearchList,comment);
-      this.portfolioComments = this.arrayRemove(this.portfolioComments,comment);
-    },
 
     arrayRemove(arr, value) {
        return arr.filter(function(ele){
            return ele != value;
        });
     },
-
 
 
     async deleteUser(user) {
