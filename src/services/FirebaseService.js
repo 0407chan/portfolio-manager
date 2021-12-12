@@ -272,6 +272,38 @@ export default {
     });
   },
 
+  deleteAllPosts(userId){
+    // Post에서 해당 post 삭제
+    firestore.collection(POSTS).where("userId", "==", userId).get()
+    .then((docSnapshots) => {
+      return docSnapshots.docs.map((doc) => {
+        firestore.collection(POSTS).doc(doc.id).delete()
+      })
+    }).catch(function(error) {
+      console.error("Error removing document: ", error);
+    });
+  },
+  deleteAllPortfolios(userId){
+    firestore.collection(PORTFOLIOS).where("userId", "==", userId).get()
+    .then((docSnapshots) => {
+      return docSnapshots.docs.map((doc) => {
+        firestore.collection(PORTFOLIOS).doc(doc.id).delete()
+      })
+    }).catch(function(error) {
+      console.error("Error removing document: ", error);
+    });
+  },
+  deleteAllComments(userId){
+    firestore.collection(COMMENTS).where("userId", "==", userId).get()
+    .then((docSnapshots) => {
+      return docSnapshots.docs.map((doc) => {
+        firestore.collection(COMMENTS).doc(doc.id).delete()
+      })
+    }).catch(function(error) {
+      console.error("Error removing document: ", error);
+    });
+  },
+
 	/**************************\
  \       Comment 함수들       \
 	\**************************/
@@ -323,6 +355,7 @@ export default {
 				})
 			})
 	},
+
 	getCommentsById(userId) {
 		const portfolioCommentCollection = firestore.collection(COMMENTS)
 		return portfolioCommentCollection
@@ -361,6 +394,7 @@ export default {
 				console.error("Error removing portfolioComment: ", error);
 		});
 	},
+
 	modifyComment(comment, newComment){
 		return firestore.collection(COMMENTS).doc(comment.id).update({
 			"body": newComment,
