@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/[portfolio-manager]/precache-manifest.70ee602032189b646275c9bff9ff8460.js"
+  "/[portfolio-manager]/precache-manifest.ec8e6fe2c16dc96fce228afd9fa1fa8c.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "ssafy"});
