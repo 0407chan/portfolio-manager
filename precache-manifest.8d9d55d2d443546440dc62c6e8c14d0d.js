@@ -24,20 +24,20 @@ self.__precacheManifest = [
     "url": "/img/facebook.c7b09731.svg"
   },
   {
-    "revision": "af7ae505a9eed503f8b8e6982036873e",
-    "url": "/fonts/fontawesome-webfont.af7ae505.woff2"
-  },
-  {
     "revision": "674f50d287a8c48dc19ba404d20fe713",
     "url": "/fonts/fontawesome-webfont.674f50d2.eot"
   },
   {
-    "revision": "fee66e712a8a08eef5805a46892932ad",
-    "url": "/fonts/fontawesome-webfont.fee66e71.woff"
+    "revision": "af7ae505a9eed503f8b8e6982036873e",
+    "url": "/fonts/fontawesome-webfont.af7ae505.woff2"
   },
   {
     "revision": "b06871f281fee6b241d60582ae9369b9",
     "url": "/fonts/fontawesome-webfont.b06871f2.ttf"
+  },
+  {
+    "revision": "fee66e712a8a08eef5805a46892932ad",
+    "url": "/fonts/fontawesome-webfont.fee66e71.woff"
   },
   {
     "revision": "912ec66d7572ff821749319396470bde",
@@ -164,40 +164,48 @@ self.__precacheManifest = [
     "url": "/css/user.css"
   },
   {
-    "revision": "71f1d75a36bb080f8c39929815533e53",
-    "url": "/css/weather-icons-wind.css"
-  },
-  {
-    "revision": "b2e6dd5239fdc680e5fcb3f53e2c5292",
-    "url": "/firebase-messaging-sw.js"
-  },
-  {
     "revision": "09adc880765c78db46ff753598d4bbec",
     "url": "/css/weather-icons.css"
   },
   {
-    "revision": "9e257855b7777b19645c63225f9acb72",
-    "url": "/css/weather-icons-wind.min.css"
-  },
-  {
-    "revision": "1cd48d78f06d33973d9d761d426e69bf",
-    "url": "/font/weathericons-regular-webfont.woff2"
-  },
-  {
-    "revision": "4b658767da6bd92ce2addb3ce512784d",
-    "url": "/font/weathericons-regular-webfont.eot"
+    "revision": "71f1d75a36bb080f8c39929815533e53",
+    "url": "/css/weather-icons-wind.css"
   },
   {
     "revision": "556b77df941d48f44f1fb0d1fec61bc3",
     "url": "/css/weather-icons.min.css"
   },
   {
+    "revision": "9e257855b7777b19645c63225f9acb72",
+    "url": "/css/weather-icons-wind.min.css"
+  },
+  {
+    "revision": "b2e6dd5239fdc680e5fcb3f53e2c5292",
+    "url": "/firebase-messaging-sw.js"
+  },
+  {
+    "revision": "4b658767da6bd92ce2addb3ce512784d",
+    "url": "/font/weathericons-regular-webfont.eot"
+  },
+  {
     "revision": "8cac70ebda3f23ce472110d9f21e8593",
     "url": "/font/weathericons-regular-webfont.woff"
   },
   {
+    "revision": "ecaf8b481729b18f6a8494d9f691cdae",
+    "url": "/font/weathericons-regular-webfont.svg"
+  },
+  {
     "revision": "4618f0de2a818e7ad3fe880e0b74d04a",
     "url": "/font/weathericons-regular-webfont.ttf"
+  },
+  {
+    "revision": "1cd48d78f06d33973d9d761d426e69bf",
+    "url": "/font/weathericons-regular-webfont.woff2"
+  },
+  {
+    "revision": "89fe95826a8bcd37ba5c7a554370fbf9",
+    "url": "/hello.ico"
   },
   {
     "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
@@ -208,10 +216,6 @@ self.__precacheManifest = [
     "url": "/svg/wi-alien.svg"
   },
   {
-    "revision": "89fe95826a8bcd37ba5c7a554370fbf9",
-    "url": "/hello.ico"
-  },
-  {
     "revision": "997436c237683fc2617358b62e3b2c56",
     "url": "/svg/wi-barometer.svg"
   },
@@ -220,36 +224,32 @@ self.__precacheManifest = [
     "url": "/svg/wi-celsius.svg"
   },
   {
-    "revision": "ecaf8b481729b18f6a8494d9f691cdae",
-    "url": "/font/weathericons-regular-webfont.svg"
+    "revision": "e10599402af02fe88dd4eaae79fdc72b",
+    "url": "/svg/wi-cloud-down.svg"
   },
   {
     "revision": "19b10c5f271b055225c7ee56382d71d4",
     "url": "/svg/wi-cloud-refresh.svg"
   },
   {
-    "revision": "e10599402af02fe88dd4eaae79fdc72b",
-    "url": "/svg/wi-cloud-down.svg"
-  },
-  {
     "revision": "c6d57c766b493ba838b5be906bdf4b18",
     "url": "/svg/wi-cloud-up.svg"
-  },
-  {
-    "revision": "8f977e0c609cf550b7cce9bb0b90bd42",
-    "url": "/svg/wi-cloudy-gusts.svg"
   },
   {
     "revision": "988749e88d71465ce6f62f4ed707bf2c",
     "url": "/svg/wi-cloudy-windy.svg"
   },
   {
-    "revision": "60f84c71fabfbc84348d04fdc83a47a0",
-    "url": "/svg/wi-day-cloudy-high.svg"
+    "revision": "8f977e0c609cf550b7cce9bb0b90bd42",
+    "url": "/svg/wi-cloudy-gusts.svg"
   },
   {
     "revision": "28859f6519239eead587ad8051b632f5",
     "url": "/svg/wi-day-cloudy-gusts.svg"
+  },
+  {
+    "revision": "60f84c71fabfbc84348d04fdc83a47a0",
+    "url": "/svg/wi-day-cloudy-high.svg"
   },
   {
     "revision": "8dfc3bc5a7395bc0877043b102a852f3",
@@ -268,12 +268,12 @@ self.__precacheManifest = [
     "url": "/svg/wi-day-hail.svg"
   },
   {
-    "revision": "746b40a81dda99faccfec37677be3114",
-    "url": "/svg/wi-day-light-wind.svg"
-  },
-  {
     "revision": "42698e359a19c767f0a6f41e1defb902",
     "url": "/svg/wi-day-lightning.svg"
+  },
+  {
+    "revision": "746b40a81dda99faccfec37677be3114",
+    "url": "/svg/wi-day-light-wind.svg"
   },
   {
     "revision": "ea0763d6c92254adb443e6c14740ca38",
@@ -288,24 +288,24 @@ self.__precacheManifest = [
     "url": "/svg/wi-day-rain.svg"
   },
   {
-    "revision": "86f986fca5306e37fe323f0b8b7cc389",
-    "url": "/svg/wi-day-showers.svg"
-  },
-  {
     "revision": "9b85f535a6945f6a48b379ecdac23ea3",
     "url": "/svg/wi-day-sleet-storm.svg"
+  },
+  {
+    "revision": "86f986fca5306e37fe323f0b8b7cc389",
+    "url": "/svg/wi-day-showers.svg"
   },
   {
     "revision": "f45eece5fd4f0a91695fe6928be5e2d5",
     "url": "/svg/wi-day-sleet.svg"
   },
   {
-    "revision": "04cc1b6db8e66dd8830db8fe00d00491",
-    "url": "/svg/wi-day-snow-wind.svg"
-  },
-  {
     "revision": "203aa99134d9de86a1bc926829351978",
     "url": "/svg/wi-day-snow-thunderstorm.svg"
+  },
+  {
+    "revision": "04cc1b6db8e66dd8830db8fe00d00491",
+    "url": "/svg/wi-day-snow-wind.svg"
   },
   {
     "revision": "83ad8e0b67ba1d2333f49fd84cade17f",
@@ -336,10 +336,6 @@ self.__precacheManifest = [
     "url": "/svg/wi-day-windy.svg"
   },
   {
-    "revision": "3c3cc3b2d4cf8336605578002e6f797e",
-    "url": "/svg/wi-degrees.svg"
-  },
-  {
     "revision": "4eb23b5a1795eae3c07586b7fc935108",
     "url": "/svg/wi-direction-down-left.svg"
   },
@@ -348,8 +344,16 @@ self.__precacheManifest = [
     "url": "/svg/wi-direction-down-right.svg"
   },
   {
+    "revision": "3c3cc3b2d4cf8336605578002e6f797e",
+    "url": "/svg/wi-degrees.svg"
+  },
+  {
     "revision": "9872bcc4037fd576c11e30836dd49c78",
     "url": "/svg/wi-direction-down.svg"
+  },
+  {
+    "revision": "3bdab7aec1dd55e3d2d61a2d97c269b4",
+    "url": "/svg/wi-direction-right.svg"
   },
   {
     "revision": "255f6df34b1ab36a5745d7ac744c9f57",
@@ -360,16 +364,12 @@ self.__precacheManifest = [
     "url": "/svg/wi-direction-left.svg"
   },
   {
-    "revision": "3bdab7aec1dd55e3d2d61a2d97c269b4",
-    "url": "/svg/wi-direction-right.svg"
+    "revision": "cbd11a695ae0e2a6e8567018003cc36b",
+    "url": "/svg/wi-direction-up-right.svg"
   },
   {
     "revision": "784874dface6e56e3bf637d05d675fe3",
     "url": "/svg/wi-direction-up.svg"
-  },
-  {
-    "revision": "cbd11a695ae0e2a6e8567018003cc36b",
-    "url": "/svg/wi-direction-up-right.svg"
   },
   {
     "revision": "ab3c230b847f5f9f068aae51b691c273",
@@ -380,12 +380,12 @@ self.__precacheManifest = [
     "url": "/svg/wi-fahrenheit.svg"
   },
   {
-    "revision": "6268a47ef2e95d73bc1e45dadfdf5a1a",
-    "url": "/svg/wi-fire.svg"
-  },
-  {
     "revision": "a263997d94b152f298a6575660f897da",
     "url": "/svg/wi-flood.svg"
+  },
+  {
+    "revision": "6268a47ef2e95d73bc1e45dadfdf5a1a",
+    "url": "/svg/wi-fire.svg"
   },
   {
     "revision": "c356784f45aaa40ef57ed9031101d912",
@@ -396,12 +396,12 @@ self.__precacheManifest = [
     "url": "/svg/wi-gale-warning.svg"
   },
   {
-    "revision": "a4598f7699558fa2a8201690bd673fc4",
-    "url": "/svg/wi-hail.svg"
-  },
-  {
     "revision": "7da71f4c576c7914581248d67205b269",
     "url": "/svg/wi-horizon.svg"
+  },
+  {
+    "revision": "a4598f7699558fa2a8201690bd673fc4",
+    "url": "/svg/wi-hail.svg"
   },
   {
     "revision": "c02360f87e7e372b20564d0387dc3cc3",
@@ -420,24 +420,24 @@ self.__precacheManifest = [
     "url": "/svg/wi-hurricane.svg"
   },
   {
-    "revision": "82da2b9d23e84d73d1fcacd6abe6fcfc",
-    "url": "/svg/wi-lunar-eclipse.svg"
-  },
-  {
     "revision": "be8364b31b4ff5c5b9f4c624d982dd98",
     "url": "/svg/wi-lightning.svg"
+  },
+  {
+    "revision": "82da2b9d23e84d73d1fcacd6abe6fcfc",
+    "url": "/svg/wi-lunar-eclipse.svg"
   },
   {
     "revision": "2e40242004e7b077aeba0a24a49e79b7",
     "url": "/svg/wi-meteor.svg"
   },
   {
-    "revision": "6c7323bcb51469aca39b873df64d2995",
-    "url": "/svg/wi-moon-alt-first-quarter.svg"
-  },
-  {
     "revision": "00bd422b9134608a30a14c2f9591c03c",
     "url": "/svg/wi-moon-alt-full.svg"
+  },
+  {
+    "revision": "6c7323bcb51469aca39b873df64d2995",
+    "url": "/svg/wi-moon-alt-first-quarter.svg"
   },
   {
     "revision": "e13be320202dc94ef0d3696c1f508d24",
@@ -464,10 +464,6 @@ self.__precacheManifest = [
     "url": "/svg/wi-moon-alt-waning-crescent-3.svg"
   },
   {
-    "revision": "d11167a379262d098bcace6f37f19148",
-    "url": "/svg/wi-moon-alt-waning-crescent-6.svg"
-  },
-  {
     "revision": "f8a92b76e53f677d20ad7bbe5b3da35b",
     "url": "/svg/wi-moon-alt-waning-crescent-4.svg"
   },
@@ -476,12 +472,16 @@ self.__precacheManifest = [
     "url": "/svg/wi-moon-alt-waning-crescent-5.svg"
   },
   {
-    "revision": "23603eab5ea8da28093566993c79417a",
-    "url": "/svg/wi-moon-alt-waning-gibbous-1.svg"
+    "revision": "d11167a379262d098bcace6f37f19148",
+    "url": "/svg/wi-moon-alt-waning-crescent-6.svg"
   },
   {
     "revision": "0c6b57640224b3b5d68ab5f7b0ea778f",
     "url": "/svg/wi-moon-alt-waning-gibbous-2.svg"
+  },
+  {
+    "revision": "23603eab5ea8da28093566993c79417a",
+    "url": "/svg/wi-moon-alt-waning-gibbous-1.svg"
   },
   {
     "revision": "4f46eea906f5233d33b9a4fcd5ee77fe",
@@ -512,16 +512,20 @@ self.__precacheManifest = [
     "url": "/svg/wi-moon-alt-waxing-crescent-1.svg"
   },
   {
-    "revision": "1d52a3a0a9bbd29e059c3c54def57f4d",
-    "url": "/svg/wi-moon-alt-waxing-crescent-2.svg"
+    "revision": "aca423e56d39033ef58ca270ceb0a8c2",
+    "url": "/svg/wi-moon-alt-waxing-crescent-3.svg"
   },
   {
     "revision": "b9d8d3cf851d2253ea0f306c860c5812",
     "url": "/svg/wi-strong-wind.svg"
   },
   {
-    "revision": "aca423e56d39033ef58ca270ceb0a8c2",
-    "url": "/svg/wi-moon-alt-waxing-crescent-3.svg"
+    "revision": "1d52a3a0a9bbd29e059c3c54def57f4d",
+    "url": "/svg/wi-moon-alt-waxing-crescent-2.svg"
+  },
+  {
+    "revision": "0e83bad2ce4d8cb681cdee0b315854e7",
+    "url": "/svg/wi-moon-alt-waxing-crescent-6 .svg"
   },
   {
     "revision": "215ec14cf5e02a6cc38352df152d21b2",
@@ -536,28 +540,24 @@ self.__precacheManifest = [
     "url": "/svg/wi-moon-alt-waxing-gibbous-1.svg"
   },
   {
-    "revision": "0e83bad2ce4d8cb681cdee0b315854e7",
-    "url": "/svg/wi-moon-alt-waxing-crescent-6 .svg"
-  },
-  {
     "revision": "22fff390b0fcd9c46390fe913b23895d",
     "url": "/svg/wi-thunderstorm.svg"
-  },
-  {
-    "revision": "b27b9ecc0ff3b3f9c205fa33d688635a",
-    "url": "/svg/wi-moon-alt-waxing-gibbous-2.svg"
   },
   {
     "revision": "101f770df9266106054392db0e883e1f",
     "url": "/svg/wi-moon-alt-waxing-gibbous-3.svg"
   },
   {
-    "revision": "1bbe75956b9a5677c035bf275a6c76e2",
-    "url": "/svg/wi-moon-alt-waxing-gibbous-5.svg"
-  },
-  {
     "revision": "afea03377f4cfc9afdd02ef21b02bcb1",
     "url": "/svg/wi-moon-alt-waxing-gibbous-4.svg"
+  },
+  {
+    "revision": "b27b9ecc0ff3b3f9c205fa33d688635a",
+    "url": "/svg/wi-moon-alt-waxing-gibbous-2.svg"
+  },
+  {
+    "revision": "1bbe75956b9a5677c035bf275a6c76e2",
+    "url": "/svg/wi-moon-alt-waxing-gibbous-5.svg"
   },
   {
     "revision": "0aea7499a63197043c78cccc512528f6",
@@ -576,16 +576,16 @@ self.__precacheManifest = [
     "url": "/svg/wi-moon-new.svg"
   },
   {
+    "revision": "585bcf211ec06d578fad0f91ee79bdd7",
+    "url": "/svg/wi-moon-waning-crescent-2.svg"
+  },
+  {
     "revision": "8c4adbb02aba4e94c02d762bb85a27ac",
     "url": "/svg/wi-moon-third-quarter.svg"
   },
   {
     "revision": "3641a7a0833058a48e4a16d13172ac91",
     "url": "/svg/wi-moon-waning-crescent-1.svg"
-  },
-  {
-    "revision": "585bcf211ec06d578fad0f91ee79bdd7",
-    "url": "/svg/wi-moon-waning-crescent-2.svg"
   },
   {
     "revision": "94f28050a506b22cb4bf0dd6e6aa60fc",
@@ -600,20 +600,20 @@ self.__precacheManifest = [
     "url": "/svg/wi-moon-waning-crescent-5.svg"
   },
   {
-    "revision": "d5335d4adead7c3af5f65eefef276ddd",
-    "url": "/svg/wi-moon-waning-crescent-6.svg"
-  },
-  {
     "revision": "2cffc20333428487dd54693119c85eb0",
     "url": "/svg/wi-moon-waning-gibbous-1.svg"
   },
   {
-    "revision": "36a2a067be11b34e80d06f4ac74fb114",
-    "url": "/svg/wi-moon-waning-gibbous-2.svg"
+    "revision": "d5335d4adead7c3af5f65eefef276ddd",
+    "url": "/svg/wi-moon-waning-crescent-6.svg"
   },
   {
     "revision": "fdeed6f24f22b6268a08730aa4b3ce13",
     "url": "/svg/wi-moon-waning-gibbous-3.svg"
+  },
+  {
+    "revision": "36a2a067be11b34e80d06f4ac74fb114",
+    "url": "/svg/wi-moon-waning-gibbous-2.svg"
   },
   {
     "revision": "ca57970a71eb1fff29c0a536646907eb",
@@ -628,12 +628,12 @@ self.__precacheManifest = [
     "url": "/svg/wi-moon-waning-gibbous-6.svg"
   },
   {
-    "revision": "6a17d1525a409fa0e4750676d4a136ea",
-    "url": "/svg/wi-moon-waxing-crescent-1.svg"
-  },
-  {
     "revision": "71cca0fee45490eaecbe66786d454ada",
     "url": "/svg/wi-moon-waxing-crescent-2.svg"
+  },
+  {
+    "revision": "6a17d1525a409fa0e4750676d4a136ea",
+    "url": "/svg/wi-moon-waxing-crescent-1.svg"
   },
   {
     "revision": "fd643dfef080e1d435af8b4c1e65c03c",
@@ -652,20 +652,28 @@ self.__precacheManifest = [
     "url": "/svg/wi-moon-waxing-gibbous-1.svg"
   },
   {
+    "revision": "b648bf895a6ef6b24d7dc5338bfc72c7",
+    "url": "/svg/wi-moon-waxing-crescent-6 .svg"
+  },
+  {
     "revision": "183da817d15e143789778d93317d835e",
     "url": "/svg/wi-moon-waxing-gibbous-2.svg"
   },
   {
-    "revision": "b648bf895a6ef6b24d7dc5338bfc72c7",
-    "url": "/svg/wi-moon-waxing-crescent-6 .svg"
+    "revision": "0544157bdafe1dd0313bec2b1078e281",
+    "url": "/svg/wi-moon-waxing-gibbous-3.svg"
+  },
+  {
+    "revision": "a597394511f0bda7e0f148db8e20f6ad",
+    "url": "/svg/wi-moon-waxing-gibbous-4 .svg"
   },
   {
     "revision": "1b91ef0f9add73846fcdc576379a5591",
     "url": "/svg/wi-moon-waxing-gibbous-5.svg"
   },
   {
-    "revision": "0544157bdafe1dd0313bec2b1078e281",
-    "url": "/svg/wi-moon-waxing-gibbous-3.svg"
+    "revision": "3b9f7d10d765d4990705bbfd81213641",
+    "url": "/svg/wi-moon-waxing-gibbous-6.svg"
   },
   {
     "revision": "5e6841e2a95e0ef829c3106c7960b623",
@@ -676,16 +684,12 @@ self.__precacheManifest = [
     "url": "/svg/wi-moonset.svg"
   },
   {
-    "revision": "3b9f7d10d765d4990705bbfd81213641",
-    "url": "/svg/wi-moon-waxing-gibbous-6.svg"
+    "revision": "2fdaa36bd6fc3af59ed530f163255ed7",
+    "url": "/svg/wi-night-alt-cloudy-high.svg"
   },
   {
     "revision": "fc2e7bc82223c21365213a2b484db569",
     "url": "/svg/wi-night-alt-cloudy-gusts.svg"
-  },
-  {
-    "revision": "a597394511f0bda7e0f148db8e20f6ad",
-    "url": "/svg/wi-moon-waxing-gibbous-4 .svg"
   },
   {
     "revision": "fd90aeab153084786ebff365b91f3419",
@@ -694,10 +698,6 @@ self.__precacheManifest = [
   {
     "revision": "07db20d635cfde98563cdb06f7b54edc",
     "url": "/svg/wi-night-alt-cloudy-windy.svg"
-  },
-  {
-    "revision": "2fdaa36bd6fc3af59ed530f163255ed7",
-    "url": "/svg/wi-night-alt-cloudy-high.svg"
   },
   {
     "revision": "1c9558261632ac23cefb746918f3facf",
@@ -720,6 +720,10 @@ self.__precacheManifest = [
     "url": "/svg/wi-night-alt-rain-mix.svg"
   },
   {
+    "revision": "6dfa13419e87616d93bfce49f058f3eb",
+    "url": "/svg/wi-night-alt-rain-wind.svg"
+  },
+  {
     "revision": "bc016c3b72a5843f21623b98e9c90f3d",
     "url": "/svg/wi-night-alt-rain.svg"
   },
@@ -728,40 +732,36 @@ self.__precacheManifest = [
     "url": "/svg/wi-night-alt-showers.svg"
   },
   {
-    "revision": "0bda2fbb706e331c898eb3baa59fc8fb",
-    "url": "/svg/wi-night-alt-sleet.svg"
-  },
-  {
-    "revision": "6dfa13419e87616d93bfce49f058f3eb",
-    "url": "/svg/wi-night-alt-rain-wind.svg"
-  },
-  {
     "revision": "3bf07524cf1ca030776a4ff21f522840",
     "url": "/svg/wi-night-alt-sleet-storm.svg"
+  },
+  {
+    "revision": "0bda2fbb706e331c898eb3baa59fc8fb",
+    "url": "/svg/wi-night-alt-sleet.svg"
   },
   {
     "revision": "a9e0233f71dfbf0f5b7978ee53a97b49",
     "url": "/svg/wi-night-alt-snow-thunderstorm.svg"
   },
   {
-    "revision": "db72088b07bc32e7beee32cc8408f26f",
-    "url": "/svg/wi-night-alt-snow.svg"
-  },
-  {
     "revision": "77e6d8969dfd81a2c277cd12b04b159d",
     "url": "/svg/wi-night-alt-snow-wind.svg"
+  },
+  {
+    "revision": "db72088b07bc32e7beee32cc8408f26f",
+    "url": "/svg/wi-night-alt-snow.svg"
   },
   {
     "revision": "136e99617edae7b63187401a54471df2",
     "url": "/svg/wi-night-alt-sprinkle.svg"
   },
   {
-    "revision": "83f2607826e2c0f225a02066db19ace1",
-    "url": "/svg/wi-night-alt-storm-showers.svg"
-  },
-  {
     "revision": "8a97fabc4397460de410f5127c339cdb",
     "url": "/svg/wi-night-alt-thunderstorm.svg"
+  },
+  {
+    "revision": "83f2607826e2c0f225a02066db19ace1",
+    "url": "/svg/wi-night-alt-storm-showers.svg"
   },
   {
     "revision": "f86c33c4ccc36dbeb826cbdb5f50594b",
@@ -792,32 +792,32 @@ self.__precacheManifest = [
     "url": "/svg/wi-night-hail.svg"
   },
   {
-    "revision": "130262db9db479b674c60b9a47816179",
-    "url": "/svg/wi-night-lightning.svg"
-  },
-  {
-    "revision": "567c9bd7fe5de02ebc0129e851b2b105",
-    "url": "/svg/wi-night-partly-cloudy.svg"
+    "revision": "3957d00e62000e9b42eb6c281df1422c",
+    "url": "/svg/wi-night-rain-wind.svg"
   },
   {
     "revision": "1d0aa7dbca627d4a062c96a14b3efd54",
     "url": "/svg/wi-night-rain-mix.svg"
   },
   {
-    "revision": "3957d00e62000e9b42eb6c281df1422c",
-    "url": "/svg/wi-night-rain-wind.svg"
+    "revision": "567c9bd7fe5de02ebc0129e851b2b105",
+    "url": "/svg/wi-night-partly-cloudy.svg"
+  },
+  {
+    "revision": "130262db9db479b674c60b9a47816179",
+    "url": "/svg/wi-night-lightning.svg"
   },
   {
     "revision": "b0c6ff5d9328fd9e6f7359283c91d2be",
     "url": "/svg/wi-night-rain.svg"
   },
   {
-    "revision": "c65f0bf35c13e1d9c03fc1bc1b085ba8",
-    "url": "/svg/wi-night-sleet-storm.svg"
-  },
-  {
     "revision": "e65996e37ba9c9fa105049d6d3b0c29c",
     "url": "/svg/wi-night-showers.svg"
+  },
+  {
+    "revision": "c65f0bf35c13e1d9c03fc1bc1b085ba8",
+    "url": "/svg/wi-night-sleet-storm.svg"
   },
   {
     "revision": "57c7fe43edbb263a64d638f35a0f0ad9",
@@ -832,12 +832,12 @@ self.__precacheManifest = [
     "url": "/svg/wi-night-snow-wind.svg"
   },
   {
-    "revision": "729719bc0754fbd1e093288e49934365",
-    "url": "/svg/wi-night-sprinkle.svg"
-  },
-  {
     "revision": "bdaa4c8d3f7c6349d3aa61837083debc",
     "url": "/svg/wi-night-snow.svg"
+  },
+  {
+    "revision": "729719bc0754fbd1e093288e49934365",
+    "url": "/svg/wi-night-sprinkle.svg"
   },
   {
     "revision": "21225e304c25be2cd2a43474ac2e7b9d",
@@ -852,12 +852,12 @@ self.__precacheManifest = [
     "url": "/svg/wi-rain-mix.svg"
   },
   {
-    "revision": "5ac590b7c142c7d4205c502edecf748c",
-    "url": "/svg/wi-raindrop.svg"
-  },
-  {
     "revision": "4635f2772c90baecda1e760bbd67f91e",
     "url": "/svg/wi-rain-wind.svg"
+  },
+  {
+    "revision": "5ac590b7c142c7d4205c502edecf748c",
+    "url": "/svg/wi-raindrop.svg"
   },
   {
     "revision": "45d30c621cddd753486f07b636f7a8d0",
@@ -884,12 +884,12 @@ self.__precacheManifest = [
     "url": "/svg/wi-sleet.svg"
   },
   {
-    "revision": "042cd80fef694e39263228e8c5e627f8",
-    "url": "/svg/wi-smog.svg"
-  },
-  {
     "revision": "5106f61daad94d020fec3e706d85c220",
     "url": "/svg/wi-small-craft-advisory.svg"
+  },
+  {
+    "revision": "042cd80fef694e39263228e8c5e627f8",
+    "url": "/svg/wi-smog.svg"
   },
   {
     "revision": "1325271128c1f81a2695f3619434888a",
@@ -916,12 +916,12 @@ self.__precacheManifest = [
     "url": "/svg/wi-storm-showers.svg"
   },
   {
-    "revision": "11f9daa177005434b7579ac59fe246f4",
-    "url": "/svg/wi-sunrise.svg"
-  },
-  {
     "revision": "a3fae3f4aebcc77204dc53ef4ed47216",
     "url": "/svg/wi-storm-warning.svg"
+  },
+  {
+    "revision": "11f9daa177005434b7579ac59fe246f4",
+    "url": "/svg/wi-sunrise.svg"
   },
   {
     "revision": "9a23179e56c86ac0a6ab929d3baae9e0",
@@ -932,16 +932,16 @@ self.__precacheManifest = [
     "url": "/svg/wi-thermometer-internal.svg"
   },
   {
-    "revision": "d96e94d55441191c134f7bb19690785c",
-    "url": "/svg/wi-sunset.svg"
-  },
-  {
     "revision": "24e49e257194e282863970afea2e1300",
     "url": "/svg/wi-thermometer.svg"
   },
   {
     "revision": "afcf33deb0883dc82c16ba83874d216c",
     "url": "/svg/wi-time-1.svg"
+  },
+  {
+    "revision": "d96e94d55441191c134f7bb19690785c",
+    "url": "/svg/wi-sunset.svg"
   },
   {
     "revision": "a0eacea9d241f1724bc79a04adb80061",
@@ -964,20 +964,20 @@ self.__precacheManifest = [
     "url": "/svg/wi-time-4.svg"
   },
   {
-    "revision": "2276b7244c5dc82454c4964bf2ed0c18",
-    "url": "/svg/wi-time-5.svg"
+    "revision": "c7fb834b69f1da031391b19695f117c0",
+    "url": "/svg/wi-time-2.svg"
   },
   {
     "revision": "6c5fe4b01404be6cfce4a211b0f03a99",
     "url": "/svg/wi-time-6.svg"
   },
   {
-    "revision": "c7fb834b69f1da031391b19695f117c0",
-    "url": "/svg/wi-time-2.svg"
-  },
-  {
     "revision": "b174ef309d89c35893d3e2d38fe58719",
     "url": "/svg/wi-time-7.svg"
+  },
+  {
+    "revision": "2276b7244c5dc82454c4964bf2ed0c18",
+    "url": "/svg/wi-time-5.svg"
   },
   {
     "revision": "144f8713038163a72b1ff67dfbc7f499",
@@ -988,10 +988,6 @@ self.__precacheManifest = [
     "url": "/svg/wi-time-9.svg"
   },
   {
-    "revision": "c5b4a7b731d354a42573365b05504f23",
-    "url": "/svg/wi-tornado.svg"
-  },
-  {
     "revision": "631abb68d682cf707930a490f8293f11",
     "url": "/svg/wi-train.svg"
   },
@@ -1000,28 +996,24 @@ self.__precacheManifest = [
     "url": "/svg/wi-tsunami.svg"
   },
   {
-    "revision": "e0979da9779be926c4042a1d91ddb046",
-    "url": "/svg/wi-umbrella.svg"
-  },
-  {
     "revision": "a826f29be86a6273d3c1796afd895a44",
     "url": "/svg/wi-volcano.svg"
+  },
+  {
+    "revision": "c5b4a7b731d354a42573365b05504f23",
+    "url": "/svg/wi-tornado.svg"
   },
   {
     "revision": "e91b37f72a9ab1e9db06130e83f932b4",
     "url": "/svg/wi-wind-beaufort-0.svg"
   },
   {
+    "revision": "e0979da9779be926c4042a1d91ddb046",
+    "url": "/svg/wi-umbrella.svg"
+  },
+  {
     "revision": "e8c53992b83b0bc80f7972b543ae9c6e",
     "url": "/svg/wi-wind-beaufort-1.svg"
-  },
-  {
-    "revision": "d979f0a82fa554458e13db0ec6b3ec83",
-    "url": "/svg/wi-wind-beaufort-10.svg"
-  },
-  {
-    "revision": "bfd0311099f968b7ba783b772ed69e5d",
-    "url": "/svg/wi-wind-beaufort-11.svg"
   },
   {
     "revision": "85682cb6753a9d51f3ca9f9cce550cc0",
@@ -1032,32 +1024,40 @@ self.__precacheManifest = [
     "url": "/svg/wi-wind-beaufort-2.svg"
   },
   {
-    "revision": "9582fbe88f2469bd91b64e52f0e06cff",
-    "url": "/svg/wi-wind-beaufort-3.svg"
-  },
-  {
     "revision": "8203e0dc64bb4b5799792afcdd2d06cc",
     "url": "/svg/wi-wind-beaufort-4.svg"
   },
   {
-    "revision": "e999d1c88dba2ca3bb7a1be4bbebbefd",
-    "url": "/svg/wi-wind-beaufort-5.svg"
+    "revision": "9582fbe88f2469bd91b64e52f0e06cff",
+    "url": "/svg/wi-wind-beaufort-3.svg"
+  },
+  {
+    "revision": "bfd0311099f968b7ba783b772ed69e5d",
+    "url": "/svg/wi-wind-beaufort-11.svg"
+  },
+  {
+    "revision": "d979f0a82fa554458e13db0ec6b3ec83",
+    "url": "/svg/wi-wind-beaufort-10.svg"
   },
   {
     "revision": "cab0f775368f0b771d9853851924a079",
     "url": "/svg/wi-wind-beaufort-6.svg"
   },
   {
+    "revision": "e999d1c88dba2ca3bb7a1be4bbebbefd",
+    "url": "/svg/wi-wind-beaufort-5.svg"
+  },
+  {
     "revision": "3b54651965b657ce8b56f04082a3e0c5",
     "url": "/svg/wi-wind-beaufort-7.svg"
   },
   {
-    "revision": "6b4f833db9e039193a12f0b48b8b0fc7",
-    "url": "/svg/wi-wind-beaufort-8.svg"
-  },
-  {
     "revision": "0cace54932788d3775eff5a9858072e1",
     "url": "/svg/wi-wind-beaufort-9.svg"
+  },
+  {
+    "revision": "6b4f833db9e039193a12f0b48b8b0fc7",
+    "url": "/svg/wi-wind-beaufort-8.svg"
   },
   {
     "revision": "155d0f5869574ca3355d156cddf74be5",
