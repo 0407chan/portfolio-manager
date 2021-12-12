@@ -2,12 +2,12 @@
   "name": "ssafy",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://0407chan.github.io/portfolio-manager/",
+  "homepage": "https://0407chan.github.io/portfolio-manager",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "predeploy": "rm -rf build && npm run build && mv dist build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@chenfengyuan/vue-carousel": "^1.0.2",
