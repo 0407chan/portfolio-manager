@@ -24,16 +24,16 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/img/facebook.c7b09731.svg"
   },
   {
+    "revision": "af7ae505a9eed503f8b8e6982036873e",
+    "url": "/[portfolio-manager]/fonts/fontawesome-webfont.af7ae505.woff2"
+  },
+  {
     "revision": "674f50d287a8c48dc19ba404d20fe713",
     "url": "/[portfolio-manager]/fonts/fontawesome-webfont.674f50d2.eot"
   },
   {
     "revision": "fee66e712a8a08eef5805a46892932ad",
     "url": "/[portfolio-manager]/fonts/fontawesome-webfont.fee66e71.woff"
-  },
-  {
-    "revision": "af7ae505a9eed503f8b8e6982036873e",
-    "url": "/[portfolio-manager]/fonts/fontawesome-webfont.af7ae505.woff2"
   },
   {
     "revision": "b06871f281fee6b241d60582ae9369b9",
@@ -160,16 +160,16 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-humidity.svg"
   },
   {
-    "revision": "71f1d75a36bb080f8c39929815533e53",
-    "url": "/[portfolio-manager]/css/weather-icons-wind.css"
+    "revision": "4fa423c49397c2243fa0fed1035bf0cf",
+    "url": "/[portfolio-manager]/css/user.css"
   },
   {
     "revision": "09adc880765c78db46ff753598d4bbec",
     "url": "/[portfolio-manager]/css/weather-icons.css"
   },
   {
-    "revision": "4fa423c49397c2243fa0fed1035bf0cf",
-    "url": "/[portfolio-manager]/css/user.css"
+    "revision": "71f1d75a36bb080f8c39929815533e53",
+    "url": "/[portfolio-manager]/css/weather-icons-wind.css"
   },
   {
     "revision": "556b77df941d48f44f1fb0d1fec61bc3",
@@ -178,6 +178,10 @@ self.__precacheManifest = [
   {
     "revision": "b2e6dd5239fdc680e5fcb3f53e2c5292",
     "url": "/[portfolio-manager]/firebase-messaging-sw.js"
+  },
+  {
+    "revision": "9e257855b7777b19645c63225f9acb72",
+    "url": "/[portfolio-manager]/css/weather-icons-wind.min.css"
   },
   {
     "revision": "8cac70ebda3f23ce472110d9f21e8593",
@@ -192,24 +196,24 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/font/weathericons-regular-webfont.woff2"
   },
   {
-    "revision": "ecaf8b481729b18f6a8494d9f691cdae",
-    "url": "/[portfolio-manager]/font/weathericons-regular-webfont.svg"
-  },
-  {
     "revision": "4618f0de2a818e7ad3fe880e0b74d04a",
     "url": "/[portfolio-manager]/font/weathericons-regular-webfont.ttf"
+  },
+  {
+    "revision": "ecaf8b481729b18f6a8494d9f691cdae",
+    "url": "/[portfolio-manager]/font/weathericons-regular-webfont.svg"
   },
   {
     "revision": "89fe95826a8bcd37ba5c7a554370fbf9",
     "url": "/[portfolio-manager]/hello.ico"
   },
   {
-    "revision": "9e257855b7777b19645c63225f9acb72",
-    "url": "/[portfolio-manager]/css/weather-icons-wind.min.css"
-  },
-  {
     "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
     "url": "/[portfolio-manager]/robots.txt"
+  },
+  {
+    "revision": "531b634c40d3d6ee87c1c37e09865ba9",
+    "url": "/[portfolio-manager]/svg/wi-alien.svg"
   },
   {
     "revision": "997436c237683fc2617358b62e3b2c56",
@@ -220,16 +224,8 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-celsius.svg"
   },
   {
-    "revision": "531b634c40d3d6ee87c1c37e09865ba9",
-    "url": "/[portfolio-manager]/svg/wi-alien.svg"
-  },
-  {
     "revision": "e10599402af02fe88dd4eaae79fdc72b",
     "url": "/[portfolio-manager]/svg/wi-cloud-down.svg"
-  },
-  {
-    "revision": "8f977e0c609cf550b7cce9bb0b90bd42",
-    "url": "/[portfolio-manager]/svg/wi-cloudy-gusts.svg"
   },
   {
     "revision": "19b10c5f271b055225c7ee56382d71d4",
@@ -240,12 +236,24 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-cloud-up.svg"
   },
   {
-    "revision": "8dfc3bc5a7395bc0877043b102a852f3",
-    "url": "/[portfolio-manager]/svg/wi-day-cloudy-windy.svg"
+    "revision": "8f977e0c609cf550b7cce9bb0b90bd42",
+    "url": "/[portfolio-manager]/svg/wi-cloudy-gusts.svg"
+  },
+  {
+    "revision": "988749e88d71465ce6f62f4ed707bf2c",
+    "url": "/[portfolio-manager]/svg/wi-cloudy-windy.svg"
   },
   {
     "revision": "28859f6519239eead587ad8051b632f5",
     "url": "/[portfolio-manager]/svg/wi-day-cloudy-gusts.svg"
+  },
+  {
+    "revision": "60f84c71fabfbc84348d04fdc83a47a0",
+    "url": "/[portfolio-manager]/svg/wi-day-cloudy-high.svg"
+  },
+  {
+    "revision": "8dfc3bc5a7395bc0877043b102a852f3",
+    "url": "/[portfolio-manager]/svg/wi-day-cloudy-windy.svg"
   },
   {
     "revision": "3237f7da426fbedf7faa6782f8c4c455",
@@ -254,10 +262,6 @@ self.__precacheManifest = [
   {
     "revision": "493be2a811d011aaac110a81defcd374",
     "url": "/[portfolio-manager]/svg/wi-day-fog.svg"
-  },
-  {
-    "revision": "988749e88d71465ce6f62f4ed707bf2c",
-    "url": "/[portfolio-manager]/svg/wi-cloudy-windy.svg"
   },
   {
     "revision": "307f87845d9095288733a2b6b2e6b37a",
@@ -272,12 +276,12 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-day-rain-mix.svg"
   },
   {
-    "revision": "52c484ed757d77ed5693f997c4f1cb0b",
-    "url": "/[portfolio-manager]/svg/wi-day-rain-wind.svg"
-  },
-  {
     "revision": "42698e359a19c767f0a6f41e1defb902",
     "url": "/[portfolio-manager]/svg/wi-day-lightning.svg"
+  },
+  {
+    "revision": "52c484ed757d77ed5693f997c4f1cb0b",
+    "url": "/[portfolio-manager]/svg/wi-day-rain-wind.svg"
   },
   {
     "revision": "ac93e407f620ec5eee663939681d518f",
@@ -300,24 +304,28 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-day-snow-thunderstorm.svg"
   },
   {
-    "revision": "60f84c71fabfbc84348d04fdc83a47a0",
-    "url": "/[portfolio-manager]/svg/wi-day-cloudy-high.svg"
-  },
-  {
     "revision": "0437c5fe50f97b1f696b135b8736f58a",
     "url": "/[portfolio-manager]/svg/wi-day-snow.svg"
-  },
-  {
-    "revision": "83ad8e0b67ba1d2333f49fd84cade17f",
-    "url": "/[portfolio-manager]/svg/wi-day-sprinkle.svg"
   },
   {
     "revision": "04cc1b6db8e66dd8830db8fe00d00491",
     "url": "/[portfolio-manager]/svg/wi-day-snow-wind.svg"
   },
   {
+    "revision": "83ad8e0b67ba1d2333f49fd84cade17f",
+    "url": "/[portfolio-manager]/svg/wi-day-sprinkle.svg"
+  },
+  {
+    "revision": "92905ca491a3ace1e36a512242b4dc14",
+    "url": "/[portfolio-manager]/svg/wi-day-sunny-overcast.svg"
+  },
+  {
     "revision": "686b9678b224f1fe8a857409cea065b8",
     "url": "/[portfolio-manager]/svg/wi-day-storm-showers.svg"
+  },
+  {
+    "revision": "4b9869a6859846e524d1985de86894f7",
+    "url": "/[portfolio-manager]/svg/wi-day-sunny.svg"
   },
   {
     "revision": "a1ec88df52249ece1a6bc37e8eebe1bd",
@@ -326,14 +334,6 @@ self.__precacheManifest = [
   {
     "revision": "5653ab64d1d6844752d6d0ebdbbea019",
     "url": "/[portfolio-manager]/svg/wi-day-windy.svg"
-  },
-  {
-    "revision": "4b9869a6859846e524d1985de86894f7",
-    "url": "/[portfolio-manager]/svg/wi-day-sunny.svg"
-  },
-  {
-    "revision": "92905ca491a3ace1e36a512242b4dc14",
-    "url": "/[portfolio-manager]/svg/wi-day-sunny-overcast.svg"
   },
   {
     "revision": "3c3cc3b2d4cf8336605578002e6f797e",
@@ -348,16 +348,20 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-direction-down-left.svg"
   },
   {
-    "revision": "3bdab7aec1dd55e3d2d61a2d97c269b4",
-    "url": "/[portfolio-manager]/svg/wi-direction-right.svg"
+    "revision": "9872bcc4037fd576c11e30836dd49c78",
+    "url": "/[portfolio-manager]/svg/wi-direction-down.svg"
+  },
+  {
+    "revision": "541ab229782db51195fa72c7e570b61c",
+    "url": "/[portfolio-manager]/svg/wi-direction-left.svg"
   },
   {
     "revision": "255f6df34b1ab36a5745d7ac744c9f57",
     "url": "/[portfolio-manager]/svg/wi-direction-up-left.svg"
   },
   {
-    "revision": "541ab229782db51195fa72c7e570b61c",
-    "url": "/[portfolio-manager]/svg/wi-direction-left.svg"
+    "revision": "3bdab7aec1dd55e3d2d61a2d97c269b4",
+    "url": "/[portfolio-manager]/svg/wi-direction-right.svg"
   },
   {
     "revision": "cbd11a695ae0e2a6e8567018003cc36b",
@@ -380,10 +384,6 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-fire.svg"
   },
   {
-    "revision": "9872bcc4037fd576c11e30836dd49c78",
-    "url": "/[portfolio-manager]/svg/wi-direction-down.svg"
-  },
-  {
     "revision": "c356784f45aaa40ef57ed9031101d912",
     "url": "/[portfolio-manager]/svg/wi-fog.svg"
   },
@@ -394,6 +394,14 @@ self.__precacheManifest = [
   {
     "revision": "7bc33419ab629480052f195049f897c5",
     "url": "/[portfolio-manager]/svg/wi-gale-warning.svg"
+  },
+  {
+    "revision": "a4598f7699558fa2a8201690bd673fc4",
+    "url": "/[portfolio-manager]/svg/wi-hail.svg"
+  },
+  {
+    "revision": "c02360f87e7e372b20564d0387dc3cc3",
+    "url": "/[portfolio-manager]/svg/wi-horizon-alt.svg"
   },
   {
     "revision": "7da71f4c576c7914581248d67205b269",
@@ -412,10 +420,6 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-hurricane.svg"
   },
   {
-    "revision": "c02360f87e7e372b20564d0387dc3cc3",
-    "url": "/[portfolio-manager]/svg/wi-horizon-alt.svg"
-  },
-  {
     "revision": "be8364b31b4ff5c5b9f4c624d982dd98",
     "url": "/[portfolio-manager]/svg/wi-lightning.svg"
   },
@@ -424,24 +428,28 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-lunar-eclipse.svg"
   },
   {
-    "revision": "6c7323bcb51469aca39b873df64d2995",
-    "url": "/[portfolio-manager]/svg/wi-moon-alt-first-quarter.svg"
-  },
-  {
     "revision": "2e40242004e7b077aeba0a24a49e79b7",
     "url": "/[portfolio-manager]/svg/wi-meteor.svg"
+  },
+  {
+    "revision": "6c7323bcb51469aca39b873df64d2995",
+    "url": "/[portfolio-manager]/svg/wi-moon-alt-first-quarter.svg"
   },
   {
     "revision": "00bd422b9134608a30a14c2f9591c03c",
     "url": "/[portfolio-manager]/svg/wi-moon-alt-full.svg"
   },
   {
+    "revision": "e13be320202dc94ef0d3696c1f508d24",
+    "url": "/[portfolio-manager]/svg/wi-rain.svg"
+  },
+  {
     "revision": "e2bd0eb053dd9ba3e13691839cdfdfe9",
     "url": "/[portfolio-manager]/svg/wi-moon-alt-new.svg"
   },
   {
-    "revision": "e13be320202dc94ef0d3696c1f508d24",
-    "url": "/[portfolio-manager]/svg/wi-rain.svg"
+    "revision": "052c33f8eac8ec6b3dff1bcecc31ab43",
+    "url": "/[portfolio-manager]/svg/wi-moon-alt-third-quarter.svg"
   },
   {
     "revision": "3a1ae04c628723b956553045442644ae",
@@ -450,10 +458,6 @@ self.__precacheManifest = [
   {
     "revision": "9135182cea9751f2a02f8793b8f654eb",
     "url": "/[portfolio-manager]/svg/wi-moon-alt-waning-crescent-2.svg"
-  },
-  {
-    "revision": "052c33f8eac8ec6b3dff1bcecc31ab43",
-    "url": "/[portfolio-manager]/svg/wi-moon-alt-third-quarter.svg"
   },
   {
     "revision": "c0af4998a8957bcac0d75140bfa98023",
@@ -468,10 +472,6 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-moon-alt-waning-crescent-5.svg"
   },
   {
-    "revision": "a4598f7699558fa2a8201690bd673fc4",
-    "url": "/[portfolio-manager]/svg/wi-hail.svg"
-  },
-  {
     "revision": "d11167a379262d098bcace6f37f19148",
     "url": "/[portfolio-manager]/svg/wi-moon-alt-waning-crescent-6.svg"
   },
@@ -480,8 +480,8 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-moon-alt-waning-gibbous-1.svg"
   },
   {
-    "revision": "0c6b57640224b3b5d68ab5f7b0ea778f",
-    "url": "/[portfolio-manager]/svg/wi-moon-alt-waning-gibbous-2.svg"
+    "revision": "4f46eea906f5233d33b9a4fcd5ee77fe",
+    "url": "/[portfolio-manager]/svg/wi-moon-alt-waning-gibbous-3.svg"
   },
   {
     "revision": "6c8c04bec9292150ae209e5a12dedafe",
@@ -496,8 +496,8 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-moon-alt-waning-gibbous-5.svg"
   },
   {
-    "revision": "4f46eea906f5233d33b9a4fcd5ee77fe",
-    "url": "/[portfolio-manager]/svg/wi-moon-alt-waning-gibbous-3.svg"
+    "revision": "0c6b57640224b3b5d68ab5f7b0ea778f",
+    "url": "/[portfolio-manager]/svg/wi-moon-alt-waning-gibbous-2.svg"
   },
   {
     "revision": "36a19f5b73a3d68d6fc8b480a9714bea",
@@ -520,14 +520,6 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-strong-wind.svg"
   },
   {
-    "revision": "aca423e56d39033ef58ca270ceb0a8c2",
-    "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-crescent-3.svg"
-  },
-  {
-    "revision": "0e83bad2ce4d8cb681cdee0b315854e7",
-    "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-crescent-6 .svg"
-  },
-  {
     "revision": "2b2409473cf8934ace545e80aa1d22ab",
     "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-crescent-5.svg"
   },
@@ -536,52 +528,60 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-crescent-4.svg"
   },
   {
-    "revision": "b27b9ecc0ff3b3f9c205fa33d688635a",
-    "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-gibbous-2.svg"
+    "revision": "0e83bad2ce4d8cb681cdee0b315854e7",
+    "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-crescent-6 .svg"
   },
   {
-    "revision": "22fff390b0fcd9c46390fe913b23895d",
-    "url": "/[portfolio-manager]/svg/wi-thunderstorm.svg"
+    "revision": "aca423e56d39033ef58ca270ceb0a8c2",
+    "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-crescent-3.svg"
   },
   {
     "revision": "2822bad28151d2b838e41bf6f20634b3",
     "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-gibbous-1.svg"
   },
   {
-    "revision": "afea03377f4cfc9afdd02ef21b02bcb1",
-    "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-gibbous-4.svg"
+    "revision": "22fff390b0fcd9c46390fe913b23895d",
+    "url": "/[portfolio-manager]/svg/wi-thunderstorm.svg"
+  },
+  {
+    "revision": "b27b9ecc0ff3b3f9c205fa33d688635a",
+    "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-gibbous-2.svg"
   },
   {
     "revision": "101f770df9266106054392db0e883e1f",
     "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-gibbous-3.svg"
   },
   {
-    "revision": "0aea7499a63197043c78cccc512528f6",
-    "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-gibbous-6 .svg"
-  },
-  {
     "revision": "1bbe75956b9a5677c035bf275a6c76e2",
     "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-gibbous-5.svg"
+  },
+  {
+    "revision": "afea03377f4cfc9afdd02ef21b02bcb1",
+    "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-gibbous-4.svg"
+  },
+  {
+    "revision": "0aea7499a63197043c78cccc512528f6",
+    "url": "/[portfolio-manager]/svg/wi-moon-alt-waxing-gibbous-6 .svg"
   },
   {
     "revision": "67c1fdf38da6ad68a5de6698fdb54684",
     "url": "/[portfolio-manager]/svg/wi-moon-first-quarter.svg"
   },
   {
-    "revision": "00bd422b9134608a30a14c2f9591c03c",
-    "url": "/[portfolio-manager]/svg/wi-moon-new.svg"
-  },
-  {
     "revision": "e2bd0eb053dd9ba3e13691839cdfdfe9",
     "url": "/[portfolio-manager]/svg/wi-moon-full.svg"
   },
   {
-    "revision": "3641a7a0833058a48e4a16d13172ac91",
-    "url": "/[portfolio-manager]/svg/wi-moon-waning-crescent-1.svg"
-  },
-  {
     "revision": "8c4adbb02aba4e94c02d762bb85a27ac",
     "url": "/[portfolio-manager]/svg/wi-moon-third-quarter.svg"
+  },
+  {
+    "revision": "00bd422b9134608a30a14c2f9591c03c",
+    "url": "/[portfolio-manager]/svg/wi-moon-new.svg"
+  },
+  {
+    "revision": "3641a7a0833058a48e4a16d13172ac91",
+    "url": "/[portfolio-manager]/svg/wi-moon-waning-crescent-1.svg"
   },
   {
     "revision": "585bcf211ec06d578fad0f91ee79bdd7",
@@ -652,36 +652,36 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-moon-waxing-crescent-6 .svg"
   },
   {
-    "revision": "183da817d15e143789778d93317d835e",
-    "url": "/[portfolio-manager]/svg/wi-moon-waxing-gibbous-2.svg"
-  },
-  {
     "revision": "88d11cd876070176437d235b5de193f8",
     "url": "/[portfolio-manager]/svg/wi-moon-waxing-gibbous-1.svg"
+  },
+  {
+    "revision": "183da817d15e143789778d93317d835e",
+    "url": "/[portfolio-manager]/svg/wi-moon-waxing-gibbous-2.svg"
   },
   {
     "revision": "0544157bdafe1dd0313bec2b1078e281",
     "url": "/[portfolio-manager]/svg/wi-moon-waxing-gibbous-3.svg"
   },
   {
-    "revision": "a597394511f0bda7e0f148db8e20f6ad",
-    "url": "/[portfolio-manager]/svg/wi-moon-waxing-gibbous-4 .svg"
-  },
-  {
     "revision": "1b91ef0f9add73846fcdc576379a5591",
     "url": "/[portfolio-manager]/svg/wi-moon-waxing-gibbous-5.svg"
+  },
+  {
+    "revision": "a597394511f0bda7e0f148db8e20f6ad",
+    "url": "/[portfolio-manager]/svg/wi-moon-waxing-gibbous-4 .svg"
   },
   {
     "revision": "3b9f7d10d765d4990705bbfd81213641",
     "url": "/[portfolio-manager]/svg/wi-moon-waxing-gibbous-6.svg"
   },
   {
-    "revision": "5e6841e2a95e0ef829c3106c7960b623",
-    "url": "/[portfolio-manager]/svg/wi-moonrise.svg"
-  },
-  {
     "revision": "18f91498cc6f98e8ad98856485913343",
     "url": "/[portfolio-manager]/svg/wi-moonset.svg"
+  },
+  {
+    "revision": "5e6841e2a95e0ef829c3106c7960b623",
+    "url": "/[portfolio-manager]/svg/wi-moonrise.svg"
   },
   {
     "revision": "fd90aeab153084786ebff365b91f3419",
@@ -696,12 +696,12 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-night-alt-cloudy-gusts.svg"
   },
   {
-    "revision": "7c36f2b5180391599389cc38849eb89d",
-    "url": "/[portfolio-manager]/svg/wi-night-alt-cloudy.svg"
-  },
-  {
     "revision": "07db20d635cfde98563cdb06f7b54edc",
     "url": "/[portfolio-manager]/svg/wi-night-alt-cloudy-windy.svg"
+  },
+  {
+    "revision": "7c36f2b5180391599389cc38849eb89d",
+    "url": "/[portfolio-manager]/svg/wi-night-alt-cloudy.svg"
   },
   {
     "revision": "1c9558261632ac23cefb746918f3facf",
@@ -720,16 +720,16 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-night-alt-rain-mix.svg"
   },
   {
-    "revision": "8ea1ac4e4686afcd6d32776a8c6879e7",
-    "url": "/[portfolio-manager]/svg/wi-night-alt-showers.svg"
+    "revision": "6dfa13419e87616d93bfce49f058f3eb",
+    "url": "/[portfolio-manager]/svg/wi-night-alt-rain-wind.svg"
   },
   {
     "revision": "bc016c3b72a5843f21623b98e9c90f3d",
     "url": "/[portfolio-manager]/svg/wi-night-alt-rain.svg"
   },
   {
-    "revision": "6dfa13419e87616d93bfce49f058f3eb",
-    "url": "/[portfolio-manager]/svg/wi-night-alt-rain-wind.svg"
+    "revision": "8ea1ac4e4686afcd6d32776a8c6879e7",
+    "url": "/[portfolio-manager]/svg/wi-night-alt-showers.svg"
   },
   {
     "revision": "3bf07524cf1ca030776a4ff21f522840",
@@ -748,12 +748,16 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-night-alt-snow-wind.svg"
   },
   {
+    "revision": "83f2607826e2c0f225a02066db19ace1",
+    "url": "/[portfolio-manager]/svg/wi-night-alt-storm-showers.svg"
+  },
+  {
     "revision": "db72088b07bc32e7beee32cc8408f26f",
     "url": "/[portfolio-manager]/svg/wi-night-alt-snow.svg"
   },
   {
-    "revision": "83f2607826e2c0f225a02066db19ace1",
-    "url": "/[portfolio-manager]/svg/wi-night-alt-storm-showers.svg"
+    "revision": "136e99617edae7b63187401a54471df2",
+    "url": "/[portfolio-manager]/svg/wi-night-alt-sprinkle.svg"
   },
   {
     "revision": "f86c33c4ccc36dbeb826cbdb5f50594b",
@@ -768,10 +772,6 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-night-cloudy-gusts.svg"
   },
   {
-    "revision": "136e99617edae7b63187401a54471df2",
-    "url": "/[portfolio-manager]/svg/wi-night-alt-sprinkle.svg"
-  },
-  {
     "revision": "cf7f17dac346daa146d5303b681ab40f",
     "url": "/[portfolio-manager]/svg/wi-night-cloudy-high.svg"
   },
@@ -784,16 +784,16 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-night-cloudy.svg"
   },
   {
+    "revision": "7f68f0ff6f6536dd9cb27be521b2881d",
+    "url": "/[portfolio-manager]/svg/wi-night-fog.svg"
+  },
+  {
     "revision": "cdc48240d1570cbc07e845fdaa56048b",
     "url": "/[portfolio-manager]/svg/wi-night-hail.svg"
   },
   {
     "revision": "130262db9db479b674c60b9a47816179",
     "url": "/[portfolio-manager]/svg/wi-night-lightning.svg"
-  },
-  {
-    "revision": "7f68f0ff6f6536dd9cb27be521b2881d",
-    "url": "/[portfolio-manager]/svg/wi-night-fog.svg"
   },
   {
     "revision": "567c9bd7fe5de02ebc0129e851b2b105",
@@ -808,12 +808,16 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-night-rain-wind.svg"
   },
   {
+    "revision": "e65996e37ba9c9fa105049d6d3b0c29c",
+    "url": "/[portfolio-manager]/svg/wi-night-showers.svg"
+  },
+  {
     "revision": "b0c6ff5d9328fd9e6f7359283c91d2be",
     "url": "/[portfolio-manager]/svg/wi-night-rain.svg"
   },
   {
-    "revision": "e65996e37ba9c9fa105049d6d3b0c29c",
-    "url": "/[portfolio-manager]/svg/wi-night-showers.svg"
+    "revision": "57c7fe43edbb263a64d638f35a0f0ad9",
+    "url": "/[portfolio-manager]/svg/wi-night-sleet.svg"
   },
   {
     "revision": "c65f0bf35c13e1d9c03fc1bc1b085ba8",
@@ -840,10 +844,6 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-night-storm-showers.svg"
   },
   {
-    "revision": "57c7fe43edbb263a64d638f35a0f0ad9",
-    "url": "/[portfolio-manager]/svg/wi-night-sleet.svg"
-  },
-  {
     "revision": "d44a5fdcf9c938ec91348518c015f41c",
     "url": "/[portfolio-manager]/svg/wi-night-thunderstorm.svg"
   },
@@ -856,12 +856,12 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-rain-wind.svg"
   },
   {
-    "revision": "45d30c621cddd753486f07b636f7a8d0",
-    "url": "/[portfolio-manager]/svg/wi-raindrops.svg"
-  },
-  {
     "revision": "5ac590b7c142c7d4205c502edecf748c",
     "url": "/[portfolio-manager]/svg/wi-raindrop.svg"
+  },
+  {
+    "revision": "45d30c621cddd753486f07b636f7a8d0",
+    "url": "/[portfolio-manager]/svg/wi-raindrops.svg"
   },
   {
     "revision": "6b5be906701b5e8666c9104dbbd60251",
@@ -876,12 +876,12 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-sandstorm.svg"
   },
   {
-    "revision": "751f534517c6cb83b1c7ec78fd32786d",
-    "url": "/[portfolio-manager]/svg/wi-showers.svg"
-  },
-  {
     "revision": "8291f3539cf9ca67ea3680a1a4a720f5",
     "url": "/[portfolio-manager]/svg/wi-sleet.svg"
+  },
+  {
+    "revision": "751f534517c6cb83b1c7ec78fd32786d",
+    "url": "/[portfolio-manager]/svg/wi-showers.svg"
   },
   {
     "revision": "5106f61daad94d020fec3e706d85c220",
@@ -924,6 +924,10 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-sunrise.svg"
   },
   {
+    "revision": "1968dadd1e36e188133385f7662681d0",
+    "url": "/[portfolio-manager]/svg/wi-thermometer-internal.svg"
+  },
+  {
     "revision": "d96e94d55441191c134f7bb19690785c",
     "url": "/[portfolio-manager]/svg/wi-sunset.svg"
   },
@@ -936,16 +940,20 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-thermometer.svg"
   },
   {
-    "revision": "1968dadd1e36e188133385f7662681d0",
-    "url": "/[portfolio-manager]/svg/wi-thermometer-internal.svg"
-  },
-  {
     "revision": "afcf33deb0883dc82c16ba83874d216c",
     "url": "/[portfolio-manager]/svg/wi-time-1.svg"
   },
   {
     "revision": "a0eacea9d241f1724bc79a04adb80061",
     "url": "/[portfolio-manager]/svg/wi-time-10.svg"
+  },
+  {
+    "revision": "c2efba5e9b60fb70b2467a762e429a57",
+    "url": "/[portfolio-manager]/svg/wi-time-11.svg"
+  },
+  {
+    "revision": "137807d53dba2d42fa6118873ba2855c",
+    "url": "/[portfolio-manager]/svg/wi-time-12.svg"
   },
   {
     "revision": "c7fb834b69f1da031391b19695f117c0",
@@ -956,24 +964,16 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-time-3.svg"
   },
   {
-    "revision": "137807d53dba2d42fa6118873ba2855c",
-    "url": "/[portfolio-manager]/svg/wi-time-12.svg"
+    "revision": "2276b7244c5dc82454c4964bf2ed0c18",
+    "url": "/[portfolio-manager]/svg/wi-time-5.svg"
   },
   {
     "revision": "b2bdb0de184055efe2c5d2280601a97c",
     "url": "/[portfolio-manager]/svg/wi-time-4.svg"
   },
   {
-    "revision": "2276b7244c5dc82454c4964bf2ed0c18",
-    "url": "/[portfolio-manager]/svg/wi-time-5.svg"
-  },
-  {
     "revision": "6c5fe4b01404be6cfce4a211b0f03a99",
     "url": "/[portfolio-manager]/svg/wi-time-6.svg"
-  },
-  {
-    "revision": "c2efba5e9b60fb70b2467a762e429a57",
-    "url": "/[portfolio-manager]/svg/wi-time-11.svg"
   },
   {
     "revision": "b174ef309d89c35893d3e2d38fe58719",
@@ -1016,12 +1016,12 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-wind-beaufort-1.svg"
   },
   {
-    "revision": "bfd0311099f968b7ba783b772ed69e5d",
-    "url": "/[portfolio-manager]/svg/wi-wind-beaufort-11.svg"
-  },
-  {
     "revision": "d979f0a82fa554458e13db0ec6b3ec83",
     "url": "/[portfolio-manager]/svg/wi-wind-beaufort-10.svg"
+  },
+  {
+    "revision": "bfd0311099f968b7ba783b772ed69e5d",
+    "url": "/[portfolio-manager]/svg/wi-wind-beaufort-11.svg"
   },
   {
     "revision": "85682cb6753a9d51f3ca9f9cce550cc0",
@@ -1048,20 +1048,20 @@ self.__precacheManifest = [
     "url": "/[portfolio-manager]/svg/wi-wind-beaufort-6.svg"
   },
   {
-    "revision": "6b4f833db9e039193a12f0b48b8b0fc7",
-    "url": "/[portfolio-manager]/svg/wi-wind-beaufort-8.svg"
-  },
-  {
     "revision": "3b54651965b657ce8b56f04082a3e0c5",
     "url": "/[portfolio-manager]/svg/wi-wind-beaufort-7.svg"
   },
   {
-    "revision": "155d0f5869574ca3355d156cddf74be5",
-    "url": "/[portfolio-manager]/svg/wi-wind-deg.svg"
+    "revision": "6b4f833db9e039193a12f0b48b8b0fc7",
+    "url": "/[portfolio-manager]/svg/wi-wind-beaufort-8.svg"
   },
   {
     "revision": "0cace54932788d3775eff5a9858072e1",
     "url": "/[portfolio-manager]/svg/wi-wind-beaufort-9.svg"
+  },
+  {
+    "revision": "155d0f5869574ca3355d156cddf74be5",
+    "url": "/[portfolio-manager]/svg/wi-wind-deg.svg"
   },
   {
     "revision": "56e49cd3e26af14007a5642cd119e0aa",
